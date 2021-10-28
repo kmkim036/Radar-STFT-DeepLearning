@@ -4,7 +4,10 @@
 import scipy.io  # library to save to .mat file
 
 # Directory Path
-DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/'
+# Ubuntu
+# DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/'
+# Window
+DirectoryPath = 'C:/Users/김경민/Desktop/Studies/Projects/Radar-CWT-DeepLearning/data/'
 
 # File Name and File Path
 FileName = 'TEST0_IM'
