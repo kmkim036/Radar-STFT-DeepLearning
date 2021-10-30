@@ -1,0 +1,27 @@
+package Model.APPS.GLOBAL_SCU_XMC1.v4_1_6;
+
+// Import statements
+import ifx.davex.app.manifest.*
+
+abstract class GLOBAL_SCU_XMC1_GUI extends AppManifest {
+	/* Begin : UI variable section */
+	 public GCheck gcheck_SR0_EnableIntr;
+	 public GCheck gcheck_SR1_EnableIntr;
+	 public GCheck gcheck_SR2_EnableIntr;
+	 public GInterruptPrio ginterruptprio_sr0;
+	 public GInterruptPrio ginterruptprio_sr1;
+	 public GInterruptPrio ginterruptprio_sr2;
+
+	 public GLOBAL_SCU_XMC1_GUI(DaveEnv daveEnv){
+
+	 gcheck_SR0_EnableIntr = GCheck(widgetName:"gcheck_SR0_EnableIntr", value:true, enabled:true, visible:true)
+	 gcheck_SR1_EnableIntr = GCheck(widgetName:"gcheck_SR1_EnableIntr", value:true, enabled:true, visible:true)
+	 gcheck_SR2_EnableIntr = GCheck(widgetName:"gcheck_SR2_EnableIntr", value:true, enabled:true, visible:true)
+	 ginterruptprio_sr0 = GInterruptPrio(widgetName:"ginterruptprio_sr0", priorityValue:3, minPriority:0, maxPriority:3, subPriorityValue:0, minSubPriority:0, maxSubPriority:0, subPriorityVisible:false, enabled:true, visible:true)
+	 ginterruptprio_sr1 = GInterruptPrio(widgetName:"ginterruptprio_sr1", priorityValue:3, minPriority:0, maxPriority:3, subPriorityValue:0, minSubPriority:0, maxSubPriority:0, subPriorityVisible:false, enabled:true, visible:true)
+	 ginterruptprio_sr2 = GInterruptPrio(widgetName:"ginterruptprio_sr2", priorityValue:3, minPriority:0, maxPriority:3, subPriorityValue:0, minSubPriority:0, maxSubPriority:0, subPriorityVisible:false, enabled:true, visible:true)
+
+
+	 }
+	/* End : UI variable section */
+}

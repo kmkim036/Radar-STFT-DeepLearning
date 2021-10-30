@@ -1,0 +1,549 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "xmc_prng.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_PRNG_Init,"ax",%progbits
+  18              	 .align 2
+  19              	 .global XMC_PRNG_Init
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	XMC_PRNG_Init:
+  24              	.LFB45:
+  25              	 .file 1 "../Libraries/XMCLib/src/xmc_prng.c"
+   1:../Libraries/XMCLib/src/xmc_prng.c **** 
+   2:../Libraries/XMCLib/src/xmc_prng.c **** /**
+   3:../Libraries/XMCLib/src/xmc_prng.c ****  * @file xmc_prng.c
+   4:../Libraries/XMCLib/src/xmc_prng.c ****  * @date 2015-06-20
+   5:../Libraries/XMCLib/src/xmc_prng.c ****  *
+   6:../Libraries/XMCLib/src/xmc_prng.c ****  * @cond
+   7:../Libraries/XMCLib/src/xmc_prng.c ****  **************************************************************************************************
+   8:../Libraries/XMCLib/src/xmc_prng.c ****  * XMClib v2.1.6 - XMC Peripheral Driver Library 
+   9:../Libraries/XMCLib/src/xmc_prng.c ****  *
+  10:../Libraries/XMCLib/src/xmc_prng.c ****  * Copyright (C) 2015-2019 Infineon Technologies AG
+  11:../Libraries/XMCLib/src/xmc_prng.c ****  * All rights reserved.                        
+  12:../Libraries/XMCLib/src/xmc_prng.c ****  *                                             
+  13:../Libraries/XMCLib/src/xmc_prng.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  14:../Libraries/XMCLib/src/xmc_prng.c ****  * following conditions are met:   
+  15:../Libraries/XMCLib/src/xmc_prng.c ****  *                                                                              
+  16:../Libraries/XMCLib/src/xmc_prng.c ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  17:../Libraries/XMCLib/src/xmc_prng.c ****  * disclaimer.                        
+  18:../Libraries/XMCLib/src/xmc_prng.c ****  * 
+  19:../Libraries/XMCLib/src/xmc_prng.c ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  20:../Libraries/XMCLib/src/xmc_prng.c ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  21:../Libraries/XMCLib/src/xmc_prng.c ****  * 
+  22:../Libraries/XMCLib/src/xmc_prng.c ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  23:../Libraries/XMCLib/src/xmc_prng.c ****  * products derived from this software without specific prior written permission.                  
+  24:../Libraries/XMCLib/src/xmc_prng.c ****  *                                                                              
+  25:../Libraries/XMCLib/src/xmc_prng.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  26:../Libraries/XMCLib/src/xmc_prng.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  27:../Libraries/XMCLib/src/xmc_prng.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  28:../Libraries/XMCLib/src/xmc_prng.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  29:../Libraries/XMCLib/src/xmc_prng.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  30:../Libraries/XMCLib/src/xmc_prng.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  31:../Libraries/XMCLib/src/xmc_prng.c ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  32:../Libraries/XMCLib/src/xmc_prng.c ****  *                                                                              
+  33:../Libraries/XMCLib/src/xmc_prng.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  34:../Libraries/XMCLib/src/xmc_prng.c ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  35:../Libraries/XMCLib/src/xmc_prng.c ****  **************************************************************************************************
+  36:../Libraries/XMCLib/src/xmc_prng.c ****  *
+  37:../Libraries/XMCLib/src/xmc_prng.c ****  * Change History
+  38:../Libraries/XMCLib/src/xmc_prng.c ****  * --------------
+  39:../Libraries/XMCLib/src/xmc_prng.c ****  *
+  40:../Libraries/XMCLib/src/xmc_prng.c ****  * 2015-02-20:
+  41:../Libraries/XMCLib/src/xmc_prng.c ****  *     - Initial <br>
+  42:../Libraries/XMCLib/src/xmc_prng.c ****  *     - Removed GetDriverVersion API <br>
+  43:../Libraries/XMCLib/src/xmc_prng.c ****  *
+  44:../Libraries/XMCLib/src/xmc_prng.c ****  * 2015-06-20
+  45:../Libraries/XMCLib/src/xmc_prng.c ****  *     - Removed definition of GetDriverVersion API <br>
+  46:../Libraries/XMCLib/src/xmc_prng.c ****  *
+  47:../Libraries/XMCLib/src/xmc_prng.c ****  * @endcond
+  48:../Libraries/XMCLib/src/xmc_prng.c ****  */
+  49:../Libraries/XMCLib/src/xmc_prng.c ****  
+  50:../Libraries/XMCLib/src/xmc_prng.c **** #include "xmc_prng.h"
+  51:../Libraries/XMCLib/src/xmc_prng.c **** 
+  52:../Libraries/XMCLib/src/xmc_prng.c **** #if defined (PRNG)
+  53:../Libraries/XMCLib/src/xmc_prng.c **** 
+  54:../Libraries/XMCLib/src/xmc_prng.c **** /**************************************************************************************************
+  55:../Libraries/XMCLib/src/xmc_prng.c ****  * API IMPLEMENTATION
+  56:../Libraries/XMCLib/src/xmc_prng.c ****  **************************************************************************************************
+  57:../Libraries/XMCLib/src/xmc_prng.c ****  
+  58:../Libraries/XMCLib/src/xmc_prng.c **** /*
+  59:../Libraries/XMCLib/src/xmc_prng.c ****  * Initializes the PRNG peripheral with the settings in the
+  60:../Libraries/XMCLib/src/xmc_prng.c ****  * initialization structure XMC_PRNG_INIT_t
+  61:../Libraries/XMCLib/src/xmc_prng.c ****  */
+  62:../Libraries/XMCLib/src/xmc_prng.c **** XMC_PRNG_INIT_STATUS_t XMC_PRNG_Init(const XMC_PRNG_INIT_t *prng)
+  63:../Libraries/XMCLib/src/xmc_prng.c **** {
+  26              	 .loc 1 63 0
+  27              	 .cfi_startproc
+  28              	.LVL0:
+  29              	.LBB14:
+  30              	.LBB15:
+  31              	 .file 2 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc/xmc_prng.h"
+   1:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+   2:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+   3:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @file xmc_prng.h
+   4:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @date 2015-06-20
+   5:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+   6:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @cond
+   7:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+   8:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * XMClib v2.1.6 - XMC Peripheral Driver Library 
+   9:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  10:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Copyright (C) 2015-2019 Infineon Technologies AG
+  11:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * All rights reserved.                        
+  12:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *                                             
+  13:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  14:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * following conditions are met:   
+  15:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *                                                                              
+  16:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  17:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * disclaimer.                        
+  18:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * 
+  19:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  20:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  21:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * 
+  22:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  23:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * products derived from this software without specific prior written permission.                  
+  24:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *                                                                              
+  25:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  26:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  27:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  28:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  29:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  30:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  31:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  32:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *                                                                              
+  33:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  34:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  35:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+  36:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  37:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Change History
+  38:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * --------------
+  39:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  40:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * 2015-02-20:
+  41:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *     - Initial <br>
+  42:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *     - Documentation updates <br>
+  43:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  44:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * 2015-06-20:
+  45:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *     - Removed version macros and declaration of GetDriverVersion API <br>
+  46:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  47:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @endcond
+  48:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+  49:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  
+  50:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #ifndef XMC_PRNG_H
+  51:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #define XMC_PRNG_H
+  52:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  53:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**************************************************************************************************
+  54:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * HEADER FILES
+  55:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+  56:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  57:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #include "xmc_common.h"
+  58:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  59:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #if defined (PRNG) 
+  60:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  61:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+  62:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @addtogroup XMClib XMC Peripheral Library
+  63:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @{
+  64:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+  65:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  66:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+  67:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @addtogroup PRNG
+  68:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @brief Pseudo Random Number Generator (PRNG) driver for XMC1000 microcontroller family
+  69:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+  70:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The pseudo random bit generator (PRNG) provides random data with fast generation times.
+  71:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * PRNG has to be initialized by the user software before use. The initialization consists
+  72:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * of two basic phases: key-loading and warm-up.
+  73:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *  
+  74:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The PRNG low level driver provides functions to configure and initialize the PRNG hardware
+  75:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * peripheral.
+  76:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @{
+  77:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */  
+  78:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  79:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**************************************************************************************************
+  80:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * MACROS
+  81:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+  82:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  
+  83:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+  84:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Byte mask value for random data block size
+  85:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */ 
+  86:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #define XMC_PRNG_RDBS_BYTE_READ_MASK (0x00FFU)
+  87:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  88:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**************************************************************************************************
+  89:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * ENUMS
+  90:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+  91:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+  92:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+  93:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * PRNG key load operation modes
+  94:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+  95:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** typedef enum XMC_PRNG_KEY_LOAD_OP_MODE {
+  96:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_STRM_MODE = 0U, /**< Streaming mode (default) */
+  97:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_KLD_MODE  = 1U  /**< Loading mode */
+  98:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** } XMC_PRNG_KEY_LOAD_OP_MODE_t;
+  99:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 100:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 101:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * PRNG data block size
+ 102:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 103:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** typedef enum XMC_PRNG_DATA_BLOCK_SIZE {
+ 104:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_RDBS_RESET = 0U, /**< Reset state (no random data block size defined) */
+ 105:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_RDBS_BYTE  = 1U, /**< BYTE (8-bit) */
+ 106:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_RDBS_WORD  = 2U  /**< WORD (16-bit) */
+ 107:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** } XMC_PRNG_DATA_BLOCK_SIZE_t;
+ 108:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 109:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 110:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * PRNG driver initialization status
+ 111:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 112:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** typedef enum XMC_PRNG_INIT_STATUS {
+ 113:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_NOT_INITIALIZED = 0U, /**< Reset state or Non-initialized state (Same as XMC_PRNG_RDBS_R
+ 114:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_INITIALIZED     = 1U  /**< Initialized state */
+ 115:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** } XMC_PRNG_INIT_STATUS_t;
+ 116:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 117:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**************************************************************************************************
+ 118:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * DATA STRUCTURES
+ 119:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+ 120:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 121:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 122:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Key words and data block size configuration values of PRNG <br>
+ 123:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 124:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The structure presents a convenient way to set/obtain the key word and data block configuration
+ 125:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * values of PRNG.
+ 126:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The XMC_PRNG_Init() can be used to populate the structure with the key word and data block
+ 127:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * configuration values of the PRNG module.
+ 128:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */ 
+ 129:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** typedef struct XMC_PRNG_INIT
+ 130:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 131:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   uint16_t key_words[5];                 /**< Keywords */
+ 132:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   XMC_PRNG_DATA_BLOCK_SIZE_t block_size; /**< Block size */
+ 133:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** } XMC_PRNG_INIT_t;
+ 134:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 135:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**************************************************************************************************
+ 136:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * API PROTOTYPES
+ 137:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  **************************************************************************************************
+ 138:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 139:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #ifdef __cplusplus
+ 140:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** extern "C" {
+ 141:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** #endif
+ 142:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 143:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 144:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @param prng Pointer to a constant instance of ::XMC_PRNG_INIT_t, pointing to
+ 145:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *             the initialization configuration.
+ 146:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return XMC_PRNG_INIT_STATUS_t XMC_PRNG_INITIALIZED if initialized,
+ 147:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *                                XMC_PRNG_NOT_INITIALIZED otherwise.
+ 148:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 149:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 150:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Initialize the PRNG peripheral with the configured key words and block size <br>
+ 151:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 152:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 153:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function configures block size for key loading mode, enables key loading mode,
+ 154:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * loads key words (80 bits) and wait till RDV is set, enables the streaming mode and
+ 155:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * waits for warmup phase. This function programmes the CTRL and WORD registers. 
+ 156:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 157:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** XMC_PRNG_INIT_STATUS_t XMC_PRNG_Init(const XMC_PRNG_INIT_t *prng);
+ 158:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 159:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 160:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 161:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 162:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @param block_size Block size of type ::XMC_PRNG_DATA_BLOCK_SIZE_t for read access
+ 163:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return None
+ 164:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 165:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 166:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Programming Random Block Size <br>
+ 167:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 168:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 169:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function sets the random data block size as byte or word by programming CTRL.RDBS bitfield.
+ 170:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * block_size = 0 for Reset state, block_size = 1 for 'byte' and block_size = 2 for 'word'.
+ 171:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 172:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** __STATIC_INLINE void XMC_PRNG_SetRandomDataBlockSize(XMC_PRNG_DATA_BLOCK_SIZE_t block_size)
+ 173:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 174:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   PRNG->CTRL = (uint16_t)((PRNG->CTRL & (uint32_t)~PRNG_CTRL_RDBS_Msk) |
+  32              	 .loc 2 174 0
+  33 0000 0621     	 mov r1,#6
+  34              	.LBE15:
+  35              	.LBE14:
+  36              	 .loc 1 63 0
+  37 0002 70B5     	 push {r4,r5,r6,lr}
+  38              	.LCFI0:
+  39              	 .cfi_def_cfa_offset 16
+  40              	 .cfi_offset 4,-16
+  41              	 .cfi_offset 5,-12
+  42              	 .cfi_offset 6,-8
+  43              	 .cfi_offset 14,-4
+  44              	.LBB17:
+  45              	.LBB16:
+  46              	 .loc 2 174 0
+  47 0004 1B4A     	 ldr r2,.L7
+  48 0006 061C     	 mov r6,r0
+  49 0008 9389     	 ldrh r3,[r2,#12]
+  50 000a 051C     	 mov r5,r0
+  51 000c 8B43     	 bic r3,r1
+  52 000e 0239     	 sub r1,r1,#2
+  53 0010 0B43     	 orr r3,r1
+  54 0012 9381     	 strh r3,[r2,#12]
+  55              	.LBE16:
+  56              	.LBE17:
+  57              	.LBB18:
+  58              	.LBB19:
+ 175:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****                           ((uint32_t)block_size << (uint32_t)PRNG_CTRL_RDBS_Pos));
+ 176:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 177:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 178:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 179:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return None
+ 180:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 181:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 182:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Checks the validity (CHK.RDV bit) of the generated random data <br>
+ 183:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 184:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 185:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function checks the validity (CHK.RDV bit) of the generated random data.
+ 186:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * In key loading mode, this value indicates if the next partial key word can be written
+ 187:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * to PRNG_WORD or not.
+ 188:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 189:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** __STATIC_INLINE uint16_t XMC_PRNG_CheckValidStatus(void)
+ 190:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 191:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   return (PRNG->CHK & PRNG_CHK_RDV_Msk);
+ 192:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 193:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 194:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 195:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return None
+ 196:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 197:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 198:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Enables the PRNG key loading mode <br>
+ 199:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 200:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 201:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function initializes the key loading by setting the bit CTRL.KLD. In this mode, Register WOR
+ 202:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * acts as always as a 16 bit destination register. After the complete key has been loaded, the CTR
+ 203:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * must be set to '0' to prepare the following warmup phase.
+ 204:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 205:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Related APIs:</b><br>
+ 206:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * XMC_PRNG_EnableStreamingMode()
+ 207:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 208:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** __STATIC_INLINE void XMC_PRNG_EnableKeyLoadingMode(void)
+ 209:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 210:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   PRNG->CTRL |= (uint16_t)PRNG_CTRL_KLD_Msk;
+  59              	 .loc 2 210 0
+  60 0014 0823     	 mov r3,#8
+  61              	.LBE19:
+  62              	.LBE18:
+  63              	.LBB22:
+  64              	.LBB23:
+ 191:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+  65              	 .loc 2 191 0
+  66 0016 0124     	 mov r4,#1
+  67              	.LBE23:
+  68              	.LBE22:
+  69              	.LBB25:
+  70              	.LBB20:
+  71              	 .loc 2 210 0
+  72 0018 9189     	 ldrh r1,[r2,#12]
+  73              	.LBE20:
+  74              	.LBE25:
+  75              	 .loc 1 63 0
+  76 001a 82B0     	 sub sp,sp,#8
+  77              	.LCFI1:
+  78              	 .cfi_def_cfa_offset 24
+  79              	.LBB26:
+  80              	.LBB21:
+  81              	 .loc 2 210 0
+  82 001c 0B43     	 orr r3,r1
+  83 001e 9381     	 strh r3,[r2,#12]
+  84              	.LVL1:
+  85 0020 0A36     	 add r6,r6,#10
+  86              	.LVL2:
+  87              	.L3:
+  88              	.LBE21:
+  89              	.LBE26:
+  64:../Libraries/XMCLib/src/xmc_prng.c ****   volatile uint16_t read_warm_up;
+  65:../Libraries/XMCLib/src/xmc_prng.c ****   uint16_t reg_val, iter;
+  66:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_PRNG_INIT_STATUS_t status = XMC_PRNG_INITIALIZED;
+  67:../Libraries/XMCLib/src/xmc_prng.c ****   
+  68:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_ASSERT("XMC_PRNG_Init:Null Pointer", (prng != (XMC_PRNG_INIT_t *)NULL));
+  69:../Libraries/XMCLib/src/xmc_prng.c **** 
+  70:../Libraries/XMCLib/src/xmc_prng.c ****   /* Configure block size for key loading mode */
+  71:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_PRNG_SetRandomDataBlockSize(XMC_PRNG_RDBS_WORD);
+  72:../Libraries/XMCLib/src/xmc_prng.c **** 
+  73:../Libraries/XMCLib/src/xmc_prng.c ****   /* Enable key loading mode */
+  74:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_PRNG_EnableKeyLoadingMode();
+  75:../Libraries/XMCLib/src/xmc_prng.c **** 
+  76:../Libraries/XMCLib/src/xmc_prng.c ****   /* Load key words (80 bits) and wait till RDV is set */
+  77:../Libraries/XMCLib/src/xmc_prng.c ****   for (iter = (uint16_t)0UL; iter < (uint16_t)5UL; iter++)
+  78:../Libraries/XMCLib/src/xmc_prng.c ****   {
+  79:../Libraries/XMCLib/src/xmc_prng.c ****     XMC_PRNG_LoadKeyWords(prng->key_words[iter]);
+  90              	 .loc 1 79 0
+  91 0022 2B88     	 ldrh r3,[r5]
+  92              	.LVL3:
+  93              	.LBB27:
+  94              	.LBB28:
+ 211:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 212:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 213:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 214:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return None
+ 215:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 216:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 217:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Enables the Streaming mode <br>
+ 218:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 219:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 220:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function enables the streaming mode and disables the PRNG key loading mode by resetting the
+ 221:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * CTRL.KLD bit. 
+ 222:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 223:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Related APIs:</b><br>
+ 224:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * XMC_PRNG_EnableKeyLoadingMode()
+ 225:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 226:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** __STATIC_INLINE void XMC_PRNG_EnableStreamingMode(void)
+ 227:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 228:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   PRNG->CTRL &= (uint16_t)~PRNG_CTRL_KLD_Msk;
+ 229:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 230:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** 
+ 231:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** /**
+ 232:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @param key Key word to load into PRNG WORD register
+ 233:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * @return None
+ 234:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 235:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par<b>Description: </b><br>
+ 236:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * Loads a partial key word to the PRNG WORD register <br>
+ 237:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  *
+ 238:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * \par
+ 239:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * The function loads partial key word to WORD registr. These partial
+ 240:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * words are sequentially written and loading a key word will take 16 clock
+ 241:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * cycles. The CHK.RDV bit is set to '0' while loading is in progress. '1' indicates
+ 242:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  * that the next partial key word can be written to WORD register. 
+ 243:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****  */
+ 244:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** __STATIC_INLINE void XMC_PRNG_LoadKeyWords(uint16_t key)
+ 245:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** {
+ 246:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****   PRNG->WORD = key;
+  95              	 .loc 2 246 0
+  96 0024 1380     	 strh r3,[r2]
+  97              	.LVL4:
+  98              	.L2:
+  99              	.LBE28:
+ 100              	.LBE27:
+ 101              	.LBB29:
+ 102              	.LBB24:
+ 191:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 103              	 .loc 2 191 0 discriminator 1
+ 104 0026 9388     	 ldrh r3,[r2,#4]
+ 105 0028 1249     	 ldr r1,.L7
+ 106              	.LBE24:
+ 107              	.LBE29:
+  80:../Libraries/XMCLib/src/xmc_prng.c ****     while (PRNG_CHK_RDV_Msk != XMC_PRNG_CheckValidStatus());
+ 108              	 .loc 1 80 0 discriminator 1
+ 109 002a 1C42     	 tst r4,r3
+ 110 002c FBD0     	 beq .L2
+ 111 002e 0235     	 add r5,r5,#2
+  77:../Libraries/XMCLib/src/xmc_prng.c ****   {
+ 112              	 .loc 1 77 0 discriminator 2
+ 113 0030 B542     	 cmp r5,r6
+ 114 0032 F6D1     	 bne .L3
+ 115              	.LBB30:
+ 116              	.LBB31:
+ 228:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h **** }
+ 117              	 .loc 2 228 0
+ 118 0034 0822     	 mov r2,#8
+ 119              	.LVL5:
+ 120 0036 8B89     	 ldrh r3,[r1,#12]
+ 121 0038 9343     	 bic r3,r2
+ 122 003a 8B81     	 strh r3,[r1,#12]
+ 123              	.LVL6:
+ 124              	.LBE31:
+ 125              	.LBE30:
+  81:../Libraries/XMCLib/src/xmc_prng.c ****   }
+  82:../Libraries/XMCLib/src/xmc_prng.c ****   
+  83:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_PRNG_EnableStreamingMode();
+  84:../Libraries/XMCLib/src/xmc_prng.c **** 
+  85:../Libraries/XMCLib/src/xmc_prng.c ****   /* Warm up phase: Read and discard 64 bits */
+  86:../Libraries/XMCLib/src/xmc_prng.c ****   read_warm_up = PRNG->WORD;
+ 126              	 .loc 1 86 0
+ 127 003c 6B46     	 mov r3,sp
+ 128 003e 0A88     	 ldrh r2,[r1]
+ 129 0040 92B2     	 uxth r2,r2
+ 130 0042 DA80     	 strh r2,[r3,#6]
+  87:../Libraries/XMCLib/src/xmc_prng.c ****   read_warm_up = PRNG->WORD;
+ 131              	 .loc 1 87 0
+ 132 0044 0A88     	 ldrh r2,[r1]
+ 133 0046 92B2     	 uxth r2,r2
+ 134 0048 DA80     	 strh r2,[r3,#6]
+  88:../Libraries/XMCLib/src/xmc_prng.c ****   read_warm_up = PRNG->WORD;
+ 135              	 .loc 1 88 0
+ 136 004a 0A88     	 ldrh r2,[r1]
+ 137 004c 92B2     	 uxth r2,r2
+ 138 004e DA80     	 strh r2,[r3,#6]
+  89:../Libraries/XMCLib/src/xmc_prng.c ****   reg_val      = PRNG->WORD;
+ 139              	 .loc 1 89 0
+ 140 0050 0C88     	 ldrh r4,[r1]
+ 141              	.LVL7:
+  90:../Libraries/XMCLib/src/xmc_prng.c ****   read_warm_up &= reg_val;
+ 142              	 .loc 1 90 0
+ 143 0052 DA88     	 ldrh r2,[r3,#6]
+ 144 0054 2240     	 and r2,r4
+ 145 0056 DA80     	 strh r2,[r3,#6]
+ 146              	.LVL8:
+ 147              	.LBB32:
+ 148              	.LBB33:
+ 174:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_prng.h ****                           ((uint32_t)block_size << (uint32_t)PRNG_CTRL_RDBS_Pos));
+ 149              	 .loc 2 174 0
+ 150 0058 827A     	 ldrb r2,[r0,#10]
+ 151 005a 0620     	 mov r0,#6
+ 152              	.LVL9:
+ 153 005c 8B89     	 ldrh r3,[r1,#12]
+ 154 005e 5200     	 lsl r2,r2,#1
+ 155 0060 8343     	 bic r3,r0
+ 156 0062 1343     	 orr r3,r2
+ 157 0064 8B81     	 strh r3,[r1,#12]
+ 158              	.LVL10:
+ 159              	.LBE33:
+ 160              	.LBE32:
+  91:../Libraries/XMCLib/src/xmc_prng.c **** 
+  92:../Libraries/XMCLib/src/xmc_prng.c ****   /* Configure block size either byte (8 bit) or word (16 bit) */
+  93:../Libraries/XMCLib/src/xmc_prng.c ****   XMC_PRNG_SetRandomDataBlockSize(prng->block_size);
+  94:../Libraries/XMCLib/src/xmc_prng.c **** 
+  95:../Libraries/XMCLib/src/xmc_prng.c ****   /*
+  96:../Libraries/XMCLib/src/xmc_prng.c ****    * Checks for reset value for "random data block size". If reset,
+  97:../Libraries/XMCLib/src/xmc_prng.c ****    * PRNG is not initialized
+  98:../Libraries/XMCLib/src/xmc_prng.c ****    */
+  99:../Libraries/XMCLib/src/xmc_prng.c ****   if ((uint16_t)XMC_PRNG_RDBS_RESET == (PRNG->CTRL & (uint16_t)PRNG_CTRL_RDBS_Msk))
+ 161              	 .loc 1 99 0
+ 162 0066 8B89     	 ldrh r3,[r1,#12]
+ 163              	.LVL11:
+ 164 0068 1840     	 and r0,r3
+ 165 006a 431E     	 sub r3,r0,#1
+ 166 006c 9841     	 sbc r0,r0,r3
+ 167              	.LVL12:
+ 100:../Libraries/XMCLib/src/xmc_prng.c ****   {
+ 101:../Libraries/XMCLib/src/xmc_prng.c ****     status = XMC_PRNG_NOT_INITIALIZED;
+ 102:../Libraries/XMCLib/src/xmc_prng.c ****   }
+ 103:../Libraries/XMCLib/src/xmc_prng.c **** 
+ 104:../Libraries/XMCLib/src/xmc_prng.c ****   return status;
+ 168              	 .loc 1 104 0
+ 169 006e C0B2     	 uxtb r0,r0
+ 105:../Libraries/XMCLib/src/xmc_prng.c **** }
+ 170              	 .loc 1 105 0
+ 171 0070 02B0     	 add sp,sp,#8
+ 172              	 
+ 173              	.LVL13:
+ 174              	.LVL14:
+ 175 0072 70BD     	 pop {r4,r5,r6,pc}
+ 176              	.L8:
+ 177              	 .align 2
+ 178              	.L7:
+ 179 0074 00000248 	 .word 1208090624
+ 180              	 .cfi_endproc
+ 181              	.LFE45:
+ 183              	 .text
+ 184              	.Letext0:
+ 185              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 186              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 187              	 .file 5 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc_prng.c
+    {standard input}:18     .text.XMC_PRNG_Init:00000000 $t
+    {standard input}:23     .text.XMC_PRNG_Init:00000000 XMC_PRNG_Init
+    {standard input}:179    .text.XMC_PRNG_Init:00000074 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

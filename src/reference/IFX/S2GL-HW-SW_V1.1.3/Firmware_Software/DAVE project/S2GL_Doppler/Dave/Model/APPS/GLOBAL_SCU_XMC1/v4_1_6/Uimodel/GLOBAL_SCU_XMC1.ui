@@ -1,0 +1,46 @@
+<p1:Tab  xmlns="http://www.eclipse.org/xwt/presentation" xmlns:x="http://www.eclipse.org/xwt" xmlns:p1="clr-namespace:com.ifx.davex.ui.controls.app" x:Class="e" layout="{x:Null}">
+	<p1:TabFolder bounds="5, 5, 500, 600">
+		<p1:GTab text="Interrupt Settings" visible="true" enabled="true" widgetName="gtab_interrupt">
+			<p1:GTab.control>
+				<p1:Tab widgetName="composite_1">
+					<p1:Tab.layout>
+						<GridLayout/>
+					</p1:Tab.layout>
+					<p1:GGroup text="Service Request 0 Settings" widgetName="ggroup_SR0">
+						<p1:GGroup.layout>
+							<GridLayout/>
+						</p1:GGroup.layout>
+						<p1:GCheck description="Enables the interrupt at SR0 initialization" manifestObj="true" text="Enable interrupt at initialization" value="true" widgetName="gcheck_SR0_EnableIntr"/>
+						<p1:GInterruptPrio manifestObj="true" maxPriority="3" maxSubPriority="0" minPriority="0" minSubPriority="0" priorityMandatory="false" priorityValue="3" subPriorityMandatory="false" subPriorityValue="0" subPriorityVisible="false" text="Interrupt Priority" widgetName="ginterruptprio_sr0" description="Subpriority is not applicable for XMC1000.">
+							<p1:GInterruptPrio.layoutData>
+								<GridData widthHint="460" heightHint="66"/>
+							</p1:GInterruptPrio.layoutData>
+						</p1:GInterruptPrio>
+					</p1:GGroup>
+					<p1:GGroup text="Service Request 1 Settings" widgetName="ggroup_SR1">
+						<p1:GGroup.layout>
+							<GridLayout/>
+						</p1:GGroup.layout>
+						<p1:GCheck description="Enables interrupt at SR1 initialization" manifestObj="true" text="Enable interrupt at initialization" value="true" widgetName="gcheck_SR1_EnableIntr"/>
+						<p1:GInterruptPrio manifestObj="true" maxPriority="3" maxSubPriority="0" minPriority="0" minSubPriority="0" priorityMandatory="false" priorityValue="3" subPriorityMandatory="false" subPriorityValue="0" subPriorityVisible="false" text="Interrupt Priority" widgetName="ginterruptprio_sr1" description="Subpriority is not applicable for XMC1000.">
+							<p1:GInterruptPrio.layoutData>
+								<GridData widthHint="459" heightHint="64"/>
+							</p1:GInterruptPrio.layoutData>
+						</p1:GInterruptPrio>
+					</p1:GGroup>
+					<p1:GGroup text="Service Request 2 Settings" widgetName="ggroup_SR2">
+						<p1:GGroup.layout>
+							<GridLayout/>
+						</p1:GGroup.layout>
+						<p1:GCheck description="Enables interrupt at SR2 initialization" manifestObj="true" text="Enable interrupt at initialization" value="true" widgetName="gcheck_SR2_EnableIntr"/>
+						<p1:GInterruptPrio manifestObj="true" maxPriority="3" maxSubPriority="0" minPriority="0" minSubPriority="0" priorityMandatory="false" priorityValue="3" subPriorityMandatory="false" subPriorityValue="0" subPriorityVisible="false" text="Interrupt Priority" widgetName="ginterruptprio_sr2" description="Subpriority is not applicable for XMC1000.">
+							<p1:GInterruptPrio.layoutData>
+								<GridData widthHint="457" heightHint="68"/>
+							</p1:GInterruptPrio.layoutData>
+						</p1:GInterruptPrio>
+					</p1:GGroup>
+				</p1:Tab>
+			</p1:GTab.control>
+		</p1:GTab>
+	</p1:TabFolder>
+</p1:Tab>

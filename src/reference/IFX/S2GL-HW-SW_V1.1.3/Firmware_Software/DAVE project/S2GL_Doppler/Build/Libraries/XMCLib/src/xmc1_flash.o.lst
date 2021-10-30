@@ -1,0 +1,1289 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "xmc1_flash.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .section .text.XMC_FLASH_ClearStatus,"ax",%progbits
+  18              	 .align 2
+  19              	 .global XMC_FLASH_ClearStatus
+  20              	 .code 16
+  21              	 .thumb_func
+  23              	XMC_FLASH_ClearStatus:
+  24              	.LFB46:
+  25              	 .file 1 "../Libraries/XMCLib/src/xmc1_flash.c"
+   1:../Libraries/XMCLib/src/xmc1_flash.c **** /**
+   2:../Libraries/XMCLib/src/xmc1_flash.c ****  * @file xmc1_flash.c
+   3:../Libraries/XMCLib/src/xmc1_flash.c ****  * @date 2015-10-14
+   4:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+   5:../Libraries/XMCLib/src/xmc1_flash.c ****  * @cond
+   6:../Libraries/XMCLib/src/xmc1_flash.c ****  **************************************************************************************************
+   7:../Libraries/XMCLib/src/xmc1_flash.c ****  * XMClib v2.1.6 - XMC Peripheral Driver Library 
+   8:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+   9:../Libraries/XMCLib/src/xmc1_flash.c ****  * Copyright (C) 2015-2019 Infineon Technologies AG
+  10:../Libraries/XMCLib/src/xmc1_flash.c ****  * All rights reserved.                        
+  11:../Libraries/XMCLib/src/xmc1_flash.c ****  *                                             
+  12:../Libraries/XMCLib/src/xmc1_flash.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../Libraries/XMCLib/src/xmc1_flash.c ****  * following conditions are met:   
+  14:../Libraries/XMCLib/src/xmc1_flash.c ****  *                                                                              
+  15:../Libraries/XMCLib/src/xmc1_flash.c ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:../Libraries/XMCLib/src/xmc1_flash.c ****  * disclaimer.                        
+  17:../Libraries/XMCLib/src/xmc1_flash.c ****  * 
+  18:../Libraries/XMCLib/src/xmc1_flash.c ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:../Libraries/XMCLib/src/xmc1_flash.c ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:../Libraries/XMCLib/src/xmc1_flash.c ****  * 
+  21:../Libraries/XMCLib/src/xmc1_flash.c ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:../Libraries/XMCLib/src/xmc1_flash.c ****  * products derived from this software without specific prior written permission.                  
+  23:../Libraries/XMCLib/src/xmc1_flash.c ****  *                                                                              
+  24:../Libraries/XMCLib/src/xmc1_flash.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../Libraries/XMCLib/src/xmc1_flash.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../Libraries/XMCLib/src/xmc1_flash.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../Libraries/XMCLib/src/xmc1_flash.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../Libraries/XMCLib/src/xmc1_flash.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../Libraries/XMCLib/src/xmc1_flash.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../Libraries/XMCLib/src/xmc1_flash.c ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:../Libraries/XMCLib/src/xmc1_flash.c ****  *                                                                              
+  32:../Libraries/XMCLib/src/xmc1_flash.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../Libraries/XMCLib/src/xmc1_flash.c ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:../Libraries/XMCLib/src/xmc1_flash.c ****  **************************************************************************************************
+  35:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  36:../Libraries/XMCLib/src/xmc1_flash.c ****  * Change History
+  37:../Libraries/XMCLib/src/xmc1_flash.c ****  * --------------
+  38:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  39:../Libraries/XMCLib/src/xmc1_flash.c ****  * 2015-02-10:
+  40:../Libraries/XMCLib/src/xmc1_flash.c ****  *     - Initial <br>
+  41:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  42:../Libraries/XMCLib/src/xmc1_flash.c ****  * 2015-06-20: 
+  43:../Libraries/XMCLib/src/xmc1_flash.c ****  *     - Removed definition of GetDriverVersion API 
+  44:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  45:../Libraries/XMCLib/src/xmc1_flash.c ****  * 2015-10-14: 
+  46:../Libraries/XMCLib/src/xmc1_flash.c ****  *     - Fixed defect in API XMC_FLASH_ErasePages, related to the errata NVM_CM.001
+  47:../Libraries/XMCLib/src/xmc1_flash.c ****  *     - NVM ROM user routine XMC1000_NvmErasePage(address) used for erase page. 
+  48:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  49:../Libraries/XMCLib/src/xmc1_flash.c ****  * @endcond 
+  50:../Libraries/XMCLib/src/xmc1_flash.c ****  *
+  51:../Libraries/XMCLib/src/xmc1_flash.c ****  */
+  52:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  53:../Libraries/XMCLib/src/xmc1_flash.c **** #include "xmc_flash.h"
+  54:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  55:../Libraries/XMCLib/src/xmc1_flash.c **** /**************************************************************************************************
+  56:../Libraries/XMCLib/src/xmc1_flash.c ****  * MACROS
+  57:../Libraries/XMCLib/src/xmc1_flash.c ****  **************************************************************************************************
+  58:../Libraries/XMCLib/src/xmc1_flash.c **** #if UC_FAMILY == XMC1
+  59:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  60:../Libraries/XMCLib/src/xmc1_flash.c **** /**************************************************************************************************
+  61:../Libraries/XMCLib/src/xmc1_flash.c ****  * ENUMS
+  62:../Libraries/XMCLib/src/xmc1_flash.c ****  **************************************************************************************************
+  63:../Libraries/XMCLib/src/xmc1_flash.c **** /* FLASH programming / erase options */
+  64:../Libraries/XMCLib/src/xmc1_flash.c **** typedef enum FLASH_ACTION
+  65:../Libraries/XMCLib/src/xmc1_flash.c **** {
+  66:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_IDLE                        =  (uint32_t)0x00,
+  67:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_ONESHOT_WRITE_VERIFY        = ((uint32_t)0x51 << NVM_NVMPROG_ACTION_Pos),
+  68:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_ONESHOT_WRITE               = ((uint32_t)0x91 << NVM_NVMPROG_ACTION_Pos),
+  69:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_CONTINUOUS_WRITE_VERIFY     = ((uint32_t)0x61 << NVM_NVMPROG_ACTION_Pos),
+  70:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_CONTINUOUS_WRITE            = ((uint32_t)0xa1 << NVM_NVMPROG_ACTION_Pos),
+  71:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_ONESHOT_PAGE_ERASE          = ((uint32_t)0x92 << NVM_NVMPROG_ACTION_Pos),
+  72:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_CONTINUOUS_PAGE_ERASE       = ((uint32_t)0xa2 << NVM_NVMPROG_ACTION_Pos),
+  73:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_ONESHOT_VERIFY_ONLY         = ((uint32_t)0xd0 << NVM_NVMPROG_ACTION_Pos),
+  74:../Libraries/XMCLib/src/xmc1_flash.c ****   FLASH_ACTION_CONTINUOUS_VERIFY_ONLY      = ((uint32_t)0xe0 << NVM_NVMPROG_ACTION_Pos)
+  75:../Libraries/XMCLib/src/xmc1_flash.c **** } FLASH_ACTION_t;
+  76:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  77:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  78:../Libraries/XMCLib/src/xmc1_flash.c **** /**************************************************************************************************
+  79:../Libraries/XMCLib/src/xmc1_flash.c ****  * API IMPLEMENTATION
+  80:../Libraries/XMCLib/src/xmc1_flash.c ****  **************************************************************************************************
+  81:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  82:../Libraries/XMCLib/src/xmc1_flash.c **** /*
+  83:../Libraries/XMCLib/src/xmc1_flash.c ****  * This API shall clear the ECC and VERIFICATION error status.
+  84:../Libraries/XMCLib/src/xmc1_flash.c ****  */
+  85:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ClearStatus(void)
+  86:../Libraries/XMCLib/src/xmc1_flash.c **** {
+  26              	 .loc 1 86 0
+  27              	 .cfi_startproc
+  87:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)((uint16_t)NVM_NVMPROG_RSTVERR_Msk | (uint16_t)NVM_NVMPROG_RSTECC_Msk);
+  28              	 .loc 1 87 0
+  29 0000 C021     	 mov r1,#192
+  30 0002 034A     	 ldr r2,.L2
+  31 0004 8901     	 lsl r1,r1,#6
+  32 0006 9388     	 ldrh r3,[r2,#4]
+  88:../Libraries/XMCLib/src/xmc1_flash.c **** }
+  33              	 .loc 1 88 0
+  34              	 
+  87:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)((uint16_t)NVM_NVMPROG_RSTVERR_Msk | (uint16_t)NVM_NVMPROG_RSTECC_Msk);
+  35              	 .loc 1 87 0
+  36 0008 0B43     	 orr r3,r1
+  37 000a 9380     	 strh r3,[r2,#4]
+  38              	 .loc 1 88 0
+  39 000c 7047     	 bx lr
+  40              	.L3:
+  41 000e C046     	 .align 2
+  42              	.L2:
+  43 0010 00000540 	 .word 1074069504
+  44              	 .cfi_endproc
+  45              	.LFE46:
+  47              	 .section .text.XMC_FLASH_GetStatus,"ax",%progbits
+  48              	 .align 2
+  49              	 .global XMC_FLASH_GetStatus
+  50              	 .code 16
+  51              	 .thumb_func
+  53              	XMC_FLASH_GetStatus:
+  54              	.LFB47:
+  89:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  90:../Libraries/XMCLib/src/xmc1_flash.c **** /*
+  91:../Libraries/XMCLib/src/xmc1_flash.c ****  * This API shall return the status of NVM.
+  92:../Libraries/XMCLib/src/xmc1_flash.c ****  */
+  93:../Libraries/XMCLib/src/xmc1_flash.c **** uint32_t XMC_FLASH_GetStatus(void)
+  94:../Libraries/XMCLib/src/xmc1_flash.c **** {
+  55              	 .loc 1 94 0
+  56              	 .cfi_startproc
+  95:../Libraries/XMCLib/src/xmc1_flash.c ****   return NVM->NVMSTATUS;
+  57              	 .loc 1 95 0
+  58 0000 014B     	 ldr r3,.L5
+  96:../Libraries/XMCLib/src/xmc1_flash.c **** }
+  59              	 .loc 1 96 0
+  60              	 
+  95:../Libraries/XMCLib/src/xmc1_flash.c ****   return NVM->NVMSTATUS;
+  61              	 .loc 1 95 0
+  62 0002 1888     	 ldrh r0,[r3]
+  63 0004 80B2     	 uxth r0,r0
+  64              	 .loc 1 96 0
+  65 0006 7047     	 bx lr
+  66              	.L6:
+  67              	 .align 2
+  68              	.L5:
+  69 0008 00000540 	 .word 1074069504
+  70              	 .cfi_endproc
+  71              	.LFE47:
+  73              	 .section .text.XMC_FLASH_EnableEvent,"ax",%progbits
+  74              	 .align 2
+  75              	 .global XMC_FLASH_EnableEvent
+  76              	 .code 16
+  77              	 .thumb_func
+  79              	XMC_FLASH_EnableEvent:
+  80              	.LFB48:
+  97:../Libraries/XMCLib/src/xmc1_flash.c **** 
+  98:../Libraries/XMCLib/src/xmc1_flash.c **** /*
+  99:../Libraries/XMCLib/src/xmc1_flash.c ****  * This API shall enable the the flash interrupt event.
+ 100:../Libraries/XMCLib/src/xmc1_flash.c ****  */
+ 101:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_EnableEvent(const uint32_t event_msk)
+ 102:../Libraries/XMCLib/src/xmc1_flash.c **** {
+  81              	 .loc 1 102 0
+  82              	 .cfi_startproc
+  83              	.LVL0:
+ 103:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMCONF |= (uint16_t)event_msk;
+  84              	 .loc 1 103 0
+  85 0000 024B     	 ldr r3,.L8
+ 104:../Libraries/XMCLib/src/xmc1_flash.c **** }
+  86              	 .loc 1 104 0
+  87              	 
+ 103:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMCONF |= (uint16_t)event_msk;
+  88              	 .loc 1 103 0
+  89 0002 1A89     	 ldrh r2,[r3,#8]
+  90 0004 1043     	 orr r0,r2
+  91              	.LVL1:
+  92 0006 80B2     	 uxth r0,r0
+  93 0008 1881     	 strh r0,[r3,#8]
+  94              	 .loc 1 104 0
+  95 000a 7047     	 bx lr
+  96              	.L9:
+  97              	 .align 2
+  98              	.L8:
+  99 000c 00000540 	 .word 1074069504
+ 100              	 .cfi_endproc
+ 101              	.LFE48:
+ 103              	 .section .text.XMC_FLASH_DisableEvent,"ax",%progbits
+ 104              	 .align 2
+ 105              	 .global XMC_FLASH_DisableEvent
+ 106              	 .code 16
+ 107              	 .thumb_func
+ 109              	XMC_FLASH_DisableEvent:
+ 110              	.LFB49:
+ 105:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 106:../Libraries/XMCLib/src/xmc1_flash.c **** /*
+ 107:../Libraries/XMCLib/src/xmc1_flash.c ****  * This API shall disable the the flash interrupt event.
+ 108:../Libraries/XMCLib/src/xmc1_flash.c ****  */
+ 109:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_DisableEvent(const uint32_t event_msk)
+ 110:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 111              	 .loc 1 110 0
+ 112              	 .cfi_startproc
+ 113              	.LVL2:
+ 111:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMCONF &= (uint16_t)(~(uint16_t)event_msk);
+ 114              	 .loc 1 111 0
+ 115 0000 024A     	 ldr r2,.L11
+ 112:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 116              	 .loc 1 112 0
+ 117              	 
+ 111:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMCONF &= (uint16_t)(~(uint16_t)event_msk);
+ 118              	 .loc 1 111 0
+ 119 0002 1389     	 ldrh r3,[r2,#8]
+ 120 0004 8343     	 bic r3,r0
+ 121 0006 1381     	 strh r3,[r2,#8]
+ 122              	 .loc 1 112 0
+ 123 0008 7047     	 bx lr
+ 124              	.L12:
+ 125 000a C046     	 .align 2
+ 126              	.L11:
+ 127 000c 00000540 	 .word 1074069504
+ 128              	 .cfi_endproc
+ 129              	.LFE49:
+ 131              	 .section .text.XMC_FLASH_ErasePage,"ax",%progbits
+ 132              	 .align 2
+ 133              	 .global XMC_FLASH_ErasePage
+ 134              	 .code 16
+ 135              	 .thumb_func
+ 137              	XMC_FLASH_ErasePage:
+ 138              	.LFB50:
+ 113:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 114:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ErasePage(uint32_t *address)
+ 115:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 139              	 .loc 1 115 0
+ 140              	 .cfi_startproc
+ 141              	.LVL3:
+ 142 0000 08B5     	 push {r3,lr}
+ 143              	.LCFI0:
+ 144              	 .cfi_def_cfa_offset 8
+ 145              	 .cfi_offset 3,-8
+ 146              	 .cfi_offset 14,-4
+ 116:../Libraries/XMCLib/src/xmc1_flash.c ****   (void)XMC1000_NvmErasePage(address);
+ 147              	 .loc 1 116 0
+ 148 0002 8023     	 mov r3,#128
+ 149 0004 5B00     	 lsl r3,r3,#1
+ 150 0006 1B68     	 ldr r3,[r3]
+ 151 0008 9847     	 blx r3
+ 152              	.LVL4:
+ 117:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 153              	 .loc 1 117 0
+ 154              	 
+ 155 000a 08BD     	 pop {r3,pc}
+ 156              	 .cfi_endproc
+ 157              	.LFE50:
+ 159              	 .section .text.XMC_FLASH_ProgramVerifyPage,"ax",%progbits
+ 160              	 .align 2
+ 161              	 .global XMC_FLASH_ProgramVerifyPage
+ 162              	 .code 16
+ 163              	 .thumb_func
+ 165              	XMC_FLASH_ProgramVerifyPage:
+ 166              	.LFB51:
+ 118:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 119:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ProgramVerifyPage(uint32_t *address, const uint32_t *data)
+ 120:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 167              	 .loc 1 120 0
+ 168              	 .cfi_startproc
+ 169              	.LVL5:
+ 170 0000 08B5     	 push {r3,lr}
+ 171              	.LCFI1:
+ 172              	 .cfi_def_cfa_offset 8
+ 173              	 .cfi_offset 3,-8
+ 174              	 .cfi_offset 14,-4
+ 121:../Libraries/XMCLib/src/xmc1_flash.c ****   (void)XMC1000_NvmProgVerify(data, address);
+ 175              	 .loc 1 121 0
+ 176 0002 8223     	 mov r3,#130
+ 120:../Libraries/XMCLib/src/xmc1_flash.c ****   (void)XMC1000_NvmProgVerify(data, address);
+ 177              	 .loc 1 120 0
+ 178 0004 021C     	 mov r2,r0
+ 179              	 .loc 1 121 0
+ 180 0006 5B00     	 lsl r3,r3,#1
+ 181 0008 081C     	 mov r0,r1
+ 182              	.LVL6:
+ 183 000a 1B68     	 ldr r3,[r3]
+ 184 000c 111C     	 mov r1,r2
+ 185              	.LVL7:
+ 186 000e 9847     	 blx r3
+ 187              	.LVL8:
+ 122:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 188              	 .loc 1 122 0
+ 189              	 
+ 190 0010 08BD     	 pop {r3,pc}
+ 191              	 .cfi_endproc
+ 192              	.LFE51:
+ 194 0012 C046     	 .section .text.XMC_FLASH_WriteBlocks,"ax",%progbits
+ 195              	 .align 2
+ 196              	 .global XMC_FLASH_WriteBlocks
+ 197              	 .code 16
+ 198              	 .thumb_func
+ 200              	XMC_FLASH_WriteBlocks:
+ 201              	.LFB52:
+ 123:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 124:../Libraries/XMCLib/src/xmc1_flash.c **** /* Write blocks of data into flash*/
+ 125:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_WriteBlocks(uint32_t *address, const uint32_t *data, uint32_t num_blocks, bool verif
+ 126:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 202              	 .loc 1 126 0
+ 203              	 .cfi_startproc
+ 204              	.LVL9:
+ 205 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+ 206              	.LCFI2:
+ 207              	 .cfi_def_cfa_offset 20
+ 208              	 .cfi_offset 4,-20
+ 209              	 .cfi_offset 5,-16
+ 210              	 .cfi_offset 6,-12
+ 211              	 .cfi_offset 7,-8
+ 212              	 .cfi_offset 14,-4
+ 127:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 128:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t block;
+ 129:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 130:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_ASSERT("XMC_FLASH_WriteBlocks: Starting address not aligned to Block",
+ 131:../Libraries/XMCLib/src/xmc1_flash.c ****                                                                    ((uint32_t)address & FLASH_BLOCK
+ 132:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 133:../Libraries/XMCLib/src/xmc1_flash.c ****   /* Configure the continuous Write option command and reset the NVM error / verification status*/
+ 134:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG &= (uint16_t)(~(uint16_t)NVM_NVMPROG_ACTION_Msk);
+ 213              	 .loc 1 134 0
+ 214 0002 FF26     	 mov r6,#255
+ 215 0004 154C     	 ldr r4,.L28
+ 216 0006 A588     	 ldrh r5,[r4,#4]
+ 217 0008 B543     	 bic r5,r6
+ 135:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)(NVM_NVMPROG_RSTVERR_Msk | NVM_NVMPROG_RSTECC_Msk);
+ 218              	 .loc 1 135 0
+ 219 000a C026     	 mov r6,#192
+ 134:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)(NVM_NVMPROG_RSTVERR_Msk | NVM_NVMPROG_RSTECC_Msk);
+ 220              	 .loc 1 134 0
+ 221 000c A580     	 strh r5,[r4,#4]
+ 222              	 .loc 1 135 0
+ 223 000e A588     	 ldrh r5,[r4,#4]
+ 224 0010 B601     	 lsl r6,r6,#6
+ 225 0012 3543     	 orr r5,r6
+ 226 0014 A580     	 strh r5,[r4,#4]
+ 136:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 137:../Libraries/XMCLib/src/xmc1_flash.c ****   if (verify == true)
+ 138:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 139:../Libraries/XMCLib/src/xmc1_flash.c ****     NVM->NVMPROG |= (uint16_t)FLASH_ACTION_CONTINUOUS_WRITE_VERIFY;
+ 227              	 .loc 1 139 0
+ 228 0016 A588     	 ldrh r5,[r4,#4]
+ 137:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 229              	 .loc 1 137 0
+ 230 0018 002B     	 cmp r3,#0
+ 231 001a 1BD0     	 beq .L16
+ 232              	 .loc 1 139 0
+ 233 001c 6123     	 mov r3,#97
+ 234              	.LVL10:
+ 235 001e 2B43     	 orr r3,r5
+ 236 0020 A380     	 strh r3,[r4,#4]
+ 237              	.L17:
+ 238              	.LVL11:
+ 140:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 141:../Libraries/XMCLib/src/xmc1_flash.c ****   else
+ 142:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 143:../Libraries/XMCLib/src/xmc1_flash.c ****     NVM->NVMPROG |= (uint16_t)FLASH_ACTION_CONTINUOUS_WRITE;
+ 144:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 145:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 146:../Libraries/XMCLib/src/xmc1_flash.c ****   for (block = 0U; block < num_blocks; ++block)
+ 239              	 .loc 1 146 0 discriminator 1
+ 240 0022 0026     	 mov r6,#0
+ 241 0024 002A     	 cmp r2,#0
+ 242 0026 0FD0     	 beq .L19
+ 243              	.LBB24:
+ 244              	.LBB25:
+ 245              	 .file 2 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc/xmc_flash.h"
+   1:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+   2:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @file xmc_flash.h
+   3:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @date 2015-06-20
+   4:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+   5:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @cond
+   6:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  **************************************************************************************************
+   7:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMClib v2.1.6 - XMC Peripheral Driver Library 
+   8:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+   9:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Copyright (C) 2015-2019 Infineon Technologies AG
+  10:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * All rights reserved.                        
+  11:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *                                             
+  12:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * following conditions are met:   
+  14:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *                                                                              
+  15:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * disclaimer.                        
+  17:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * 
+  18:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * 
+  21:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *                                                                              
+  24:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *                                                                              
+  32:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  **************************************************************************************************
+  35:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+  36:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Change History
+  37:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * --------------
+  38:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+  39:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * 2014-12-10:
+  40:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *     - Initial <br>
+  41:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * 2015-02-20:
+  42:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *     - Updated for Documentation related changes<br>
+  43:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * 2015-06-20: 
+  44:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *     - Removed version macros and declaration of GetDriverVersion API 
+  45:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @endcond 
+  46:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+  47:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+  48:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  49:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  50:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #ifndef XMC_FLASH_H
+  51:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #define XMC_FLASH_H
+  52:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  53:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**************************************************************************************************
+  54:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * HEADER FILES
+  55:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  **************************************************************************************************
+  56:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  57:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #include "xmc_common.h"
+  58:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  59:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #if UC_FAMILY == XMC1
+  60:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  #include "xmc1_flash.h"
+  61:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #endif
+  62:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  
+  63:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #if UC_FAMILY == XMC4
+  64:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  #include "xmc4_flash.h"
+  65:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #endif
+  66:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  67:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+  68:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @addtogroup XMClib XMC Peripheral Library
+  69:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @{
+  70:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+  71:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  72:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+  73:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @addtogroup FLASH
+  74:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @brief Flash driver for XMC microcontroller family.
+  75:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+  76:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Flash is a non volatile memory module used to store instruction code or constant data.
+  77:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * The flash low level driver provides support to the following functionalities of flash memory.<BR
+  78:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <OL>
+  79:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+  80:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides function to program a page. ( XMC_FLASH_ProgramPage() )</LI><BR>
+  81:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides functions to support read and write protection. ( XMC_FLASH_InstallProtection(), 
+  82:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMC_FLASH_ConfirmProtection(), XMC_FLASH_VerifyReadProtection(), XMC_FLASH_VerifyWriteProtection
+  83:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides function to erase sector. ( XMC_FLASH_EraseSector() ) </LI><BR> 
+  84:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+  85:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+  86:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides functions to program and verify pages. ( XMC_FLASH_ProgramPage(), XMC_FLASH_Program
+  87:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *  XMC_FLASH_ProgramVerifyPage() )</LI><BR>
+  88:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides functions to write and verify blocks. ( XMC_FLASH_WriteBlocks(), XMC_FLASH_VerifyBl
+  89:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides functions to read data in terms of word and blocks. ( XMC_FLASH_ReadBlocks(), XMC_F
+  90:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * </LI><BR> 
+  91:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * <LI>Provides function to erase page. ( XMC_FLASH_ErasePage() ) </LI><BR> 
+  92:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+  93:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * </OL>
+  94:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @{
+  95:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+  96:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+  97:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /*******************************************************************************
+  98:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * API PROTOTYPE
+  99:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *******************************************************************************/
+ 100:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #ifdef __cplusplus
+ 101:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** extern "C" {
+ 102:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** #endif
+ 103:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 104:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 105:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 106:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param None
+ 107:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 108:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return None
+ 109:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 110:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 111:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+ 112:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Clears the previous error status by reseting the ECC and VERR error status bits of NVMSTATUS reg
+ 113:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Call this API before starting any flash programming / erase related APIs to ensure all previous 
+ 114:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 115:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+ 116:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Clears the previous error status by reseting the FSR status register.\n\n  Call this API before 
+ 117:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * programming / erase related APIs to ensure all previous errors are cleared.
+ 118:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 119:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 120:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 121:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * None 
+ 122:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 123:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 124:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** void XMC_FLASH_ClearStatus(void);
+ 125:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 126:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 127:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 128:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param None
+ 129:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 130:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return uint32_t Status of the previous flash operation.
+ 131:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 132:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 133:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+ 134:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Informs the status of flash by reading the NVMSTATUS register.\n\n  It indicates the ECC, VERR(v
+ 135:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * WRPERR (Write protocol error) errors as well as the current flash state. After calling the flash
+ 136:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * operation related APIs, call this API to get the verification status. The return value of this A
+ 137:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * against the members of @ref XMC_FLASH_STATUS_t enumeration to get the relevant status.
+ 138:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 139:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+ 140:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Informs the status of flash by reading the FSR register.\n\n  It indicates the error status such
+ 141:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * PROER, PFDBER, ORIER, VER errors as well as the current flash state. After calling the flash rea
+ 142:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * operation related APIs, call this API to verify flash status. The return value of this API shall
+ 143:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * the members of @ref XMC_FLASH_STATUS_t enumeration to get the relevant status.
+ 144:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 145:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 146:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 147:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * None
+ 148:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 149:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 150:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** uint32_t XMC_FLASH_GetStatus(void);
+ 151:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 152:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 153:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 154:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param event_msk ORed values of @ref XMC_FLASH_EVENT_t enumeration
+ 155:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 156:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return None
+ 157:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 158:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 159:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Enables the particular flash events as specified in the input parameter.\n
+ 160:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 161:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 162:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMC_FLASH_DisableEvent()\n\n\n
+ 163:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 164:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 165:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** void XMC_FLASH_EnableEvent(const uint32_t event_msk);
+ 166:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 167:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 168:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 169:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param event_msk ORed values of @ref XMC_FLASH_EVENT_t enumeration
+ 170:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 171:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return None
+ 172:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 173:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 174:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Disables the particular flash events as specified in the input parameter.\n
+ 175:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 176:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 177:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMC_FLASH_EnableEvent()\n\n\n
+ 178:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 179:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 180:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** void XMC_FLASH_DisableEvent(const uint32_t event_msk);
+ 181:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 182:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 183:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 184:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param address    Pointer to the starting address of flash page from where the programming start
+ 185:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param data       Pointer to the source address where targeted data is located.
+ 186:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 187:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return None
+ 188:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 189:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 190:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+ 191:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Programs a single flash page associated with the specified \a address.\n\n XMC1000 Flash can be 
+ 192:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * page (256 bytes) using this API. It calls the Flash Firmware routine \a XMC1000_NvmProgVerify(un
+ 193:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * to perform the programming. Refer XMC1000 reference manual of for more details on flash firmware
+ 194:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * (Section 25.3). Call XMC_FLASH_GetStatus() API after calling this API, to verify the programming
+ 195:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 196:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+ 197:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Programs a single flash page associated with the specified \a address.\n\n  XMC4000 flash can be
+ 198:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * granularity of 256 bytes page using this API. Before entering into page write process, it clears
+ 199:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * bits inside status register. It starts the write process by issuing the page mode command follow
+ 200:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * command which loads the targeted \a data blocks into internal assembly buffer. Finally, it issue
+ 201:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * command which programs the \a data into flash. Call XMC_FLASH_GetStatus() API after calling this
+ 202:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * programming operation.\n
+ 203:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 204:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 205:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Note:</b><br>
+ 206:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Flash will be busy state during write is ongoing, hence no operations allowed until it completes
+ 207:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 208:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 209:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * None 
+ 210:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 211:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 212:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** void XMC_FLASH_ProgramPage(uint32_t *address, const uint32_t *data);
+ 213:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 214:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 215:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 216:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param address Pointer to the starting address of the page to be erased.
+ 217:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 218:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return None
+ 219:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 220:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 221:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+ 222:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Erases a complete sector starting from the \a address specified.\n\n  XMC1000 Flash can be erase
+ 223:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * of one page = 16 blocks of 16 Bytes = 256 Bytes using this API. It internally calls XMC_FLASH_Er
+ 224:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * times starting from the first page of the sector.. Call XMC_FLASH_GetStatus() API after calling 
+ 225:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * to verify the erase operation.\n
+ 226:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 227:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 228:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+ 229:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Erases a sector associated with the specified \a address.\n\n  Before erase, it clears the error
+ 230:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * FSR status register. Issues the erase sector command sequence with the specified starting \a add
+ 231:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * erase process. Call XMC_FLASH_GetStatus() API after calling this API, to verify the erase operat
+ 232:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 233:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC1
+ 234:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 235:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMC_FLASH_ErasePages() \n\n\n
+ 236:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 237:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \if XMC4
+ 238:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 239:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * None
+ 240:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \endif
+ 241:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 242:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** void XMC_FLASH_EraseSector(uint32_t *address);
+ 243:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** 
+ 244:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** /**
+ 245:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 246:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @param None
+ 247:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 248:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * @return true if flash is in busy state else returns \a false.
+ 249:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 250:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Description:</b><br>
+ 251:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Checks whether flash is in busy state or not.\n\n  It is checked by calling the XMC_FLASH_GetSta
+ 252:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * Refer XMC_FLASH_GetStatus() for more details.\n
+ 253:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 254:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * \par<b>Related APIs:</b><BR>
+ 255:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  * XMC_FLASH_GetStatus()\n\n\n
+ 256:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  *
+ 257:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****  */
+ 258:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** __STATIC_INLINE bool XMC_FLASH_IsBusy(void)
+ 259:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h **** {
+ 260:C:/Users/±è°æ¹Î/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc\xmc_flash.h ****   return (bool)(XMC_FLASH_GetStatus() & XMC_FLASH_STATUS_BUSY);
+ 246              	 .loc 2 260 0 discriminator 1
+ 247 0028 0124     	 mov r4,#1
+ 248              	.LBB26:
+ 249              	.LBB27:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 250              	 .loc 1 95 0 discriminator 1
+ 251 002a 0C4D     	 ldr r5,.L28
+ 252              	.LVL12:
+ 253              	.L23:
+ 254              	.LBE27:
+ 255              	.LBE26:
+ 256              	.LBE25:
+ 257              	.LBE24:
+ 126:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 258              	 .loc 1 126 0 discriminator 1
+ 259 002c 0023     	 mov r3,#0
+ 260              	.LVL13:
+ 261              	.L20:
+ 147:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 148:../Libraries/XMCLib/src/xmc1_flash.c ****     for (word = 0U; word < XMC_FLASH_WORDS_PER_BLOCK; ++word)
+ 149:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 150:../Libraries/XMCLib/src/xmc1_flash.c ****       *address = *data;
+ 262              	 .loc 1 150 0 discriminator 3
+ 263 002e CF58     	 ldr r7,[r1,r3]
+ 264 0030 C750     	 str r7,[r0,r3]
+ 265              	.LVL14:
+ 266 0032 0433     	 add r3,r3,#4
+ 267              	.LVL15:
+ 148:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 268              	 .loc 1 148 0 discriminator 3
+ 269 0034 102B     	 cmp r3,#16
+ 270 0036 FAD1     	 bne .L20
+ 271 0038 1031     	 add r1,r1,#16
+ 272              	.LVL16:
+ 273 003a 1030     	 add r0,r0,#16
+ 274              	.LVL17:
+ 275              	.L21:
+ 276              	.LBB31:
+ 277              	.LBB30:
+ 278              	.LBB29:
+ 279              	.LBB28:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 280              	 .loc 1 95 0 discriminator 1
+ 281 003c 2B88     	 ldrh r3,[r5]
+ 282              	.LBE28:
+ 283              	.LBE29:
+ 284              	.LBE30:
+ 285              	.LBE31:
+ 151:../Libraries/XMCLib/src/xmc1_flash.c ****       data++;
+ 152:../Libraries/XMCLib/src/xmc1_flash.c ****       address++;
+ 153:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 154:../Libraries/XMCLib/src/xmc1_flash.c ****       
+ 155:../Libraries/XMCLib/src/xmc1_flash.c ****     while (XMC_FLASH_IsBusy() == true)
+ 286              	 .loc 1 155 0 discriminator 1
+ 287 003e 1C42     	 tst r4,r3
+ 288 0040 FCD1     	 bne .L21
+ 146:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 289              	 .loc 1 146 0 discriminator 2
+ 290 0042 0136     	 add r6,r6,#1
+ 291              	.LVL18:
+ 292 0044 9642     	 cmp r6,r2
+ 293 0046 F1D1     	 bne .L23
+ 294              	.LVL19:
+ 295              	.L19:
+ 156:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 157:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 158:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 159:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 160:../Libraries/XMCLib/src/xmc1_flash.c ****   /* Stop continuous write operation */
+ 161:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG &= (uint16_t)(~(uint16_t)NVM_NVMPROG_ACTION_Msk);
+ 296              	 .loc 1 161 0
+ 297 0048 FF21     	 mov r1,#255
+ 298              	.LVL20:
+ 299 004a 044A     	 ldr r2,.L28
+ 300              	.LVL21:
+ 162:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 301              	 .loc 1 162 0
+ 302              	 
+ 161:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 303              	 .loc 1 161 0
+ 304 004c 9388     	 ldrh r3,[r2,#4]
+ 305 004e 8B43     	 bic r3,r1
+ 306 0050 9380     	 strh r3,[r2,#4]
+ 307              	 .loc 1 162 0
+ 308 0052 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 309              	.LVL22:
+ 310              	.L16:
+ 143:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 311              	 .loc 1 143 0
+ 312 0054 A123     	 mov r3,#161
+ 313              	.LVL23:
+ 314 0056 2B43     	 orr r3,r5
+ 315 0058 A380     	 strh r3,[r4,#4]
+ 316 005a E2E7     	 b .L17
+ 317              	.L29:
+ 318              	 .align 2
+ 319              	.L28:
+ 320 005c 00000540 	 .word 1074069504
+ 321              	 .cfi_endproc
+ 322              	.LFE52:
+ 324              	 .section .text.XMC_FLASH_ErasePages,"ax",%progbits
+ 325              	 .align 2
+ 326              	 .global XMC_FLASH_ErasePages
+ 327              	 .code 16
+ 328              	 .thumb_func
+ 330              	XMC_FLASH_ErasePages:
+ 331              	.LFB53:
+ 163:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 164:../Libraries/XMCLib/src/xmc1_flash.c **** /* Erase flash pages */
+ 165:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ErasePages(uint32_t *address, uint32_t num_pages)
+ 166:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 332              	 .loc 1 166 0
+ 333              	 .cfi_startproc
+ 334              	.LVL24:
+ 335 0000 F8B5     	 push {r3,r4,r5,r6,r7,lr}
+ 336              	.LCFI3:
+ 337              	 .cfi_def_cfa_offset 24
+ 338              	 .cfi_offset 3,-24
+ 339              	 .cfi_offset 4,-20
+ 340              	 .cfi_offset 5,-16
+ 341              	 .cfi_offset 6,-12
+ 342              	 .cfi_offset 7,-8
+ 343              	 .cfi_offset 14,-4
+ 344 0002 4646     	 mov r6,r8
+ 345 0004 4F46     	 mov r7,r9
+ 346 0006 8846     	 mov r8,r1
+ 347 0008 C0B4     	 push {r6,r7}
+ 348              	.LCFI4:
+ 349              	 .cfi_def_cfa_offset 32
+ 350              	 .cfi_offset 8,-32
+ 351              	 .cfi_offset 9,-28
+ 352              	 .loc 1 166 0
+ 353 000a 071C     	 mov r7,r0
+ 167:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t page;
+ 168:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 169:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_ASSERT("XMC_FLASH_ErasePages: Starting address not aligned to Page",
+ 170:../Libraries/XMCLib/src/xmc1_flash.c ****                                                                     ((uint32_t)address & FLASH_PAGE
+ 171:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 172:../Libraries/XMCLib/src/xmc1_flash.c ****   for (page = 0U; page < num_pages; ++page)
+ 354              	 .loc 1 172 0
+ 355 000c 0026     	 mov r6,#0
+ 356 000e 0029     	 cmp r1,#0
+ 357 0010 10D0     	 beq .L30
+ 173:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 174:../Libraries/XMCLib/src/xmc1_flash.c ****     (void)XMC1000_NvmErasePage(address);
+ 358              	 .loc 1 174 0
+ 359 0012 8023     	 mov r3,#128
+ 360 0014 5B00     	 lsl r3,r3,#1
+ 361 0016 9946     	 mov r9,r3
+ 362              	.LBB32:
+ 363              	.LBB33:
+ 364              	 .loc 2 260 0
+ 365 0018 0124     	 mov r4,#1
+ 366              	.LBB34:
+ 367              	.LBB35:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 368              	 .loc 1 95 0
+ 369 001a 084D     	 ldr r5,.L38
+ 370              	.LVL25:
+ 371              	.L35:
+ 372              	.LBE35:
+ 373              	.LBE34:
+ 374              	.LBE33:
+ 375              	.LBE32:
+ 376              	 .loc 1 174 0
+ 377 001c 4B46     	 mov r3,r9
+ 378 001e 381C     	 mov r0,r7
+ 379 0020 1B68     	 ldr r3,[r3]
+ 380 0022 9847     	 blx r3
+ 381              	.LVL26:
+ 382              	.L32:
+ 383              	.LBB39:
+ 384              	.LBB38:
+ 385              	.LBB37:
+ 386              	.LBB36:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 387              	 .loc 1 95 0 discriminator 1
+ 388 0024 2B88     	 ldrh r3,[r5]
+ 389              	.LBE36:
+ 390              	.LBE37:
+ 391              	.LBE38:
+ 392              	.LBE39:
+ 175:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 176:../Libraries/XMCLib/src/xmc1_flash.c ****     while (XMC_FLASH_IsBusy() == true)
+ 393              	 .loc 1 176 0 discriminator 1
+ 394 0026 1C42     	 tst r4,r3
+ 395 0028 FCD1     	 bne .L32
+ 177:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 178:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 179:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 180:../Libraries/XMCLib/src/xmc1_flash.c ****     /* Increment the page address for the next erase */
+ 181:../Libraries/XMCLib/src/xmc1_flash.c ****     address += XMC_FLASH_WORDS_PER_PAGE;
+ 396              	 .loc 1 181 0 discriminator 2
+ 397 002a 0137     	 add r7,r7,#1
+ 398              	.LVL27:
+ 172:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 399              	 .loc 1 172 0 discriminator 2
+ 400 002c 0136     	 add r6,r6,#1
+ 401              	.LVL28:
+ 402              	 .loc 1 181 0 discriminator 2
+ 403 002e FF37     	 add r7,r7,#255
+ 404              	.LVL29:
+ 172:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 405              	 .loc 1 172 0 discriminator 2
+ 406 0030 4645     	 cmp r6,r8
+ 407 0032 F3D1     	 bne .L35
+ 408              	.LVL30:
+ 409              	.L30:
+ 182:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 183:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 184:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 185:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 410              	 .loc 1 185 0
+ 411              	 
+ 412              	.LVL31:
+ 413              	.LVL32:
+ 414 0034 0CBC     	 pop {r2,r3}
+ 415 0036 9046     	 mov r8,r2
+ 416 0038 9946     	 mov r9,r3
+ 417 003a F8BD     	 pop {r3,r4,r5,r6,r7,pc}
+ 418              	.L39:
+ 419              	 .align 2
+ 420              	.L38:
+ 421 003c 00000540 	 .word 1074069504
+ 422              	 .cfi_endproc
+ 423              	.LFE53:
+ 425              	 .section .text.XMC_FLASH_VerifyBlocks,"ax",%progbits
+ 426              	 .align 2
+ 427              	 .global XMC_FLASH_VerifyBlocks
+ 428              	 .code 16
+ 429              	 .thumb_func
+ 431              	XMC_FLASH_VerifyBlocks:
+ 432              	.LFB54:
+ 186:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 187:../Libraries/XMCLib/src/xmc1_flash.c **** /* Write multiple data blocks and verify the written data */
+ 188:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_VerifyBlocks(uint32_t *address, const uint32_t *data, uint32_t num_blocks)
+ 189:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 433              	 .loc 1 189 0
+ 434              	 .cfi_startproc
+ 435              	.LVL33:
+ 436 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+ 437              	.LCFI5:
+ 438              	 .cfi_def_cfa_offset 20
+ 439              	 .cfi_offset 4,-20
+ 440              	 .cfi_offset 5,-16
+ 441              	 .cfi_offset 6,-12
+ 442              	 .cfi_offset 7,-8
+ 443              	 .cfi_offset 14,-4
+ 190:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 191:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t block;
+ 192:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 193:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_ASSERT("XMC_FLASH_VerifyBlocks: Starting address not aligned to Block",
+ 194:../Libraries/XMCLib/src/xmc1_flash.c ****                                                                    ((uint32_t)address & FLASH_BLOCK
+ 195:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 196:../Libraries/XMCLib/src/xmc1_flash.c ****   /* Configure the Continuous write with verify option command and reset the NVM error / verificati
+ 197:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG &= (uint16_t)~NVM_NVMPROG_ACTION_Msk;
+ 444              	 .loc 1 197 0
+ 445 0002 FF25     	 mov r5,#255
+ 446 0004 0F4C     	 ldr r4,.L50
+ 198:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)((uint16_t)NVM_NVMPROG_RSTVERR_Msk | 
+ 199:../Libraries/XMCLib/src/xmc1_flash.c ****                              (uint16_t)NVM_NVMPROG_RSTECC_Msk | 
+ 200:../Libraries/XMCLib/src/xmc1_flash.c ****                              (uint16_t)FLASH_ACTION_CONTINUOUS_VERIFY_ONLY);
+ 201:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 202:../Libraries/XMCLib/src/xmc1_flash.c ****   for (block = 0U; block < num_blocks; ++block)
+ 447              	 .loc 1 202 0
+ 448 0006 0026     	 mov r6,#0
+ 197:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)((uint16_t)NVM_NVMPROG_RSTVERR_Msk | 
+ 449              	 .loc 1 197 0
+ 450 0008 A388     	 ldrh r3,[r4,#4]
+ 451 000a AB43     	 bic r3,r5
+ 452 000c A380     	 strh r3,[r4,#4]
+ 198:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG |= (uint16_t)((uint16_t)NVM_NVMPROG_RSTVERR_Msk | 
+ 453              	 .loc 1 198 0
+ 454 000e A388     	 ldrh r3,[r4,#4]
+ 455 0010 0D4D     	 ldr r5,.L50+4
+ 456 0012 2B43     	 orr r3,r5
+ 457 0014 A380     	 strh r3,[r4,#4]
+ 458              	.LVL34:
+ 459              	.LBB40:
+ 460              	.LBB41:
+ 461              	 .loc 2 260 0
+ 462 0016 0125     	 mov r5,#1
+ 463              	.LBE41:
+ 464              	.LBE40:
+ 465              	 .loc 1 202 0
+ 466 0018 002A     	 cmp r2,#0
+ 467 001a 0DD0     	 beq .L42
+ 468              	.LVL35:
+ 469              	.L46:
+ 189:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 470              	 .loc 1 189 0 discriminator 1
+ 471 001c 0023     	 mov r3,#0
+ 472              	.LVL36:
+ 473              	.L43:
+ 203:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 204:../Libraries/XMCLib/src/xmc1_flash.c ****     for (word = 0U; word < XMC_FLASH_WORDS_PER_BLOCK; ++word)
+ 205:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 206:../Libraries/XMCLib/src/xmc1_flash.c ****       *address = *data;
+ 474              	 .loc 1 206 0 discriminator 3
+ 475 001e CF58     	 ldr r7,[r1,r3]
+ 476 0020 C750     	 str r7,[r0,r3]
+ 477              	.LVL37:
+ 478 0022 0433     	 add r3,r3,#4
+ 479              	.LVL38:
+ 204:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 480              	 .loc 1 204 0 discriminator 3
+ 481 0024 102B     	 cmp r3,#16
+ 482 0026 FAD1     	 bne .L43
+ 483 0028 1031     	 add r1,r1,#16
+ 484              	.LVL39:
+ 485 002a 1030     	 add r0,r0,#16
+ 486              	.LVL40:
+ 487              	.L44:
+ 488              	.LBB45:
+ 489              	.LBB44:
+ 490              	.LBB42:
+ 491              	.LBB43:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 492              	 .loc 1 95 0 discriminator 1
+ 493 002c 2388     	 ldrh r3,[r4]
+ 494              	.LBE43:
+ 495              	.LBE42:
+ 496              	.LBE44:
+ 497              	.LBE45:
+ 207:../Libraries/XMCLib/src/xmc1_flash.c ****       data++;
+ 208:../Libraries/XMCLib/src/xmc1_flash.c ****       address++;
+ 209:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 210:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 211:../Libraries/XMCLib/src/xmc1_flash.c ****     while (XMC_FLASH_IsBusy() == true)
+ 498              	 .loc 1 211 0 discriminator 1
+ 499 002e 1D42     	 tst r5,r3
+ 500 0030 FCD1     	 bne .L44
+ 202:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 501              	 .loc 1 202 0 discriminator 2
+ 502 0032 0136     	 add r6,r6,#1
+ 503              	.LVL41:
+ 504 0034 9642     	 cmp r6,r2
+ 505 0036 F1D1     	 bne .L46
+ 506              	.LVL42:
+ 507              	.L42:
+ 212:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 213:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 214:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 215:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 216:../Libraries/XMCLib/src/xmc1_flash.c ****   /* Stop continuous verify operation */
+ 217:../Libraries/XMCLib/src/xmc1_flash.c ****   NVM->NVMPROG &= (uint16_t)(~(uint16_t)NVM_NVMPROG_ACTION_Msk);
+ 508              	 .loc 1 217 0
+ 509 0038 FF21     	 mov r1,#255
+ 510              	.LVL43:
+ 511 003a 024A     	 ldr r2,.L50
+ 512              	.LVL44:
+ 218:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 513              	 .loc 1 218 0
+ 514              	 
+ 217:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 515              	 .loc 1 217 0
+ 516 003c 9388     	 ldrh r3,[r2,#4]
+ 517 003e 8B43     	 bic r3,r1
+ 518 0040 9380     	 strh r3,[r2,#4]
+ 519              	 .loc 1 218 0
+ 520 0042 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 521              	.L51:
+ 522              	 .align 2
+ 523              	.L50:
+ 524 0044 00000540 	 .word 1074069504
+ 525 0048 E0300000 	 .word 12512
+ 526              	 .cfi_endproc
+ 527              	.LFE54:
+ 529              	 .section .text.XMC_FLASH_ReadBlocks,"ax",%progbits
+ 530              	 .align 2
+ 531              	 .global XMC_FLASH_ReadBlocks
+ 532              	 .code 16
+ 533              	 .thumb_func
+ 535              	XMC_FLASH_ReadBlocks:
+ 536              	.LFB55:
+ 219:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 220:../Libraries/XMCLib/src/xmc1_flash.c **** /* Read data blocks from flash */
+ 221:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ReadBlocks(uint32_t *address, uint32_t *data, uint32_t num_blocks)
+ 222:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 537              	 .loc 1 222 0
+ 538              	 .cfi_startproc
+ 539              	.LVL45:
+ 540 0000 30B5     	 push {r4,r5,lr}
+ 541              	.LCFI6:
+ 542              	 .cfi_def_cfa_offset 12
+ 543              	 .cfi_offset 4,-12
+ 544              	 .cfi_offset 5,-8
+ 545              	 .cfi_offset 14,-4
+ 223:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 224:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t block;
+ 225:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 226:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_ASSERT("XMC_FLASH_ReadBlocks: Starting address not aligned to Block",
+ 227:../Libraries/XMCLib/src/xmc1_flash.c ****                                                                   ((uint32_t)address & FLASH_BLOCK_
+ 228:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 229:../Libraries/XMCLib/src/xmc1_flash.c ****   for (block = 0U; block < num_blocks; ++block)
+ 546              	 .loc 1 229 0
+ 547 0002 0024     	 mov r4,#0
+ 548 0004 002A     	 cmp r2,#0
+ 549 0006 0AD0     	 beq .L52
+ 550              	.LVL46:
+ 551              	.L57:
+ 222:../Libraries/XMCLib/src/xmc1_flash.c ****   uint32_t word;
+ 552              	 .loc 1 222 0 discriminator 1
+ 553 0008 0023     	 mov r3,#0
+ 554              	.LVL47:
+ 555              	.L55:
+ 230:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 231:../Libraries/XMCLib/src/xmc1_flash.c ****     for (word = 0U; word < XMC_FLASH_WORDS_PER_BLOCK; ++word)
+ 232:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 233:../Libraries/XMCLib/src/xmc1_flash.c ****       *data = *address;
+ 556              	 .loc 1 233 0 discriminator 3
+ 557 000a C558     	 ldr r5,[r0,r3]
+ 558 000c CD50     	 str r5,[r1,r3]
+ 559              	.LVL48:
+ 560 000e 0433     	 add r3,r3,#4
+ 561              	.LVL49:
+ 231:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 562              	 .loc 1 231 0 discriminator 3
+ 563 0010 102B     	 cmp r3,#16
+ 564 0012 FAD1     	 bne .L55
+ 229:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 565              	 .loc 1 229 0 discriminator 2
+ 566 0014 0134     	 add r4,r4,#1
+ 567              	.LVL50:
+ 568 0016 1031     	 add r1,r1,#16
+ 569              	.LVL51:
+ 570 0018 1030     	 add r0,r0,#16
+ 571              	.LVL52:
+ 572 001a 9442     	 cmp r4,r2
+ 573 001c F4D1     	 bne .L57
+ 574              	.LVL53:
+ 575              	.L52:
+ 234:../Libraries/XMCLib/src/xmc1_flash.c ****       data++;
+ 235:../Libraries/XMCLib/src/xmc1_flash.c ****       address++;
+ 236:../Libraries/XMCLib/src/xmc1_flash.c ****     }
+ 237:../Libraries/XMCLib/src/xmc1_flash.c ****   }
+ 238:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 576              	 .loc 1 238 0
+ 577              	 
+ 578 001e 30BD     	 pop {r4,r5,pc}
+ 579              	 .cfi_endproc
+ 580              	.LFE55:
+ 582              	 .section .text.XMC_FLASH_EraseSector,"ax",%progbits
+ 583              	 .align 2
+ 584              	 .global XMC_FLASH_EraseSector
+ 585              	 .code 16
+ 586              	 .thumb_func
+ 588              	XMC_FLASH_EraseSector:
+ 589              	.LFB56:
+ 239:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 240:../Libraries/XMCLib/src/xmc1_flash.c **** /* Erase single sector */
+ 241:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_EraseSector(uint32_t *address)
+ 242:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 590              	 .loc 1 242 0
+ 591              	 .cfi_startproc
+ 592              	.LVL54:
+ 593 0000 8023     	 mov r3,#128
+ 594 0002 F0B5     	 push {r4,r5,r6,r7,lr}
+ 595              	.LCFI7:
+ 596              	 .cfi_def_cfa_offset 20
+ 597              	 .cfi_offset 4,-20
+ 598              	 .cfi_offset 5,-16
+ 599              	 .cfi_offset 6,-12
+ 600              	 .cfi_offset 7,-8
+ 601              	 .cfi_offset 14,-4
+ 602 0004 4746     	 mov r7,r8
+ 603 0006 5B01     	 lsl r3,r3,#5
+ 604 0008 80B4     	 push {r7}
+ 605              	.LCFI8:
+ 606              	 .cfi_def_cfa_offset 24
+ 607              	 .cfi_offset 8,-24
+ 608 000a 9846     	 mov r8,r3
+ 609              	.LBB46:
+ 610              	.LBB47:
+ 174:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 611              	 .loc 1 174 0
+ 612 000c 8027     	 mov r7,#128
+ 613              	.LBE47:
+ 614              	.LBE46:
+ 615              	 .loc 1 242 0
+ 616 000e 061C     	 mov r6,r0
+ 617              	.LBB57:
+ 618              	.LBB56:
+ 619              	.LBB48:
+ 620              	.LBB49:
+ 621              	 .loc 2 260 0
+ 622 0010 0124     	 mov r4,#1
+ 623              	.LBB50:
+ 624              	.LBB51:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 625              	 .loc 1 95 0
+ 626 0012 084D     	 ldr r5,.L65
+ 627 0014 8044     	 add r8,r8,r0
+ 628              	.LBE51:
+ 629              	.LBE50:
+ 630              	.LBE49:
+ 631              	.LBE48:
+ 174:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 632              	 .loc 1 174 0
+ 633 0016 7F00     	 lsl r7,r7,#1
+ 634              	.LVL55:
+ 635              	.L62:
+ 636 0018 301C     	 mov r0,r6
+ 637 001a 3B68     	 ldr r3,[r7]
+ 638 001c 9847     	 blx r3
+ 639              	.LVL56:
+ 640              	.L61:
+ 641              	.LBB55:
+ 642              	.LBB54:
+ 643              	.LBB53:
+ 644              	.LBB52:
+  95:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 645              	 .loc 1 95 0
+ 646 001e 2B88     	 ldrh r3,[r5]
+ 647              	.LBE52:
+ 648              	.LBE53:
+ 649              	.LBE54:
+ 650              	.LBE55:
+ 176:../Libraries/XMCLib/src/xmc1_flash.c ****     {
+ 651              	 .loc 1 176 0
+ 652 0020 1C42     	 tst r4,r3
+ 653 0022 FCD1     	 bne .L61
+ 181:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 654              	 .loc 1 181 0
+ 655 0024 0136     	 add r6,r6,#1
+ 656              	.LVL57:
+ 657 0026 FF36     	 add r6,r6,#255
+ 658              	.LVL58:
+ 172:../Libraries/XMCLib/src/xmc1_flash.c ****   {
+ 659              	 .loc 1 172 0
+ 660 0028 4645     	 cmp r6,r8
+ 661 002a F5D1     	 bne .L62
+ 662              	.LBE56:
+ 663              	.LBE57:
+ 243:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_ASSERT("XMC_FLASH_EraseSector: Starting address not aligned to Sector",
+ 244:../Libraries/XMCLib/src/xmc1_flash.c ****                                                                  ((uint32_t)address & FLASH_SECTOR_
+ 245:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_FLASH_ErasePages(address, XMC_FLASH_PAGES_PER_SECTOR);
+ 246:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 664              	 .loc 1 246 0
+ 665              	 
+ 666              	.LVL59:
+ 667 002c 04BC     	 pop {r2}
+ 668 002e 9046     	 mov r8,r2
+ 669 0030 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 670              	.L66:
+ 671 0032 C046     	 .align 2
+ 672              	.L65:
+ 673 0034 00000540 	 .word 1074069504
+ 674              	 .cfi_endproc
+ 675              	.LFE56:
+ 677              	 .section .text.XMC_FLASH_ProgramPage,"ax",%progbits
+ 678              	 .align 2
+ 679              	 .global XMC_FLASH_ProgramPage
+ 680              	 .code 16
+ 681              	 .thumb_func
+ 683              	XMC_FLASH_ProgramPage:
+ 684              	.LFB57:
+ 247:../Libraries/XMCLib/src/xmc1_flash.c **** 
+ 248:../Libraries/XMCLib/src/xmc1_flash.c **** /* Program single page */
+ 249:../Libraries/XMCLib/src/xmc1_flash.c **** void XMC_FLASH_ProgramPage(uint32_t *address, const uint32_t *data)
+ 250:../Libraries/XMCLib/src/xmc1_flash.c **** {
+ 685              	 .loc 1 250 0
+ 686              	 .cfi_startproc
+ 687              	.LVL60:
+ 688 0000 08B5     	 push {r3,lr}
+ 689              	.LCFI9:
+ 690              	 .cfi_def_cfa_offset 8
+ 691              	 .cfi_offset 3,-8
+ 692              	 .cfi_offset 14,-4
+ 693              	.LBB58:
+ 694              	.LBB59:
+ 121:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 695              	 .loc 1 121 0
+ 696 0002 8223     	 mov r3,#130
+ 697              	.LBE59:
+ 698              	.LBE58:
+ 699              	 .loc 1 250 0
+ 700 0004 021C     	 mov r2,r0
+ 701              	.LVL61:
+ 702              	.LBB61:
+ 703              	.LBB60:
+ 121:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 704              	 .loc 1 121 0
+ 705 0006 5B00     	 lsl r3,r3,#1
+ 706 0008 081C     	 mov r0,r1
+ 707              	.LVL62:
+ 708 000a 1B68     	 ldr r3,[r3]
+ 709 000c 111C     	 mov r1,r2
+ 710              	.LVL63:
+ 711 000e 9847     	 blx r3
+ 712              	.LVL64:
+ 713              	.LBE60:
+ 714              	.LBE61:
+ 251:../Libraries/XMCLib/src/xmc1_flash.c ****   XMC_FLASH_ProgramVerifyPage(address, data);
+ 252:../Libraries/XMCLib/src/xmc1_flash.c **** }
+ 715              	 .loc 1 252 0
+ 716              	 
+ 717 0010 08BD     	 pop {r3,pc}
+ 718              	 .cfi_endproc
+ 719              	.LFE57:
+ 721 0012 C046     	 .text
+ 722              	.Letext0:
+ 723              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 724              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 725              	 .file 5 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+ 726              	 .file 6 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1000_RomFunctionTable.h"
+ 727              	 .file 7 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc/xmc1_flash.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc1_flash.c
+    {standard input}:18     .text.XMC_FLASH_ClearStatus:00000000 $t
+    {standard input}:23     .text.XMC_FLASH_ClearStatus:00000000 XMC_FLASH_ClearStatus
+    {standard input}:43     .text.XMC_FLASH_ClearStatus:00000010 $d
+    {standard input}:48     .text.XMC_FLASH_GetStatus:00000000 $t
+    {standard input}:53     .text.XMC_FLASH_GetStatus:00000000 XMC_FLASH_GetStatus
+    {standard input}:69     .text.XMC_FLASH_GetStatus:00000008 $d
+    {standard input}:74     .text.XMC_FLASH_EnableEvent:00000000 $t
+    {standard input}:79     .text.XMC_FLASH_EnableEvent:00000000 XMC_FLASH_EnableEvent
+    {standard input}:99     .text.XMC_FLASH_EnableEvent:0000000c $d
+    {standard input}:104    .text.XMC_FLASH_DisableEvent:00000000 $t
+    {standard input}:109    .text.XMC_FLASH_DisableEvent:00000000 XMC_FLASH_DisableEvent
+    {standard input}:127    .text.XMC_FLASH_DisableEvent:0000000c $d
+    {standard input}:132    .text.XMC_FLASH_ErasePage:00000000 $t
+    {standard input}:137    .text.XMC_FLASH_ErasePage:00000000 XMC_FLASH_ErasePage
+    {standard input}:160    .text.XMC_FLASH_ProgramVerifyPage:00000000 $t
+    {standard input}:165    .text.XMC_FLASH_ProgramVerifyPage:00000000 XMC_FLASH_ProgramVerifyPage
+    {standard input}:195    .text.XMC_FLASH_WriteBlocks:00000000 $t
+    {standard input}:200    .text.XMC_FLASH_WriteBlocks:00000000 XMC_FLASH_WriteBlocks
+    {standard input}:320    .text.XMC_FLASH_WriteBlocks:0000005c $d
+    {standard input}:325    .text.XMC_FLASH_ErasePages:00000000 $t
+    {standard input}:330    .text.XMC_FLASH_ErasePages:00000000 XMC_FLASH_ErasePages
+    {standard input}:421    .text.XMC_FLASH_ErasePages:0000003c $d
+    {standard input}:426    .text.XMC_FLASH_VerifyBlocks:00000000 $t
+    {standard input}:431    .text.XMC_FLASH_VerifyBlocks:00000000 XMC_FLASH_VerifyBlocks
+    {standard input}:524    .text.XMC_FLASH_VerifyBlocks:00000044 $d
+    {standard input}:530    .text.XMC_FLASH_ReadBlocks:00000000 $t
+    {standard input}:535    .text.XMC_FLASH_ReadBlocks:00000000 XMC_FLASH_ReadBlocks
+    {standard input}:583    .text.XMC_FLASH_EraseSector:00000000 $t
+    {standard input}:588    .text.XMC_FLASH_EraseSector:00000000 XMC_FLASH_EraseSector
+    {standard input}:673    .text.XMC_FLASH_EraseSector:00000034 $d
+    {standard input}:678    .text.XMC_FLASH_ProgramPage:00000000 $t
+    {standard input}:683    .text.XMC_FLASH_ProgramPage:00000000 XMC_FLASH_ProgramPage
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

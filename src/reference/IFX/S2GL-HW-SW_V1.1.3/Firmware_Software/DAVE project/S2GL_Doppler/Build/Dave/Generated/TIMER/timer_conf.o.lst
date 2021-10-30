@@ -1,0 +1,63 @@
+   1              	 .cpu cortex-m0
+   2              	 .fpu softvfp
+   3              	 .eabi_attribute 20,1
+   4              	 .eabi_attribute 21,1
+   5              	 .eabi_attribute 23,3
+   6              	 .eabi_attribute 24,1
+   7              	 .eabi_attribute 25,1
+   8              	 .eabi_attribute 26,1
+   9              	 .eabi_attribute 30,2
+  10              	 .eabi_attribute 34,0
+  11              	 .eabi_attribute 18,4
+  12              	 .code 16
+  13              	 .file "timer_conf.c"
+  14              	 .text
+  15              	.Ltext0:
+  16              	 .cfi_sections .debug_frame
+  17              	 .global TIMER_0
+  18              	 .global TIMER_0_config
+  19              	 .section .data.TIMER_0,"aw",%progbits
+  20              	 .align 2
+  23              	TIMER_0:
+  24 0000 58150100 	 .word 71000
+  25 0004 0038FFC7 	 .word -939575296
+  26 0008 0A000000 	 .word 10
+  27 000c 05000000 	 .word 5
+  28 0010 00000000 	 .word GLOBAL_CCU4_0
+  29 0014 00010448 	 .word 1208221952
+  30 0018 00       	 .byte 0
+  31 0019 000000   	 .space 3
+  32 001c 00000000 	 .word TIMER_0_config
+  33 0020 02       	 .byte 2
+  34 0021 00       	 .byte 0
+  35 0022 7FB1     	 .short -20097
+  36 0024 00       	 .byte 0
+  37 0025 01       	 .byte 1
+  38 0026 00       	 .byte 0
+  39 0027 00       	 .space 1
+  40              	 .section .bss.TIMER_0_config,"aw",%nobits
+  41              	 .align 2
+  44              	TIMER_0_config:
+  45 0000 00000000 	 .space 8
+  45      00000000 
+  46              	 .text
+  47              	.Letext0:
+  48              	 .file 1 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  49              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  50              	 .file 3 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/CMSIS/Infineon/XMC1300_series/Include/XMC1300.h"
+  51              	 .file 4 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc/xmc_ccu4.h"
+  52              	 .file 5 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/XMCLib/inc/xmc1_scu.h"
+  53              	 .file 6 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Dave/Generated/GLOBAL_CCU4/global_ccu4.h"
+  54              	 .file 7 "../Dave/Generated/TIMER/timer.h"
+  55              	 .file 8 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Libraries/CMSIS/Infineon/XMC1300_series/Include/system_XMC1300.h"
+  56              	 .file 9 "C:/Users/\261\350\260\346\271\316/Desktop/IFX_S2GL-HW-SW_V1.1.3/Firmware_Software/DAVE project/S2GL_Doppler/Dave/Generated/GLOBAL_CCU4/global_ccu4_extern.h"
+  57              	 .file 10 "../Dave/Generated/TIMER/timer_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 timer_conf.c
+    {standard input}:23     .data.TIMER_0:00000000 TIMER_0
+    {standard input}:44     .bss.TIMER_0_config:00000000 TIMER_0_config
+    {standard input}:20     .data.TIMER_0:00000000 $d
+    {standard input}:41     .bss.TIMER_0_config:00000000 $d
+
+UNDEFINED SYMBOLS
+GLOBAL_CCU4_0
