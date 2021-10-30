@@ -7,7 +7,7 @@ i = 1;
 
 %Copyright 2016 The MathWorks, Inc.
 %% Load a signal
-load eqData;
+load eqData.mat;
 figure(i);
 i = i + 1;
 plot(t, kobe);

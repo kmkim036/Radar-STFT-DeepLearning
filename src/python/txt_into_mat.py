@@ -10,16 +10,18 @@ import scipy.io  # library to save to .mat file
 DirectoryPath = 'C:/Users/김경민/Desktop/Studies/Projects/Radar-CWT-DeepLearning/data/'
 
 # File Name and File Path
-FileName = 'TEST0_IM'
-FilePathToLoad = DirectoryPath + FileName + '.txt'
-FilePathToSave = DirectoryPath + FileName + '.mat'
+FileName = '211029_1_1'
+FileREPathToLoad = DirectoryPath + FileName + '_RE.txt'
+FileIMPathToLoad = DirectoryPath + FileName + '_IM.txt'
+FileREPathToSave = DirectoryPath + FileName + '_RE.mat'
+FileIMPathToSave = DirectoryPath + FileName + '_IM.mat'
 
 # Sampling Rate of Radar
 SampleRate = 3000
 
 # variable for mat file
 dt = float(1)
-Fs = float(1)
+Fs = float(850)
 data = []
 t = []
 
@@ -28,7 +30,41 @@ i = 0
 j = 0
 
 # load txt file
-fr = open(FilePathToLoad, 'r')
+fr = open(FileREPathToLoad, 'r')
+while True:
+    line = fr.readline()
+    if not line:
+        data = list(zip([*data]))  # transpose list data
+        break
+    line = line.replace('\n', '')
+    data.append(float(line))
+    i = i + 1
+
+# close txt file
+fr.close()
+
+# save time data into array variable
+SampleRate = 1 / SampleRate
+while j != i:
+    t.append(SampleRate * j)
+    j = j + 1
+
+# save into mat file
+mdix = {"Fs": Fs, "dataRE": data, "dt": dt, "t": t}
+scipy.io.savemat(FileREPathToSave, mdix)
+
+# variable for mat file
+dt = float(1)
+Fs = float(850)
+data = []
+t = []
+
+# varialbe just for indexing
+i = 0
+j = 0
+
+# load txt file
+fr = open(FileIMPathToLoad, 'r')
 
 # save raw radar data into array variable
 while True:
@@ -50,5 +86,7 @@ while j != i:
     j = j + 1
 
 # save into mat file
-mdix = {"Fs": Fs, "data": data, "dt": dt, "t": t}
-scipy.io.savemat(FilePathToSave, mdix)
+mdix = {"Fs": Fs, "dataIM": data, "dt": dt, "t": t}
+scipy.io.savemat(FileIMPathToSave, mdix)
+
+
