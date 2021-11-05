@@ -5,6 +5,7 @@
 i = 1;
 
 %% Load a raw radar signal data
+% revise file name to load
 load 211029_3_2_RE.mat;
 load 211029_3_2_IM.mat;
 
