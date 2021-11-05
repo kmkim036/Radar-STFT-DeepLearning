@@ -1,7 +1,7 @@
-% by kmkim
+%% by kmkim
 % need to install wavelet toolbox before
 
-% index just for figure numbering
+%% index just for figure numbering
 i = 1;
 
 %% Load a raw radar signal data
@@ -30,23 +30,23 @@ title('STFT result');
 i = i + 1;
 
 %% plot raw signal data by real and imagenary
-figure(i);
-i = i + 1;
-plot(t, dataRE);
-grid on;
-xlabel('Time (secs)');
-ylabel('Raw Data');
-title('Radar Signal RE')
-axis tight
-
-figure(i);
-i = i + 1;
-plot(t, dataIM);
-grid on;
-xlabel('Time (secs)');
-ylabel('Raw Data');
-title('Radar Signal IM')
-axis tight
+% figure(i);
+% i = i + 1;
+% plot(t, dataRE);
+% grid on;
+% xlabel('Time (secs)');
+% ylabel('Raw Data');
+% title('Radar Signal RE')
+% axis tight
+% 
+% figure(i);
+% i = i + 1;
+% plot(t, dataIM);
+% grid on;
+% xlabel('Time (secs)');
+% ylabel('Raw Data');
+% title('Radar Signal IM')
+% axis tight
 
 %% cwt
 % To perform the Continuous Wavelet Transform, you can use the fucntion cwt. We provide the
@@ -97,4 +97,43 @@ imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with analytic Morlet wavelet IM');
 
-%% END
+%% compare cwt data of real, imagenary with complex
+% Rawdata = complex(dataRE, dataIM);
+% figure(i);
+% cwt(dataRE, Fs);
+% title('real');
+% i = i + 1;
+% figure(i);
+% cwt(dataIM, Fs);
+% title('im');
+% i=i+1;
+% figure(i);
+% cwt(Rawdata,Fs);
+% i = i+1;
+
+% Result
+% positive component = left half side of real part
+% negative component = right half side of imagenary part
+
+%% compare cwt data of DC removal and vectoring with normal one
+% figure(i);
+% i = i + 1;
+% cwt_data = cwt(dataRE, 'amor', Fs); % analytic Morlet wavelet
+% imagesc(pow2db(abs(cwt_data))); 
+% colorbar;
+% title('CWT with analytic Morlet wavelet RE');
+% 
+% dataRE = dataRE - mean(dataRE); % DC removal
+% dataRE_DC_vector = reshape(dataRE, numel(dataRE), 1); % Vectoring
+% 
+% figure(i);
+% i = i + 1;
+% cwt_data = cwt(dataRE_DC_vector, 'amor', Fs); % analytic Morlet wavelet
+% imagesc(pow2db(abs(cwt_data))); 
+% colorbar;
+% title('CWT with analytic Morlet wavelet RE DC vector');
+
+% Result
+% no difference
+
+%% EOF
