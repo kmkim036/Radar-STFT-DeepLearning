@@ -39,7 +39,7 @@ i = i + 1;
 % ylabel('Raw Data');
 % title('Radar Signal RE')
 % axis tight
-% 
+%
 % figure(i);
 % i = i + 1;
 % plot(t, dataIM);
@@ -57,14 +57,14 @@ i = i + 1;
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataRE, Fs); % default wavelet = morse wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with Morse wavelet RE');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, Fs); % default wavelet = morse wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with Morse wavelet IM');
 
@@ -72,14 +72,14 @@ title('CWT with Morse wavelet IM');
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataRE, 'bump', Fs); % bump wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with bump wavelet RE');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, 'bump', Fs); % bump wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with bump wavelet IM');
 
@@ -87,14 +87,14 @@ title('CWT with bump wavelet IM');
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataRE, 'amor', Fs); % analytic Morlet wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with analytic Morlet wavelet RE');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, 'amor', Fs); % analytic Morlet wavelet
-imagesc(pow2db(abs(cwt_data))); 
+imagesc(pow2db(abs(cwt_data)));
 colorbar;
 title('CWT with analytic Morlet wavelet IM');
 
@@ -120,17 +120,17 @@ title('CWT with analytic Morlet wavelet IM');
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataRE, 'amor', Fs); % analytic Morlet wavelet
-% imagesc(pow2db(abs(cwt_data))); 
+% imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with analytic Morlet wavelet RE');
-% 
+%
 % dataRE = dataRE - mean(dataRE); % DC removal
 % dataRE_DC_vector = reshape(dataRE, numel(dataRE), 1); % Vectoring
-% 
+%
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataRE_DC_vector, 'amor', Fs); % analytic Morlet wavelet
-% imagesc(pow2db(abs(cwt_data))); 
+% imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with analytic Morlet wavelet RE DC vector');
 
