@@ -71,14 +71,14 @@ title('CWT with Morse wavelet IM');
 %% cwt with bump wavelet
 figure(i);
 i = i + 1;
-cwt_data = cwt(dataRE, 'bump', Fs); % default wavelet = morse wavelet
+cwt_data = cwt(dataRE, 'bump', Fs); % bump wavelet
 imagesc(pow2db(abs(cwt_data))); 
 colorbar;
 title('CWT with bump wavelet RE');
 
 figure(i);
 i = i + 1;
-cwt_data = cwt(dataIM, 'bump', Fs); % default wavelet = morse wavelet
+cwt_data = cwt(dataIM, 'bump', Fs); % bump wavelet
 imagesc(pow2db(abs(cwt_data))); 
 colorbar;
 title('CWT with bump wavelet IM');
