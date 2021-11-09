@@ -6,8 +6,8 @@ i = 1;
 
 %% Load a raw radar signal data
 % revise file name to load
-load 211029_3_2_RE.mat;
-load 211029_3_2_IM.mat;
+load 211109_4_4_RE.mat;
+load 211109_4_4_IM.mat;
 
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data

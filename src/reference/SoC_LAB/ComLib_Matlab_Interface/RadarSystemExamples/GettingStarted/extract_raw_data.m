@@ -54,7 +54,7 @@ serialPortHandle = radar_open_device(serialPortName);
 disp('Connected RadarSystem:');
 
 time_cnt = 1;
-TIME = 20; % 총 추출 횟수
+TIME = 15; % 총 추출 횟수
 % tic
 % Getting raw data
 while true
@@ -84,7 +84,7 @@ end;
 radar_close_device(serialPortHandle);
 
 %% File Out
-filename = '211109_1_2'; % 파일명 변경!
+filename = '211109_4_4'; % 파일명 변경!
 foldername = 'data\211109\';
 
 dump_I_vector = reshape(dump_I, numel(dump_I), 1);

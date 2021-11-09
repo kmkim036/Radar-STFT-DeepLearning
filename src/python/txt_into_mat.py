@@ -5,12 +5,12 @@ import scipy.io  # library to save to .mat file
 
 # Directory Path
 # Ubuntu
-DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/211029/'
+#DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/211029/'
 # Window
-# DirectoryPath = 'C:/Users/김경민/Desktop/Studies/Projects/Radar-CWT-DeepLearning/data/211029/'
+DirectoryPath = 'C:/Users/김경민/Desktop/Studies/Projects/Radar-CWT-DeepLearning/data/211109/'
 
 # File Name and File Path
-FileName = '211029_4_2'
+FileName = '211109_4_4'
 FileREPathToLoad = DirectoryPath + FileName + '_RE.txt'
 FileIMPathToLoad = DirectoryPath + FileName + '_IM.txt'
 FileREPathToSave = DirectoryPath + FileName + '_RE.mat'
