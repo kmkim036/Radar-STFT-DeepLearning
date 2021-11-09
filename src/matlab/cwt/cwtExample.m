@@ -59,14 +59,14 @@ i = i + 1;
 cwt_data = cwt(dataRE, Fs); % default wavelet = morse wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with Morse wavelet RE');
+title('CWT with Morse wavelet Real Part');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, Fs); % default wavelet = morse wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with Morse wavelet IM');
+title('CWT with Morse wavelet Imaginary Part');
 
 %% cwt with bump wavelet
 figure(i);
@@ -74,14 +74,14 @@ i = i + 1;
 cwt_data = cwt(dataRE, 'bump', Fs); % bump wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with bump wavelet RE');
+title('CWT with bump wavelet Real Part');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, 'bump', Fs); % bump wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with bump wavelet IM');
+title('CWT with bump wavelet Imaginary Part');
 
 %% cwt with analytic morlet wavelet
 figure(i);
@@ -89,14 +89,14 @@ i = i + 1;
 cwt_data = cwt(dataRE, 'amor', Fs); % analytic Morlet wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with analytic Morlet wavelet RE');
+title('CWT with analytic Morlet wavelet Real Part');
 
 figure(i);
 i = i + 1;
 cwt_data = cwt(dataIM, 'amor', Fs); % analytic Morlet wavelet
 imagesc(pow2db(abs(cwt_data)));
 colorbar;
-title('CWT with analytic Morlet wavelet IM');
+title('CWT with analytic Morlet wavelet Imaginary Part');
 
 %% compare cwt data of real, imagenary with complex
 % Rawdata = complex(dataRE, dataIM);
