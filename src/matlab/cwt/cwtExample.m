@@ -9,8 +9,8 @@ i = 1;
 
 %% Load a raw radar signal data
 % revise file name to load
-load 211029_2_2_RE.mat;
-load 211029_2_2_IM.mat;
+load 211109_1_2_RE.mat;
+load 211109_1_2_IM.mat;
 
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data
@@ -56,7 +56,8 @@ title('STFT result');
 % To perform the Continuous Wavelet Transform, you can use the fucntion cwt. We provide the
 % signal and the sampling frequency as an input arguments.
 
-mode = 1; % variable 'mode' to select input data
+% variable 'mode' to select input data
+mode = 1;
 % 1: abs before transform / DC not removed
 % 2: abs before transform after DC removed
 
@@ -109,11 +110,11 @@ title('CWT with morlet wavelet with log scale');
 
 %% complex positive, negative
 % cwt_data_0 = cwt(input_raw, 'amor', Fs);
-% cwt_data_1 = cwt_data_0(:,:,1); 
+% cwt_data_1 = cwt_data_0(:,:,1);
 % cwt_data_2 = cwt_data_0(:,:,2);
 % cwt_data_3 = cwt_data_1 + cwt_data_2;
 % cwt_data_4 = abs(cwt_data_1) + abs(cwt_data_2);
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
@@ -124,7 +125,7 @@ title('CWT with morlet wavelet with log scale');
 % imagesc(pow2db(abs(cwt_data_1)));
 % colorbar;
 % title('positive component with morlet wavelet, log scale');
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
@@ -135,7 +136,7 @@ title('CWT with morlet wavelet with log scale');
 % imagesc(pow2db(abs(cwt_data_2)));
 % colorbar;
 % title('negative component with morlet wavelet, log scale');
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
@@ -146,7 +147,7 @@ title('CWT with morlet wavelet with log scale');
 % imagesc(pow2db(abs(cwt_data_3)));
 % colorbar;
 % title('abs(pos + neg) with morlet wavelet, log scale');
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
@@ -166,37 +167,37 @@ title('CWT with morlet wavelet with log scale');
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with Morse wavelet Real Part');
-% 
+%
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataIM, Fs); % default wavelet = morse wavelet
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with Morse wavelet Imaginary Part');
-% 
-% % cwt with bump wavelet 
+%
+% % cwt with bump wavelet
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataRE, 'bump', Fs); % bump wavelet
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with bump wavelet Real Part');
-% 
+%
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataIM, 'bump', Fs); % bump wavelet
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with bump wavelet Imaginary Part');
-% 
-% % cwt with analytic morlet wavelet 
+%
+% % cwt with analytic morlet wavelet
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataRE, 'amor', Fs); % analytic Morlet wavelet
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with analytic Morlet wavelet Real Part');
-% 
+%
 % figure(i);
 % i = i + 1;
 % cwt_data = cwt(dataIM, 'amor', Fs); % analytic Morlet wavelet
@@ -215,7 +216,7 @@ title('CWT with morlet wavelet with log scale');
 % imagesc(abs(cwt(dataIM, 'amor', Fs)));
 % colorbar();
 % title('Imaginary');
-% 
+%
 % figure(i);
 % i = i + 1;
 % cwt(RawData,'amor', Fs);
