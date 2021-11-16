@@ -2,7 +2,7 @@
 Matlab  
 Python  
 # When  
-From October 2021  
+In Capstone Design Class  
 # Description  
 Radar signal processing with Continuous Wavelet Transform  
   
