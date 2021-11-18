@@ -54,12 +54,13 @@ serialPortHandle = radar_open_device(serialPortName);
 disp('Connected RadarSystem:');
 
 time_cnt = 1;
-TIME = 15; % 총 추출 횟수
+TIME = 33; % 총 추출 횟수 200ms
+
 % tic
 % Getting raw data
 while true
     % Trigger radar chirp and get the raw data of single chirp
-    
+    disp(time_cnt);
     [I, Q] = radar_get_frame(serialPortHandle);   
     
     % Raw Data 추출 과정
@@ -84,16 +85,15 @@ end;
 radar_close_device(serialPortHandle);
 
 %% File Out
-filename = '211109_4_4'; % 파일명 변경!
-foldername = 'data\211109\';
+% 날짜_이름_모션_회차
+filename = '211118_kkm_6_1'; % 파일명 변경!
+foldername = 'data\211118\';
 
 dump_I_vector = reshape(dump_I, numel(dump_I), 1);
 dump_Q_vector = reshape(dump_Q, numel(dump_Q), 1);
 
 dlmwrite([foldername,filename,'_RE.txt'], dump_I_vector(:), 'delimiter', '', 'newline', 'pc');
 dlmwrite([foldername,filename,'_IM.txt'], dump_Q_vector(:), 'delimiter', '', 'newline', 'pc');
-
-
 
 %% plot
 RawData = complex(dump_I, dump_Q);
