@@ -16,4 +16,4 @@
 |6_1|먼 거리에서 뛰면서 레이더로 오기|김경민, 김성진, 남궁호정|약 15m|outdoor|
 
 # Link
-[OneDrive]()  
+[OneDrive](https://kau365-my.sharepoint.com/:f:/g/personal/rudals9067_kau_kr/EsXfeRHH5kNEnnVXQzm01FkBsB1PvM4LpcLxIJ5UOT48Og?e=MHdedP)  
