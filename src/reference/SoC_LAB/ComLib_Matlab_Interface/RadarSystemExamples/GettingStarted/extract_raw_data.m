@@ -54,7 +54,7 @@ serialPortHandle = radar_open_device(serialPortName);
 disp('Connected RadarSystem:');
 
 time_cnt = 1;
-TIME = 33; % 총 추출 횟수 200ms
+TIME = 20; % 총 추출 횟수 200ms
 
 % tic
 % Getting raw data
@@ -86,8 +86,8 @@ radar_close_device(serialPortHandle);
 
 %% File Out
 % 날짜_이름_모션_회차
-filename = '211118_kkm_6_1'; % 파일명 변경!
-foldername = 'data\211118\';
+filename = '211122_kkm_1_2'; % 파일명 변경!
+foldername = 'data\211122\';
 
 dump_I_vector = reshape(dump_I, numel(dump_I), 1);
 dump_Q_vector = reshape(dump_Q, numel(dump_Q), 1);
