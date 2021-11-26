@@ -83,7 +83,7 @@ end
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with morse wavelet with log scale');
-% 
+%
 % % bump wavelet
 % cwt_data = cwt(input, 'bump', Fs);
 % figure(i);
@@ -96,7 +96,7 @@ end
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with bump wavelet with log scale');
-
+% 
 % morlet wavelet
 % cwt_data = cwt(input, 'amor', Fs);
 % figure(i);
@@ -121,7 +121,7 @@ title('CWT with morlet wavelet');
 % cwt_data_2 = cwt_data_0(:,:,2);
 % cwt_data_3 = cwt_data_1 + cwt_data_2;
 % cwt_data_4 = abs(cwt_data_1) + abs(cwt_data_2);
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
@@ -132,7 +132,7 @@ title('CWT with morlet wavelet');
 % imagesc(pow2db(abs(cwt_data_1)));
 % colorbar;
 % title('positive component with morlet wavelet, log scale');
-% 
+%
 % figure(i);
 % i = i + 1;
 % subplot(2, 1, 1);
