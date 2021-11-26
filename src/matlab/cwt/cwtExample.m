@@ -9,8 +9,8 @@ i = 1;
 
 %% Load a raw radar signal data
 % revise file name to load
-load 211122_kkm_1_2_RE.mat;
-load 211122_kkm_1_2_IM.mat;
+load 211118_nkhj_2_3_RE.mat;
+load 211118_nkhj_2_3_IM.mat;
 
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data
@@ -61,7 +61,7 @@ mode = 2;
 % 1: abs before transform / DC not removed
 % 2: abs before transform after DC removed
 
-clims = [0 700];
+% clims = [0 700];
 
 if mode == 1
     input = abs(RawData);
@@ -98,17 +98,22 @@ end
 % title('CWT with bump wavelet with log scale');
 
 % morlet wavelet
-cwt_data = cwt(input, 'amor', Fs);
+% cwt_data = cwt(input, 'amor', Fs);
+% figure(i);
+% i = i + 1;
+% subplot(2, 1, 1);
+% imagesc(abs(cwt_data), clims);
+% colorbar;
+% title('CWT with morlet wavelet');
+% subplot(2, 1, 2);
+% imagesc(pow2db(abs(cwt_data)));
+% colorbar;
+% title('CWT with morlet wavelet with log scale');
+
 figure(i);
 i = i + 1;
-subplot(2, 1, 1);
-imagesc(abs(cwt_data), clims);
-colorbar;
+cwt(input, 'amor', Fs);
 title('CWT with morlet wavelet');
-subplot(2, 1, 2);
-imagesc(pow2db(abs(cwt_data)));
-colorbar;
-title('CWT with morlet wavelet with log scale');
 
 %% complex positive, negative
 % cwt_data_0 = cwt(input_raw, 'amor', Fs);
