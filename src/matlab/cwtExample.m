@@ -96,7 +96,7 @@ end
 % imagesc(pow2db(abs(cwt_data)));
 % colorbar;
 % title('CWT with bump wavelet with log scale');
-% 
+%
 % morlet wavelet
 % cwt_data = cwt(input, 'amor', Fs);
 % figure(i);
