@@ -11,6 +11,7 @@ i = 1;
 % revise file name to load
 load 211118_nkhj_2_3_RE.mat;
 load 211118_nkhj_2_3_IM.mat;
+file_name = '211118_nkhj_2_3';
 
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data
@@ -32,6 +33,7 @@ i = i + 1;
 imagesc(pow2db(abs(stft_data)));
 colorbar;
 title('STFT result');
+saveas(gcf, sprintf('%s_stft.png', file_name));
 
 %% plot raw signal data by real and imagenary
 % figure(i);
@@ -114,6 +116,7 @@ figure(i);
 i = i + 1;
 cwt(input, 'amor', Fs);
 title('CWT with morlet wavelet');
+saveas(gcf, sprintf('%s_cwt.png', file_name));
 
 %% complex positive, negative
 % cwt_data_0 = cwt(input_raw, 'amor', Fs);
