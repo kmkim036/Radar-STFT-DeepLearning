@@ -45,7 +45,6 @@ resetRS; % close and delete ports
 
 % Configuration: Change to you needs
 serialPortName = 'COM6';   % Input the serial port name which is shown in device manager
-
 % Constants: Do not change unless this value is also changed in FW
 sampling_freq_hz = 3000;
 
@@ -54,7 +53,7 @@ serialPortHandle = radar_open_device(serialPortName);
 disp('Connected RadarSystem:');
 
 time_cnt = 1;
-TIME = 20; % 총 추출 횟수 200ms
+TIME = 15; % 총 추출 횟수 200ms
 
 % tic
 % Getting raw data
@@ -85,9 +84,15 @@ end;
 radar_close_device(serialPortHandle);
 
 %% File Out
-% 날짜_이름_모션_회차
-filename = '211122_kkm_1_2'; % 파일명 변경!
-foldername = 'data\211122\';
+% 날짜_사람_모션_회차
+% 사람
+% 0: 김경민, 1: 김성진, 2: 남궁호정
+% 모션
+% 0: 걷기, 1: 뛰기, 2: 성큼, 3: 살금
+% 회차
+% 1~30, 1~10
+filename = '211130_2_3_10'; % 파일명 변경!
+foldername = 'data\211130\';
 
 dump_I_vector = reshape(dump_I, numel(dump_I), 1);
 dump_Q_vector = reshape(dump_Q, numel(dump_Q), 1);
