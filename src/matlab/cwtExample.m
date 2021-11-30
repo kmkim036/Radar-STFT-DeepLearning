@@ -9,9 +9,8 @@ i = 1;
 
 %% Load a raw radar signal data
 % revise file name to load
-load 211118_nkhj_2_3_RE.mat;
-load 211118_nkhj_2_3_IM.mat;
-file_name = '211118_nkhj_2_3';
+load 211130_0_0_9_RE.mat;
+load 211130_0_0_9_IM.mat;
 
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data
@@ -33,7 +32,7 @@ i = i + 1;
 imagesc(pow2db(abs(stft_data)));
 colorbar;
 title('STFT result');
-saveas(gcf, sprintf('%s_stft.png', file_name));
+% saveas(gcf, sprintf('%s_stft.png', file_name));
 
 %% plot raw signal data by real and imagenary
 % figure(i);
@@ -114,9 +113,9 @@ end
 
 figure(i);
 i = i + 1;
-cwt(input, 'amor', Fs);
+cwt(input, 'amor', 650);
 title('CWT with morlet wavelet');
-saveas(gcf, sprintf('%s_cwt.png', file_name));
+% saveas(gcf, sprintf('%s_cwt.png', file_name));
 
 %% complex positive, negative
 % cwt_data_0 = cwt(input_raw, 'amor', Fs);
