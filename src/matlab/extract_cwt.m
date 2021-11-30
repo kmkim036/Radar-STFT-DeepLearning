@@ -12,7 +12,7 @@ for person = 0:2
         csv_file_name = sprintf('%d_%d_%d_cwt.csv', date, person, motion);
         writematrix(['pixels'], csv_file_name);
         sum_cwt = [];
-        for i = 0:round % 파일 개수 만큼 설정하면 됨, %d에 i가 입력됨
+        for i = 1:round % 파일 개수 만큼 설정하면 됨, %d에 i가 입력됨
             a = load(sprintf('211118_%d_%d_%d_IM.txt', person, motion, i));
             b = load(sprintf('211118_%d_%d_%d_RE.txt', person, motion, i));
             RawData = complex(a, b);
