@@ -1,5 +1,5 @@
-%% by kmkim
-% need to install wavelet toolbox before
+%% Function
+% plot stft figure and cwt figure of a sample data
 
 %% close all ex-figures
 close all;

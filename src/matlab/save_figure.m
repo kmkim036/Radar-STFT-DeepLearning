@@ -1,3 +1,6 @@
+%% Function
+% save stft figure and cwt figure of selected data
+
 clear all;
 clc;
 close all;
