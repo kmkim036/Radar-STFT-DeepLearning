@@ -1,41 +1,73 @@
+# Function
+# convert csv data to data frame
+
+# Variable to check
+# date: set date when measure data
+# DirectoryPath: set by PC
+# whole_counts: the number of whole sample in csv files
+# img_row: the number of rows for cwt image
+# img_col: the number of columns for cwt image
+# classnum: number of class (by person, or by motion, or by both)
+
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 경로
-path = "/content/drive/MyDrive/data/"
+date = '211130'
 
-date = 211118
-whole_counts = 100
+# Directory Path
+# kkm
+# Ubuntu
+# DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/' + date + '/'
+DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
+# Window
+#DirectoryPath = 'C:/Users/김경민/Desktop/Studies/Projects/Radar-CWT-DeepLearning/data/' + date + '/'
+
+# nkhj
+# DirectoryPath = "/content/drive/MyDrive/data/"
+
+# ksj
+# DirectoryPath = ""
 
 
-def preprocessing():                       # 함수 정의
+def preprocessing(classnum):
+    whole_counts = 240
+    img_row = 45
+    img_col = 222
+    # make blank numpy with (img_row X img_col)
+    image = np.zeros(shape=(whole_counts, img_row, img_col))
     label = []
-    image = np.zeros(shape=(whole_counts, 21, 101))  # 빈 넘파이형태 (21*101 형태로 설정)
     i = 0
     for person in range(0, 3):
         for motion in range(0, 4):
-            cwt_data = pd.read_csv(path + date + "_" +
-                                   person + "_" + motion + "_cwt.csv")
-            for row in enumerate(cwt_data.index):
-                # 공백으로 구분된 데이터를 넘파이로 변경
-                df = np.fromstring(cwt_data['pixels'][row], dtype=int, sep=' ')
-                df = np.reshape(df, (21, 101))
+            cwt_data = pd.read_csv(DirectoryPath + date + "_" +
+                                   str(person) + "_" + str(motion) + "_cwt.csv")
+            for rounds in range(0, len(cwt_data)):
+                df = np.fromstring(
+                    cwt_data['pixels'][rounds], dtype=int, sep=' ')
+                df = np.reshape(df, (img_row, img_col))
                 image[i] = df
-                label[i] = person * 4 + motion
+                if classnum == 12:
+                    # classify by (person + motion)
+                    label.append(person * 4 + motion)
+                elif classnum == 3:
+                    label.append(person)  # classify by person
+                else:
+                    label.append(motion)  # classify by motion
                 i = i + 1
     return image, label
 
 
-# 데이터 불러오기
-# cwt_data = pd.read_csv(path + "csv_data.csv")
-# cwt_data['pixels']  # 데이터 구조 확인
-
 if __name__ == "__main__":
+    classnum = 12
+
     # preprocessing
-    x_result, x_label = preprocessing()
+    x_result, x_label = preprocessing(classnum)
 
     # check the preprocessed data
-    x_result   # 전체 구조확인
-    x_result[0]        # 0번째 값 확인
+    # print(x_result)   # 전체 구조확인
+    print(x_label)
+    print(x_result[0])        # 0번째 값 확인
     plt.imshow(x_result[0])  # 0번째 값 출력
+    plt.show()
