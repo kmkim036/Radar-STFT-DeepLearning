@@ -1,3 +1,6 @@
+%% Function
+% save the part of cwt data figure of selected data into csv file
+
 clear all;
 clc;
 close all;
@@ -28,16 +31,23 @@ for person = 0:2
             RawData_DC = RawData - mean(RawData);
             RawData_DC_vector = reshape(RawData_DC, numel(RawData_DC), 1);
 
-            cwt_data = cwt(abs(RawData_DC_vector), 'amor', 650);
-
             % need to revise crop part
-            cwt_data_crop = abs(cwt_data(30:49, 300:399)); % 자를 부분 설정
+            cwt_data = abs(cwt(abs(RawData_DC_vector), 'amor', 650));
+            max_value = max(cwt_data, [], 'all');
+            [k, j] = find(cwt_data == max_value);
+
+            if j > (1920 - 110)
+                cwt_data_crop = (cwt_data(1:45, j - 221:j));
+            else
+                cwt_data_crop = (cwt_data(1:45, j - 111:j + 110)); 
+            end
+
             reshape_crop = reshape(cwt_data_crop', 1, []); % 1행으로 쫙 펼침
             sum_cwt = [sum_cwt; reshape_crop]; % 다음 행에 추가
 
         end
 
-        writematrix(round(sum_cwt, 0), csv_file_name, 'Delimiter', 'space', 'WriteMode', 'append') % sum_cwt를 csv에 추가
+        writematrix(ceil(sum_cwt), csv_file_name, 'Delimiter', 'space', 'WriteMode', 'append') % sum_cwt를 csv에 추가
 
     end
 
