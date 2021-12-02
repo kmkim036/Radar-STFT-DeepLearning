@@ -31,16 +31,31 @@ for person = 0:2
             RawData_DC = RawData - mean(RawData);
             RawData_DC_vector = reshape(RawData_DC, numel(RawData_DC), 1);
 
-            % need to revise crop part
             cwt_data = abs(cwt(abs(RawData_DC_vector), 'amor', 650));
-            max_value = max(cwt_data, [], 'all');
-            [k, j] = find(cwt_data == max_value);
 
-            if j > (1920 - 110)
-                cwt_data_crop = (cwt_data(1:45, j - 221:j));
-            else
-                cwt_data_crop = (cwt_data(1:45, j - 111:j + 110)); 
+            % need to fix crop part
+            % "fix row_start and column_start value by motion"
+            % extract time: 0.6s => 1920 * (0.6 / 3) = 384
+            % extract frequency: 10000 / 384 = 26.04
+            % => image size: 26 x 384
+
+            % column_start = (start second / 3) * 1920
+            % example: start second = 1.5 => column_start = (1.5 / 3) * 1920 = 960
+            if motion == 0:
+                row_start = 1;
+                column_start = 980;
+            else if motion == 1:
+                row_start = 1;
+                column_start = 980;
+            else if motion == 2:
+                row_start = 1;
+                column_start = 980;
+            else if motion == 3:
+                row_start = 1;
+                column_start = 980;
             end
+
+            cwt_data_crop = (cwt_data(row_start:row_start + 25, column_start:column_start + 383));
 
             reshape_crop = reshape(cwt_data_crop', 1, []); % 1행으로 쫙 펼침
             sum_cwt = [sum_cwt; reshape_crop]; % 다음 행에 추가
