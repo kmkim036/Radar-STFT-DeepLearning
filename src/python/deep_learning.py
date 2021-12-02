@@ -29,6 +29,7 @@ date = '211130'
 whole_counts = 240
 img_row = 45
 img_col = 222
+classnum = 12
 
 # Directory Path Setting
 # kkm
@@ -45,7 +46,7 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
 # DirectoryPath = ""
 
 
-def preprocessing(classnum):
+def preprocessing():
     # make blank numpy with (img_row X img_col)
     image = np.zeros(shape=(whole_counts, img_row, img_col))
     label = []
@@ -69,7 +70,7 @@ def preprocessing(classnum):
     return image, label
 
 
-def create_CNNmodel(classnum):
+def create_CNNmodel():
     model = Sequential()
     model.add(Conv2D(64, kernel_size=(5, 5), strides=(1, 1),
                      padding='same', activation='relu', input_shape=(img_row, img_col, 1)))
@@ -88,16 +89,13 @@ def create_CNNmodel(classnum):
 
 
 if __name__ == "__main__":
-
-    classnum = 12
-
     # preprocessing
-    x_result, x_label = preprocessing(classnum)
+    x_result, x_label = preprocessing()
 
     x_result = np.array(x_result)
     x_label = np_utils.to_categorical(x_label, classnum)
 
-    model = create_CNNmodel(classnum)
+    model = create_CNNmodel()
 
     hist = model.fit(x_result, x_label, epochs=10)
 

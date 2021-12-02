@@ -15,6 +15,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 date = '211130'
+classnum = 12
+
 
 # Directory Path
 # kkm
@@ -31,7 +33,7 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
 # DirectoryPath = ""
 
 
-def preprocessing(classnum):
+def preprocessing():
     whole_counts = 240
     img_row = 45
     img_col = 222
@@ -60,10 +62,8 @@ def preprocessing(classnum):
 
 
 if __name__ == "__main__":
-    classnum = 12
-
     # preprocessing
-    x_result, x_label = preprocessing(classnum)
+    x_result, x_label = preprocessing()
 
     # check the preprocessed data
     # print(x_result)   # 전체 구조확인
