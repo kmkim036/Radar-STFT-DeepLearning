@@ -35,8 +35,8 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
 
 def preprocessing():
     whole_counts = 240
-    img_row = 45
-    img_col = 222
+    img_row = 26
+    img_col = 374
     # make blank numpy with (img_row X img_col)
     image = np.zeros(shape=(whole_counts, img_row, img_col))
     label = []
