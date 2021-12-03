@@ -1,6 +1,6 @@
 # Function
 # convert csv data to data frame
-# execute deep learning model
+# execute deep learning model by motion to predict who
 
 # Variable to check
 # date: set date when measure data
@@ -26,10 +26,9 @@ from keras.utils import np_utils
 
 
 date = '211130'
-whole_counts = 240
-img_row = 45
-img_col = 222
-classnum = 12
+img_row = 26
+img_col = 384
+classnum = 3
 
 # Directory Path Setting
 # kkm
@@ -45,29 +44,43 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
 # ksj
 # DirectoryPath = ""
 
+# 80% => train
+# 20% => test
 
-def preprocessing():
-    # make blank numpy with (img_row X img_col)
-    image = np.zeros(shape=(whole_counts, img_row, img_col))
-    label = []
+
+def preprocessing_by_motion(motion):
+    if motion < 2:
+        whole_rounds = 30
+    else:
+        whole_rounds = 10
+    whole_counts1 = int(whole_rounds * 0.8 * 3)
+    image1 = np.zeros(shape=(whole_counts1, img_row, img_col))
+    label1 = []
+    whole_counts2 = int(whole_rounds * 0.2 * 3)
+    image2 = np.zeros(shape=(whole_counts2, img_row, img_col))
+    label2 = []
     i = 0
     for person in range(0, 3):
-        for motion in range(0, 4):
-            cwt_data = pd.read_csv(DirectoryPath + date + "_" +
-                                   str(person) + "_" + str(motion) + "_cwt.csv")
-            for rounds in range(0, len(cwt_data)):
-                df = np.fromstring(
-                    cwt_data['pixels'][rounds], dtype=int, sep=' ')
-                df = np.reshape(df, (img_row, img_col))
-                image[i] = df
-                if classnum == 12:  # classify by both person and motion
-                    label.append(person * 4 + motion)
-                elif classnum == 3:  # classify by person
-                    label.append(person)
-                elif classnum == 4:  # classify by motion
-                    label.append(motion)
-                i = i + 1
-    return image, label
+        cwt_data = pd.read_csv(
+            DirectoryPath + date + "_" + str(person) + "_" + str(motion) + "_cwt.csv")
+        for rounds in range(0, int(whole_rounds * 0.8)):
+            df = np.fromstring(cwt_data['pixels'][rounds], dtype=int, sep=' ')
+            df = np.reshape(df, (img_row, img_col))
+            image1[i] = df
+            label1.append(person)
+            i = i + 1
+    i = 0
+    for person in range(0, 3):
+        cwt_data = pd.read_csv(
+            DirectoryPath + date + "_" + str(person) + "_" + str(motion) + "_cwt.csv")
+        for rounds in range(int(whole_rounds * 0.8), whole_rounds):
+            df = np.fromstring(cwt_data['pixels'][rounds], dtype=int, sep=' ')
+            df = np.reshape(df, (img_row, img_col))
+            image2[i] = df
+            label2.append(person)
+            i = i + 1
+
+    return image1, label1, image2, label2
 
 
 def create_CNNmodel():
@@ -79,7 +92,7 @@ def create_CNNmodel():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(250, activation='relu'))
+    model.add(Dense(500, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(classnum, activation='softmax'))
     model.compile(loss='categorical_crossentropy',
@@ -89,29 +102,46 @@ def create_CNNmodel():
 
 
 if __name__ == "__main__":
-    # preprocessing
-    x_result, x_label = preprocessing()
-
-    x_result = np.array(x_result)
-    x_label = np_utils.to_categorical(x_label, classnum)
-
     model = create_CNNmodel()
 
-    hist = model.fit(x_result, x_label, epochs=10)
+    # preprocessing
+    # w = walk(0), r = run(1), s = stride(2), c = creep(3)
+    for i in range(0, 4):
+        train_set, train_label, test_set, test_label = preprocessing_by_motion(
+            i)
+        print("motion index: " + str(i))
+        print("train set")
+        print("counts: " + str(train_set.shape[0]))
+        print("labels: " + str(train_label))
+        print("test set")
+        print("counts: " + str(test_set.shape[0]))
+        print("labels: " + str(test_label))
+        train_set = np.array(train_set)
+        test_set = np.array(test_set)
+        train_label = np_utils.to_categorical(train_label, classnum)
+        test_label = np_utils.to_categorical(test_label, classnum)
 
-    # evaluate: evaluate
-    print('Evaluate')
-    score = model.evaluate(x_result, x_label)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
+        hist = model.fit(train_set, train_label, epochs=10)
 
-    # predict: test
-    pred = model.predict(x_result)
-    print("1st data:", np.argmax(x_label[0]))
-    print("1st predict: ", np.argmax(pred[0]))
-    print("2nd data:", np.argmax(x_label[78]))
-    print("2nd predict: ", np.argmax(pred[78]))
-    print("3rd data:", np.argmax(x_label[149]))
-    print("3rd predict: ", np.argmax(pred[149]))
-    print("4th data:", np.argmax(x_label[238]))
-    print("4th predict: ", np.argmax(pred[238]))
+        # evaluate: evaluate
+        print('Evaluate')
+        score = model.evaluate(test_set, test_label)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+
+        # predict: test
+        pred = model.predict(test_set)
+        if i < 2:
+            cnts = 18
+        else:
+            cnts = 6
+        corrects = 0
+        notcorrects = 0
+        for j in range(0, cnts):
+            if np.argmax(test_label[j]) == np.argmax(pred[j]):
+                corrects = corrects + 1
+            else:
+                notcorrects = notcorrects + 1
+            print("No." + str(j + 1) + " data: " +
+                  str(np.argmax(test_label[j])), ", predict: " + str(np.argmax(pred[j])))
+        print("predict accuracy: " + str(corrects / cnts))
