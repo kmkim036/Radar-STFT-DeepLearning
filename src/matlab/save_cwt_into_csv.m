@@ -41,16 +41,16 @@ for person = 0:2
 
             % column_start = (start second / 3) * 1920
             % example: start second = 1.5 => column_start = (1.5 / 3) * 1920 = 960
-            if motion == 0:
+            if motion == 0
                 row_start = 1;
                 column_start = 980;
-            else if motion == 1:
+            elseif motion == 1
                 row_start = 1;
                 column_start = 980;
-            else if motion == 2:
+            elseif motion == 2
                 row_start = 1;
                 column_start = 980;
-            else if motion == 3:
+            elseif motion == 3
                 row_start = 1;
                 column_start = 980;
             end
