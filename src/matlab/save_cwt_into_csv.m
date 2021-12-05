@@ -12,7 +12,7 @@ for person = 0:2
 
     for motion = 0:3
         dpm = sprintf('%d_%d_%d', date, person, motion);
-        csv_file_name = sprintf('%s_cwt_crop.csv', dpm);
+        csv_file_name = sprintf('%s_cwt.csv', dpm);
         writematrix(['pixels'], csv_file_name);
         sum_cwt = [];
         % need to revise round counts for motion
