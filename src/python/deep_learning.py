@@ -24,7 +24,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 date = '211130'
-mode = 0
+mode = 5
 
 if mode == 0:
     img_row = 128
@@ -46,6 +46,10 @@ elif mode == 4:
     img_row = 40
     img_col = 41
     file_name = '_cwt_16_40.csv'
+elif mode == 5:
+    img_row = 40
+    img_col = 60
+    file_name = '_cwt_16_60.csv'
 
 # Directory Path Setting
 # kkm
@@ -309,26 +313,26 @@ if __name__ == "__main__":
         val_label = np_utils.to_categorical(val_label, classnum)
         test_label = np_utils.to_categorical(test_label, classnum)
 
-        gen = ImageDataGenerator(
-            width_shift_range=0.2
-        )
-        augment_ratio = 1.5   # 전체 데이터의 150%
-        augment_size = int(augment_ratio * train_set.shape[0])
+        # gen = ImageDataGenerator(
+        #     width_shift_range=0.2
+        # )
+        # augment_ratio = 1.5   # 전체 데이터의 150%
+        # augment_size = int(augment_ratio * train_set.shape[0])
 
-        randidx = np.random.randint(train_set.shape[0], size=augment_size)
+        # randidx = np.random.randint(train_set.shape[0], size=augment_size)
 
-        x_augmented = train_set[randidx].copy()
-        y_augmented = train_label[randidx].copy()
+        # x_augmented = train_set[randidx].copy()
+        # y_augmented = train_label[randidx].copy()
 
-        x_augmented, y_augmented = gen.flow(
-            x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
+        # x_augmented, y_augmented = gen.flow(
+        #     x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
 
-        train_set = np.concatenate((train_set, x_augmented))
-        train_label = np.concatenate((train_label, y_augmented))
-        s = np.arange(train_set.shape[0])
-        np.random.shuffle(s)
-        train_set = train_set[s]
-        train_label = train_label[s]
+        # train_set = np.concatenate((train_set, x_augmented))
+        # train_label = np.concatenate((train_label, y_augmented))
+        # s = np.arange(train_set.shape[0])
+        # np.random.shuffle(s)
+        # train_set = train_set[s]
+        # train_label = train_label[s]
 
         hist = model.fit(train_set, train_label, validation_data=(
             val_set, val_label), epochs=50, verbose=0, callbacks=[early_stopping])
@@ -395,26 +399,26 @@ if __name__ == "__main__":
         val_label = np_utils.to_categorical(val_label, classnum)
         test_label = np_utils.to_categorical(test_label, classnum)
 
-        gen = ImageDataGenerator(
-            width_shift_range=0.2
-        )
-        augment_ratio = 1.5   # 전체 데이터의 150%
-        augment_size = int(augment_ratio * train_set.shape[0])
+        # gen = ImageDataGenerator(
+        #     width_shift_range=0.2
+        # )
+        # augment_ratio = 1.5   # 전체 데이터의 150%
+        # augment_size = int(augment_ratio * train_set.shape[0])
 
-        randidx = np.random.randint(train_set.shape[0], size=augment_size)
+        # randidx = np.random.randint(train_set.shape[0], size=augment_size)
 
-        x_augmented = train_set[randidx].copy()
-        y_augmented = train_label[randidx].copy()
+        # x_augmented = train_set[randidx].copy()
+        # y_augmented = train_label[randidx].copy()
 
-        x_augmented, y_augmented = gen.flow(
-            x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
+        # x_augmented, y_augmented = gen.flow(
+        #     x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
 
-        train_set = np.concatenate((train_set, x_augmented))
-        train_label = np.concatenate((train_label, y_augmented))
-        s = np.arange(train_set.shape[0])
-        np.random.shuffle(s)
-        train_set = train_set[s]
-        train_label = train_label[s]
+        # train_set = np.concatenate((train_set, x_augmented))
+        # train_label = np.concatenate((train_label, y_augmented))
+        # s = np.arange(train_set.shape[0])
+        # np.random.shuffle(s)
+        # train_set = train_set[s]
+        # train_label = train_label[s]
 
         hist = model.fit(train_set, train_label, validation_data=(
             val_set, val_label), epochs=50, verbose=0, callbacks=[early_stopping])
@@ -435,7 +439,7 @@ if __name__ == "__main__":
 
     # by all
     """
-    classnum = 12
+    classnum = 3
     model = create_CNNmodel(classnum)
     early_stopping = EarlyStopping(monitor='val_accuracy', patience=10)
     train_set, train_label, val_set, val_label, test_set, test_label = preprocessing(classnum)
