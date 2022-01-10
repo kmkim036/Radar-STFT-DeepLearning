@@ -90,9 +90,9 @@ radar_close_device(serialPortHandle);
 % 모션
 % 0: 걷기, 1: 뛰기, 2: 성큼, 3: 살금
 % 회차
-% 1~30, 1~10
-filename = '211130_2_3_10'; % 파일명 변경!
-foldername = 'data\211130\';
+% 1~30, 1~10, 1~50
+filename = 'run_speed'; % 파일명 변경!
+foldername = 'data\220110\';
 
 dump_I_vector = reshape(dump_I, numel(dump_I), 1);
 dump_Q_vector = reshape(dump_Q, numel(dump_Q), 1);
