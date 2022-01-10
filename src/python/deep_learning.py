@@ -1,3 +1,5 @@
+# Initial Demo Version for Deep Learning Program
+
 # Function
 # convert csv data to data frame
 # execute deep learning model by motion to predict who
