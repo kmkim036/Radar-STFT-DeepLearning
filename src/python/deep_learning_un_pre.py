@@ -12,7 +12,7 @@ import deep_learning_model
 classnum = 4
 date = '220110'
 
-mode = 5
+mode = 3
 
 if mode == 0:
     img_row = 128
@@ -27,14 +27,10 @@ elif mode == 2:
     img_col = 96
     file_name = '_cwt_20.csv'
 elif mode == 3:
-    img_row = 26
-    img_col = 384
-    file_name = '_cwt.csv'
-elif mode == 4:
     img_row = 40
-    img_col = 41
+    img_col = 40
     file_name = '_cwt_16_40.csv'
-elif mode == 5:
+elif mode == 4:
     img_row = 40
     img_col = 60
     file_name = '_cwt_16_60.csv'
@@ -43,14 +39,14 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/'
 
 
 def preprocessing(classnum):
-    whole_rounds = 600
-    whole_counts1 = int(whole_rounds * 0.6)
+    whole_rounds = 50
+    whole_counts1 = int(whole_rounds * 0.6 * 12)
     image1 = np.zeros(shape=(whole_counts1, img_row, img_col, 1))
     label1 = []
-    whole_counts2 = int(whole_rounds * 0.2)
+    whole_counts2 = int(whole_rounds * 0.2 * 12)
     image2 = np.zeros(shape=(whole_counts2, img_row, img_col, 1))
     label2 = []
-    whole_counts3 = int(whole_rounds * 0.2)
+    whole_counts3 = int(whole_rounds * 0.2 * 12)
     image3 = np.zeros(shape=(whole_counts3, img_row, img_col, 1))
     label3 = []
     i = 0
@@ -58,13 +54,8 @@ def preprocessing(classnum):
         for motion in range(0, 4):
             cwt_data = pd.read_csv(DirectoryPath + date + "_" +
                                    str(person) + "_" + str(motion) + file_name)
-            if motion < 2:
-                motion_rounds = 30
-            else:
-                motion_rounds = 10
-            for rounds in range(0, int(motion_rounds * 0.6)):
-                df = np.fromstring(
-                    cwt_data['pixels'][rounds], dtype=int, sep=' ')
+            for rounds in range(0, int(whole_rounds * 0.6)):
+                df = np.fromstring(cwt_data['pixels'][rounds], dtype=int, sep=' ')
                 df = np.reshape(df, (img_row, img_col, 1))
                 image1[i] = df
                 if classnum == 12:
@@ -80,13 +71,8 @@ def preprocessing(classnum):
         for motion in range(0, 4):
             cwt_data = pd.read_csv(DirectoryPath + date + "_" +
                                    str(person) + "_" + str(motion) + file_name)
-            if motion < 2:
-                motion_rounds = 30
-            else:
-                motion_rounds = 10
-            for rounds in range(int(motion_rounds * 0.6), int(motion_rounds * 0.8)):
-                df = np.fromstring(
-                    cwt_data['pixels'][rounds], dtype=int, sep=' ')
+            for rounds in range(int(whole_rounds * 0.6), int(whole_rounds * 0.8)):
+                df = np.fromstring(cwt_data['pixels'][rounds], dtype=int, sep=' ')
                 df = np.reshape(df, (img_row, img_col, 1))
                 image2[i] = df
                 if classnum == 12:
@@ -102,13 +88,8 @@ def preprocessing(classnum):
         for motion in range(0, 4):
             cwt_data = pd.read_csv(DirectoryPath + date + "_" +
                                    str(person) + "_" + str(motion) + file_name)
-            if motion < 2:
-                motion_rounds = 30
-            else:
-                motion_rounds = 10
-            for rounds in range(int(motion_rounds * 0.8), motion_rounds):
-                df = np.fromstring(
-                    cwt_data['pixels'][rounds], dtype=int, sep=' ')
+            for rounds in range(int(whole_rounds * 0.8), whole_rounds):
+                df = np.fromstring(cwt_data['pixels'][rounds], dtype=int, sep=' ')
                 df = np.reshape(df, (img_row, img_col, 1))
                 image3[i] = df
                 if classnum == 12:

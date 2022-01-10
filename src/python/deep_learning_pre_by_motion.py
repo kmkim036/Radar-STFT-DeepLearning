@@ -12,7 +12,7 @@ import deep_learning_model
 classnum = 3
 date = '220110'
 
-mode = 5
+mode = 4
 
 if mode == 0:
     img_row = 128
@@ -27,14 +27,10 @@ elif mode == 2:
     img_col = 96
     file_name = '_cwt_20.csv'
 elif mode == 3:
-    img_row = 26
-    img_col = 384
-    file_name = '_cwt.csv'
-elif mode == 4:
     img_row = 40
-    img_col = 41
+    img_col = 40
     file_name = '_cwt_16_40.csv'
-elif mode == 5:
+elif mode == 4:
     img_row = 40
     img_col = 60
     file_name = '_cwt_16_60.csv'
