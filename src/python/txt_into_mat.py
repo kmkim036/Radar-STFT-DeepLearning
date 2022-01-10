@@ -9,7 +9,7 @@
 
 import scipy.io  # library to save to .mat file
 
-date = '211130'
+date = '220110'
 
 # Directory Path
 # kkm
@@ -25,10 +25,7 @@ DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/data/'
 for person in range(0, 3):
     for motion in range(0, 4):
         # need to revise round counts by motion
-        if motion < 2:
-            round = 30
-        else:
-            round = 10
+        round = 50
             # File Name and File Path
         for i in range(1, round + 1):
             FileName = date + '_' + str(person) + \
