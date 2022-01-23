@@ -14,7 +14,7 @@ from keras.utils import np_utils
 import deep_learning_model
 
 motion = 0
-menu = 4
+menu = 2
 
 # STFT = (128, 29) //  CWT = (81,1920)
 # 이미지 크기를 시작좌표와 끝좌표로 설정, 고정된 위치에서 추출한 이미지를 사용한 결과를 확인
@@ -44,9 +44,9 @@ elif menu == 2:
     scale_row = 1
     rows = 81
 
-    start_col = 33
-    end_col = 80
-    scale_col = 20
+    start_col = 41
+    end_col = 100
+    scale_col = 16
     cols = 1920
 elif menu == 3:
     count = 50
@@ -82,19 +82,17 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
     # DirectoryPath = 'C:/Users/hojung/Documents/Anaconda_python/data/txt/'
     DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/txt/'
     if menu < 4:
-        whole_count = 50
-        image = np.zeros(shape=(whole_count, rows, cols, 1))
+        image = np.zeros(shape=(count, rows, cols, 1))
         label = []
         cwt_data = pd.read_csv(
             DirectoryPath + date + "_" + str(person) + "_" + str(motion) + file_name)
-        for i in range(0, whole_count):
+        for i in range(0, count):
             df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
             df = np.reshape(df, (rows, cols, 1))
             image[i] = df
             label.append(person)    # 사람으로 구분
     else:
-        whole_count = 100
-        image = np.zeros(shape=(whole_count, rows, cols, 1))
+        image = np.zeros(shape=(count, rows, cols, 1))
         label = []
         cwt_data = pd.read_csv(
             DirectoryPath + date + "_" + str(person) + "_" + str(motion) + '_cwt.txt')
