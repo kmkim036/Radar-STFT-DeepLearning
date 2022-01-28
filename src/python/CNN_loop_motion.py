@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# 한 모션에 대해서 사람을 구분
+# 4가지 모든 동작에 대해 추출위치 움직이며 동작
 
 import tensorflow as tf
 import numpy as np
@@ -15,7 +15,9 @@ from tensorflow import keras
 from tensorflow.keras.callbacks import EarlyStopping
 from keras.utils import np_utils
 import deep_learning_model
-
+#=========================================================================
+#==========================파일 경로 설정 및 원본 이미지 사이즈 설정====================
+#=========================================================================
 def preprocessing(person,motion): # person, motion에 해당하는 image 불러옴
     date = '220110'
     file_name = '_cwt_1.csv'
@@ -44,6 +46,7 @@ def preprocessing_resize_crop(image,start_row,end_row,start_col,end_col,row_scal
     return crop_image
 
 def concatenate_n_div(image0, label0, image1, label1, image2, label2): # ratio비율로 각 data set을 합치고 순서도 섞음
+#각 파일의 시행 횟수와 데이터셋 나누는 비율 설정
     count = 50
     train_ratio = 0.6
     val_ratio = 0.2
@@ -80,33 +83,33 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2): # ratio�
     y_test = y_test[s]
     return x_train, y_train, x_val, y_val, x_test, y_test
 
+#========================================================
+#================파라미터 설정================================
+#========================================================
 # STFT = (128, 29) //  CWT = (81,1920)
 start_row = 0   # row 전체 범위 설정
-end_row = 60    
+end_row = 40    
 interval_row = 5  # row 간격, 몇 칸씩 이동할건지
 scale_row = 1  # 몇칸마다 추출하는지
+# 1칸씩 추출, 0~40 사이에서 5칸씩 이동 
+# => img_row=30이므로 (0~30),(5~35),(10~40) 이런식으로 추출
 
-start_col = 0    # col 전체 범위 설정
-end_col = 240
+start_col = 60    # col 전체 범위 설정
+end_col = 160
 interval_col = 10  # col 간격, 몇 칸씩 이동할건지
 scale_col = 8  # 몇칸마다 추출하는지
+# 8칸씩 추출, 0~160 사이에서 10칸씩 이동 
+# => img_col=80이므로 (60~140),(70~150),(80~160) 이런식으로 추출
 
 classnum = 3     # class 개수
 motion_num = 4   # 모션 개수
 
+# 이미지 크기 설정
 img_row = 30   # 추출 img row 크기
 img_col = 80   # 추출 img col 크기
 
-# 내용
-# ROW  : 1씩 이동하며 추출하고 row 0~60 내에서 5씩 이동, 크기 30
-# COL : 이동하며 추출하고 col 0~240 내에서10씩 이동, 크기 80
-
-#row_len = math.ceil((end_row- start_row) / scale_row)  # 먼저 scale했을때 row길이
-#col_len = math.ceil((end_col - start_col) / scale_col) # 먼저 scale했을때 col길이
 rows = math.ceil((end_row - start_row - img_row + 1) / interval_row) # row에서 가능한 이동 개수
 cols = math.ceil((end_col - start_col - img_col + 1) / interval_col) # col에서 가능한 이동 개수
-
-
 
 arry_result_acc = np.zeros(rows*cols*motion_num).reshape(motion_num,rows,cols)  # 결과 저장 arry
 arry_result_val = np.zeros(rows*cols*motion_num).reshape(motion_num,rows,cols)  # 결과 배열 검증용 arry

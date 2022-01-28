@@ -11,10 +11,15 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow import keras
 from tensorflow.keras.callbacks import EarlyStopping
 from keras.utils import np_utils
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
 import deep_learning_model
 
-motion = 0
 menu = 2
+
+motion = 3
+
+augment_ratio = 8
 
 # STFT = (128, 29) //  CWT = (81,1920)
 # 이미지 크기를 시작좌표와 끝좌표로 설정, 고정된 위치에서 추출한 이미지를 사용한 결과를 확인
@@ -37,49 +42,47 @@ if menu == 1:
 elif menu == 2:
     count = 50
 
-    file_name = '_cwt.txt'
+    file_name = '_cwt_raw.txt'
 
     start_row = 0
     end_row = 40
     scale_row = 1
     rows = 81
 
-    start_col = 41
-    end_col = 100
+    start_col = 00
+    end_col = 120
     scale_col = 16
     cols = 1920
 elif menu == 3:
     count = 50
 
-    file_name = '_cwt_morse.txt'
+    file_name = '_cwt_morse_raw.txt'
 
     start_row = 0
     end_row = 40
     scale_row = 1
     rows = 80
 
-    start_col = 41
-    end_col = 80
-    scale_col = 16
+    start_col = 0
+    end_col = 96
+    scale_col = 20
     cols = 1920
 else:
     count = 100
-    
+
     start_row = 0
     end_row = 40
     scale_row = 1
     rows = 80
 
-    start_col = 33
-    end_col = 80
-    scale_col = 20
-    cols = 1920  
+    start_col = 40
+    end_col = 100
+    scale_col = 16
+    cols = 1920
+
 
 def preprocessing(person, motion):  # person, motion에 해당하는 image 불러옴
     date = '220110'
-#    파일명에서 모션번호 뒤에 오는 값을 고려하여 파일명 설정
-    #DirectoryPath = 'C:/Users/hojung/Documents/Anaconda_python/data/220110/'
-    # DirectoryPath = 'C:/Users/hojung/Documents/Anaconda_python/data/txt/'
     DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-CWT-DeepLearning/txt/'
     if menu < 4:
         image = np.zeros(shape=(count, rows, cols, 1))
@@ -100,21 +103,22 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
             df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
             df = np.reshape(df, (81, cols, 1))
             image_temp = df
-            image[i] = image_temp[0:80,0:1920]
-            label.append(person)    # 사람으로 구분    
+            image[i] = image_temp[0:80, 0:1920]
+            label.append(person)    # 사람으로 구분
         cwt_data = pd.read_csv(
             DirectoryPath + date + "_" + str(person) + "_" + str(motion) + '_cwt_morse.txt')
         for i in range(0, 50):
             df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
             df = np.reshape(df, (rows, cols, 1))
             image[i + 50] = df
-            label.append(person)    # 사람으로 구분 
+            label.append(person)    # 사람으로 구분
     return image, label
 
 
 # 시작과 끝 좌표는 scale한 후의 좌표를 기준으로 함
 def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row_scale, col_scale):
-    crop_image = image[:, 0:image.shape[1]                       :row_scale, 0:image.shape[2]:col_scale]
+    crop_image = image[:, 0:image.shape[1]
+        :row_scale, 0:image.shape[2]:col_scale]
     crop_image = crop_image[:, start_row:end_row, start_col:end_col]
     return crop_image
 
@@ -146,6 +150,42 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2):
                                         count*val_ratio): count],
                              label2[int(count*train_ratio + count*val_ratio): count]))
 
+    train_gen = ImageDataGenerator(
+        width_shift_range=0.2
+        # rescale= 1/255
+    )
+
+    test_gen = ImageDataGenerator(
+        # rescale= 1/255
+    )
+
+    augment_size = int(augment_ratio * x_train.shape[0])
+    randidx = np.random.randint(x_train.shape[0], size=augment_size)
+    x_augmented = x_train[randidx].copy()
+    y_augmented = y_train[randidx].copy()
+    x_augmented, y_augmented = train_gen.flow(
+        x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
+    x_train = np.concatenate((x_train, x_augmented))
+    y_train = np.concatenate((y_train, y_augmented))
+
+    augment_size = int(augment_ratio * x_val.shape[0])
+    randidx = np.random.randint(x_val.shape[0], size=augment_size)
+    x_augmented = x_val[randidx].copy()
+    y_augmented = y_val[randidx].copy()
+    x_augmented, y_augmented = test_gen.flow(
+        x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
+    x_val = np.concatenate((x_val, x_augmented))
+    y_val = np.concatenate((y_val, y_augmented))
+
+    augment_size = int(augment_ratio * x_test.shape[0])
+    randidx = np.random.randint(x_test.shape[0], size=augment_size)
+    x_augmented = x_test[randidx].copy()
+    y_augmented = y_test[randidx].copy()
+    x_augmented, y_augmented = test_gen.flow(
+        x_augmented, y_augmented,  batch_size=augment_size, shuffle=False).next()
+    x_test = np.concatenate((x_test, x_augmented))
+    y_test = np.concatenate((y_test, y_augmented))
+
     s = np.arange(x_train.shape[0])
     np.random.shuffle(s)
     x_train = x_train[s]
@@ -160,7 +200,13 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2):
     np.random.shuffle(s)
     x_test = x_test[s]
     y_test = y_test[s]
+
+    print(x_train.shape[0])
+    print(x_val.shape[0])
+    print(x_test.shape[0])
+
     return x_train, y_train, x_val, y_val, x_test, y_test
+
 
 classnum = 3     # class 개수
 
@@ -226,6 +272,7 @@ for i in range(try_num):    # 5회 실행 -> 평균 계산위해
     y_train = np_utils.to_categorical(y_train, classnum)
     y_val = np_utils.to_categorical(y_val, classnum)
     y_test = np_utils.to_categorical(y_test, classnum)
+
     # CNN 훈련
     hist = model.fit(x_train, y_train, validation_data=(
         x_val, y_val), epochs=50, callbacks=[early_stopping], verbose=2, batch_size=20)
