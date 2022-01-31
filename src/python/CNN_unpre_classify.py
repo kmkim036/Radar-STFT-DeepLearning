@@ -69,7 +69,7 @@ def preprocessing(person):  # person, motion에 해당하는 image 불러옴
         df = np.reshape(df, (rows, cols, 1))
         image[i] = df
         if classnum == 8:
-            label.append(person - 1 + 4 * motion)
+            label.append((person - 1) * 2 + motion)
         elif classnum == 4:
             label.append(person - 1)
         else:
@@ -83,12 +83,14 @@ def preprocessing(person):  # person, motion에 해당하는 image 불러옴
         df = np.reshape(df, (rows, cols, 1))
         image[i + 100] = df
         if classnum == 8:
-            label.append(person - 1 + 4 * (motion - 1))
+            label.append((person - 1) * 2 + motion - 1)
         elif classnum == 4:
             label.append(person - 1)
         else:
             label.append(motion - 1)
-
+    print(image.shape)
+    print(label)
+    print(len(label))
     return image, label
 
 
@@ -105,35 +107,74 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
     val_ratio = 0.15
     test_ratio = 0.15  # 적용안됨
 
-    x_train = np.concatenate((image0[0:int(count*train_ratio)], image1[0:int(
-        count*train_ratio)], image2[0:int(count*train_ratio)], image3[0:int(count*train_ratio)]))
-    y_train = np.concatenate((label0[0:int(count*train_ratio)], label1[0:int(
-        count*train_ratio)], label2[0:int(count*train_ratio)], label3[0:int(count*train_ratio)]))
-    x_val = np.concatenate((image0[int(count*train_ratio): int(count*train_ratio + count*val_ratio)],
-                            image1[int(count*train_ratio): int(count *
-                                                               train_ratio + count*val_ratio)],
-                            image2[int(count*train_ratio): int(count *
-                                                               train_ratio + count*val_ratio)],
-                            image3[int(count*train_ratio): int(count*train_ratio + count*val_ratio)]))
-    y_val = np.concatenate((label0[int(count*train_ratio): int(count*train_ratio + count*val_ratio)],
-                            label1[int(count*train_ratio): int(count *
-                                                               train_ratio + count*val_ratio)],
-                            label2[int(count*train_ratio): int(count *
-                                                               train_ratio + count*val_ratio)],
-                            label3[int(count*train_ratio): int(count*train_ratio + count*val_ratio)]))
+    x_train = np.concatenate((image0[0:int(count*train_ratio)], image0[count:count + int(count*train_ratio)],
+                              image1[0:int(
+                                  count*train_ratio)], image1[count:count + int(count*train_ratio)],
+                              image2[0:int(
+                                  count*train_ratio)], image2[count:count + int(count*train_ratio)],
+                              image3[0:int(count*train_ratio)], image3[count:count + int(count*train_ratio)]))
+    y_train = np.concatenate((label0[0:int(count*train_ratio)], label0[count:count + int(count*train_ratio)],
+                              label1[0:int(
+                                  count*train_ratio)], label1[count:count + int(count*train_ratio)],
+                              label2[0:int(
+                                  count*train_ratio)], label2[count:count + int(count*train_ratio)],
+                              label3[0:int(count*train_ratio)], label3[count:count + int(count*train_ratio)]))
+    x_val = np.concatenate((image0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
+                            image0[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            image1[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image1[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            image2[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image2[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            image3[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image3[count + int(count*train_ratio):count + int(count*train_ratio + count*val_ratio)]))
+    y_val = np.concatenate((label0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
+                            label0[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            label1[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label1[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            label2[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label2[count + int(count*train_ratio):count +
+                                   int(count*train_ratio + count*val_ratio)],
+                            label3[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label3[count + int(count*train_ratio):count + int(count*train_ratio + count*val_ratio)]))
     x_test = np.concatenate((image0[int(count*train_ratio + count*val_ratio): count],
+                             image0[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
                              image1[int(count*train_ratio +
                                         count*val_ratio): count],
+                             image1[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
                              image2[int(count*train_ratio +
                                         count*val_ratio): count],
-                             image3[int(count*train_ratio + count*val_ratio): count]))
+                             image2[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
+                             image3[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             image3[count + int(count*train_ratio + count*val_ratio): 2*count]))
     y_test = np.concatenate((label0[int(count*train_ratio + count*val_ratio): count],
+                             label0[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
                              label1[int(count*train_ratio +
                                         count*val_ratio): count],
+                             label1[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
                              label2[int(count*train_ratio +
                                         count*val_ratio): count],
-                             label3[int(count*train_ratio + count*val_ratio): count]))
-
+                             label2[count + int(count*train_ratio +
+                                                count*val_ratio): 2*count],
+                             label3[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             label3[count + int(count*train_ratio + count*val_ratio): 2*count]))
     print('before augmentation, train: ' + str(x_train.shape[0]))
     print('before augmentation, val: ' + str(x_val.shape[0]))
     print('before augmentation, test: ' + str(x_test.shape[0]))
