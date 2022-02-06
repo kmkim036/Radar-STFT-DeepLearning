@@ -34,6 +34,10 @@ date = '220132'
 
 count = 100
 
+lr = 0.001
+bs = 64
+wsr = 0.15
+
 if menu == 1:
     file_name = '_stft.txt'
 
@@ -47,7 +51,7 @@ if menu == 1:
     scale_col = 1
     cols = 29
 elif menu == 2:
-    file_name = '_cwt_raw.txt'
+    file_name = '_cwt.txt'
 
     start_row = 0
     end_row = 40
@@ -123,7 +127,7 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
     print('before augmentation, test: ' + str(x_test.shape[0]))
 
     train_gen = ImageDataGenerator(
-        width_shift_range=0.2
+        width_shift_range=wsr
     )
 
     augment_size = int(augment_ratio * x_train.shape[0])
@@ -165,16 +169,6 @@ image1, label1 = preprocessing(1, motion)  # 성진_motion 불러옴
 image2, label2 = preprocessing(2, motion)  # 호정_motion 불러옴
 image3, label3 = preprocessing(3, motion)  # 여성1_motion 불러옴
 image4, label4 = preprocessing(4, motion)  # 여성2_motion 불러옴
-
-
-# 정규화 테스트중
-# maxval = image0.max()
-# image0 = image0.astype('float32')/maxval
-# maxval = image1.max()
-# image1 = image1.astype('float32')/maxval
-# maxval = image2.max()
-# image2 = image2.astype('float32')/maxval
-
 
 result_acc = 0
 for i in range(try_num):
@@ -223,7 +217,7 @@ for i in range(try_num):
     x_test = x_test.astype('float32')/maxval
 
     # CNN model
-    model = deep_learning_model.create_CNNmodel(row_len, col_len, classnum)
+    model = deep_learning_model.create_CNNmodel(lr, row_len, col_len, classnum)
     early_stopping = EarlyStopping(monitor='val_accuracy', patience=10)
     y_train = np_utils.to_categorical(y_train, classnum)
     y_val = np_utils.to_categorical(y_val, classnum)
@@ -231,7 +225,7 @@ for i in range(try_num):
 
     # CNN 훈련
     hist = model.fit(x_train, y_train, validation_data=(
-        x_val, y_val), epochs=50, callbacks=[early_stopping], verbose=2, batch_size=20)
+        x_val, y_val), epochs=50, callbacks=[early_stopping], verbose=2, batch_size=bs)
 
     # 평가
     print('Evaluate')
