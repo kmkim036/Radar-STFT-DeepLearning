@@ -235,7 +235,7 @@ for i in range(try_num):
     test_label = np.concatenate((test_label, y_test))
     pred = model.predict(x_test)
     predict_label = np.concatenate((predict_label, pred))
-    
+
 print('image size :', str(row_len)+'X'+str(col_len), '   row =', str(start_row)+' : '+str(end_row), '   col =', str(start_col)+' : '+str(end_col),
       '   round :', try_num, '//  average_acc :', result_acc / try_num)
 
