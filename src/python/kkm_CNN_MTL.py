@@ -1,6 +1,3 @@
-# 추출좌표를 이동하며 여러 조건을 테스트하는 것이 아닌 한 곳에서만 추출하여 결과를 계산
-# un-pre classfied
-# 4명(남2여2) + 2모션(걷기,성큼성큼)을 구분
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -13,6 +10,7 @@ from tensorflow import keras
 from tensorflow.keras.callbacks import EarlyStopping
 from keras.utils import np_utils
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.utils.vis_utils import plot_model
 
 from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
@@ -20,6 +18,8 @@ import seaborn as sns
 import deep_learning_model_MTL
 
 menu = 1
+
+modeltype =1 
 
 augment_ratio = 9
 
@@ -331,12 +331,16 @@ for i in range(try_num):
     x_val = x_val.astype('float32')/maxval
     x_test = x_test.astype('float32')/maxval
 
-    print(x_train.shape[0])
-    print(x_val.shape[0])
-    print(x_test.shape[0])
-
     # CNN model
-    model = deep_learning_model_MTL.create_CNNmodel_2(lr, row_len, col_len)
+    model = deep_learning_model_MTL.create_CNNmodel(modeltype, lr, row_len, col_len)
+
+    if i == 0:
+        print(x_train.shape[0])
+        print(x_val.shape[0])
+        print(x_test.shape[0])
+        print(model.summary())
+        plot_model(model, to_file='MTL_model_' + str(modeltype) + '.png', show_shapes=True)
+
     early_stopping = EarlyStopping(
         monitor='val_human_output_accuracy', patience=10)
     y_train_human = np_utils.to_categorical(y_train_human, 4)
