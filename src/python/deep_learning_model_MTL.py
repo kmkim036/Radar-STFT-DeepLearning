@@ -6,7 +6,7 @@ from keras.layers import Dense, Flatten
 from keras.layers import Input, Add
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 
-def create_CNNmodel(modeltype, lr, img_row, img_col):
+def create_CNNmodel(modeltype, classnum_human, classnum_motion, lr, img_row, img_col):
 
     model_input = Input(shape=(img_row, img_col, 1), name='main_input')
 
@@ -36,8 +36,8 @@ def create_CNNmodel(modeltype, lr, img_row, img_col):
     main_branch = Flatten()(main_branch)
     main_branch = Dense(128, activation='relu')(main_branch)
 
-    human = Dense(4, activation='softmax', name = 'human_output')(main_branch)
-    motion = Dense(2, activation='softmax', name = 'motion_output')(main_branch)
+    human = Dense(classnum_human, activation='softmax', name = 'human_output')(main_branch)
+    motion = Dense(classnum_motion, activation='softmax', name = 'motion_output')(main_branch)
 
     model = Model(inputs = model_input, outputs = [human, motion])
     

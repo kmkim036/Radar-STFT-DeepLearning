@@ -19,7 +19,7 @@ import deep_learning_model_MTL
 
 menu = 1
 
-modeltype =1 
+modeltype = 1
 
 augment_ratio = 9
 
@@ -33,11 +33,14 @@ lr = 0.001
 bs = 64
 wsr = 0.15
 
-test_label_human = np.zeros(4).reshape(1, 4)
-predict_label_human = np.zeros(4).reshape(1, 4)
+classnum_human = 4
+classnum_motion = 2
 
-test_label_motion = np.zeros(2).reshape(1, 2)
-predict_label_motion = np.zeros(2).reshape(1, 2)
+test_label_human = np.zeros(classnum_human).reshape(1, classnum_human)
+predict_label_human = np.zeros(classnum_human).reshape(1, classnum_human)
+
+test_label_motion = np.zeros(classnum_motion).reshape(1, classnum_motion)
+predict_label_motion = np.zeros(classnum_motion).reshape(1, classnum_motion)
 
 if menu == 1:
     file_name = '_stft.txt'
@@ -88,7 +91,7 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
 
 # 시작과 끝 좌표는 scale한 후의 좌표를 기준으로 함
 def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row_scale, col_scale):
-    crop_image = image[:, 0:image.shape[1]:row_scale, 0:image.shape[2]:col_scale]
+    crop_image = image[:, 0:image.shape[1]                       :row_scale, 0:image.shape[2]:col_scale]
     crop_image = crop_image[:, start_row:end_row, start_col:end_col]
     return crop_image
 
@@ -332,23 +335,25 @@ for i in range(try_num):
     x_test = x_test.astype('float32')/maxval
 
     # CNN model
-    model = deep_learning_model_MTL.create_CNNmodel(modeltype, lr, row_len, col_len)
+    model = deep_learning_model_MTL.create_CNNmodel(
+        modeltype, classnum_human, classnum_motion, lr, row_len, col_len)
 
     if i == 0:
         print(x_train.shape[0])
         print(x_val.shape[0])
         print(x_test.shape[0])
         print(model.summary())
-        plot_model(model, to_file='MTL_model_' + str(modeltype) + '.png', show_shapes=True)
+        plot_model(model, to_file='MTL_model_' +
+                   str(modeltype) + '.png', show_shapes=True)
 
     early_stopping = EarlyStopping(
         monitor='val_human_output_accuracy', patience=10)
-    y_train_human = np_utils.to_categorical(y_train_human, 4)
-    y_train_motion = np_utils.to_categorical(y_train_motion, 2)
-    y_val_human = np_utils.to_categorical(y_val_human, 4)
-    y_val_motion = np_utils.to_categorical(y_val_motion, 2)
-    y_test_human = np_utils.to_categorical(y_test_human, 4)
-    y_test_motion = np_utils.to_categorical(y_test_motion, 2)
+    y_train_human = np_utils.to_categorical(y_train_human, classnum_human)
+    y_train_motion = np_utils.to_categorical(y_train_motion, classnum_motion)
+    y_val_human = np_utils.to_categorical(y_val_human, classnum_human)
+    y_val_motion = np_utils.to_categorical(y_val_motion, classnum_motion)
+    y_test_human = np_utils.to_categorical(y_test_human, classnum_human)
+    y_test_motion = np_utils.to_categorical(y_test_motion, classnum_motion)
     hist = model.fit({'main_input': x_train}, {'human_output': y_train_human, 'motion_output': y_train_motion},
                      validation_data=(x_val, [y_val_human, y_val_motion]), epochs=50, verbose=0, callbacks=[early_stopping], batch_size=bs)
 
@@ -373,7 +378,7 @@ predict_label_human = np.delete(predict_label_human, 0, axis=0)
 predict_label_motion = np.delete(predict_label_motion, 0, axis=0)
 
 sns.set(style='white')
-plt.figure(figsize=(4, 4))
+plt.figure(figsize=(classnum_human, classnum_human))
 cm = confusion_matrix(np.argmax(test_label_human[:int(test_label_human.shape[0])], axis=1),
                       np.argmax(predict_label_human[:int(predict_label_human.shape[0])], axis=-1))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
@@ -382,7 +387,7 @@ plt.ylabel('True Label')
 plt.show()
 
 sns.set(style='white')
-plt.figure(figsize=(2, 2))
+plt.figure(figsize=(classnum_motion, classnum_motion))
 cm = confusion_matrix(np.argmax(test_label_motion[:int(test_label_motion.shape[0])], axis=1),
                       np.argmax(predict_label_motion[:int(predict_label_motion.shape[0])], axis=-1))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
