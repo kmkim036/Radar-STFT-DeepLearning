@@ -1,6 +1,5 @@
-# 한 개의 모션에 대해서만 동작
-# 추출좌표를 이동하며 여러 조건을 테스트하는 것이 아닌 한 곳에서만 추출하여 결과를 계산
-# 4명(남2여2)을 구분
+# classify human in one motion
+
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -19,19 +18,18 @@ import seaborn as sns
 
 import deep_learning_model
 
-# STFT = (128, 29) //  CWT = (81,1920)
-# 이미지 크기를 시작좌표와 끝좌표로 설정, 고정된 위치에서 추출한 이미지를 사용한 결과를 확인
-# 추출하는 좌표가 변하지않으므로 동작시간이 비교적 매우 짧다.
-
-menu = 2
+menu = 1
 
 motion = 0
+# motion 0: walk
+# motion 2: stride
+# motion 3: creep
 
 augment_ratio = 9
 
-classnum = 4     # class 개수
+classnum = 4
 
-try_num = 10   # 같은 조건에서 몇번 반복할지
+try_num = 30
 
 date = '220132'
 
@@ -88,7 +86,7 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
 
 # 시작과 끝 좌표는 scale한 후의 좌표를 기준으로 함
 def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row_scale, col_scale):
-    crop_image = image[:, 0:image.shape[1]                       :row_scale, 0:image.shape[2]:col_scale]
+    crop_image = image[:, 0:image.shape[1]:row_scale, 0:image.shape[2]:col_scale]
     crop_image = crop_image[:, start_row:end_row, start_col:end_col]
     return crop_image
 

@@ -1,6 +1,5 @@
-# 추출좌표를 이동하며 여러 조건을 테스트하는 것이 아닌 한 곳에서만 추출하여 결과를 계산
-# un-pre classfied
-# 4명(남2여2) + 2모션(걷기,성큼성큼)을 구분
+# classify human with which motion
+
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -19,13 +18,13 @@ import seaborn as sns
 
 import deep_learning_model
 
-menu = 2
+menu = 1
 
 augment_ratio = 9
 
-classnum = 8     # class 개수
+classnum = 12
 
-try_num = 10   # 같은 조건에서 몇번 반복할지
+try_num = 10
 
 date = '220132'
 
@@ -76,23 +75,22 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
         df = np.reshape(df, (rows, cols, 1))
         image[i] = df
         if motion == 0:
-            label.append(2 * (person - 1) + 0)
+            label.append(3 * (person - 1) + motion)
         else:
-            label.append(2 * (person - 1) + 1)
+            label.append(3 * (person - 1) + motion - 1)
 
     return image, label
 
 
 # 시작과 끝 좌표는 scale한 후의 좌표를 기준으로 함
 def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row_scale, col_scale):
-    crop_image = image[:, 0:image.shape[1]
-        :row_scale, 0:image.shape[2]:col_scale]
+    crop_image = image[:, 0:image.shape[1]:row_scale, 0:image.shape[2]:col_scale]
     crop_image = crop_image[:, start_row:end_row, start_col:end_col]
     return crop_image
 
 
 # ratio비율로 각 data set을 합치고 순서도 섞음
-def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, label3, image4, label4, image5, label5, image6, label6, image7, label7):
+def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, label3, image4, label4, image5, label5, image6, label6, image7, label7, image8, label8, image9, label9, image10, label10, image11, label11):
     train_ratio = 0.7
     val_ratio = 0.15
     test_ratio = 0.15  # 적용안됨
@@ -105,7 +103,11 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
          image4[0:int(count*train_ratio)],
          image5[0:int(count*train_ratio)],
          image6[0:int(count*train_ratio)],
-         image7[0:int(count*train_ratio)]))
+         image7[0:int(count*train_ratio)],
+         image8[0:int(count*train_ratio)],
+         image9[0:int(count*train_ratio)],
+         image10[0:int(count*train_ratio)],
+         image11[0:int(count*train_ratio)]))
     y_train = np.concatenate(
         (label0[0:int(count*train_ratio)],
          label1[0:int(count*train_ratio)],
@@ -114,8 +116,13 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
          label4[0:int(count*train_ratio)],
          label5[0:int(count*train_ratio)],
          label6[0:int(count*train_ratio)],
-         label7[0:int(count*train_ratio)]))
-    x_val = np.concatenate((image0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
+         label7[0:int(count*train_ratio)],
+         label8[0:int(count*train_ratio)],
+         label9[0:int(count*train_ratio)],
+         label10[0:int(count*train_ratio)],
+         label11[0:int(count*train_ratio)]))
+    x_val = np.concatenate((image0[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
                             image1[int(count*train_ratio):int(count *
                                                               train_ratio + count*val_ratio)],
                             image2[int(count*train_ratio):int(count *
@@ -128,7 +135,16 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
                                                               train_ratio + count*val_ratio)],
                             image6[int(count*train_ratio):int(count *
                                                               train_ratio + count*val_ratio)],
-                            image7[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
+                            image7[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image8[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image9[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image10[int(count*train_ratio):int(count *
+                                                               train_ratio + count*val_ratio)],
+                            image11[int(count*train_ratio):int(count *
+                                                               train_ratio + count*val_ratio)]))
     y_val = np.concatenate((label0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
                             label1[int(count*train_ratio):int(count *
                                                               train_ratio + count*val_ratio)],
@@ -142,7 +158,16 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
                                                               train_ratio + count*val_ratio)],
                             label6[int(count*train_ratio):int(count *
                                                               train_ratio + count*val_ratio)],
-                            label7[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
+                            label7[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label8[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label9[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label10[int(count*train_ratio):int(count *
+                                                               train_ratio + count*val_ratio)],
+                            label11[int(count*train_ratio):int(count *
+                                                               train_ratio + count*val_ratio)]))
     x_test = np.concatenate((image0[int(count*train_ratio + count*val_ratio): count],
                              image1[int(count*train_ratio +
                                         count*val_ratio): count],
@@ -156,7 +181,16 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
                                         count*val_ratio): count],
                              image6[int(count*train_ratio +
                                         count*val_ratio): count],
-                             image7[int(count*train_ratio + count*val_ratio): count]))
+                             image7[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             image8[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             image9[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             image10[int(count*train_ratio +
+                                         count*val_ratio): count],
+                             image11[int(count*train_ratio +
+                                         count*val_ratio): count]))
     y_test = np.concatenate((label0[int(count*train_ratio + count*val_ratio): count],
                              label1[int(count*train_ratio +
                                         count*val_ratio): count],
@@ -170,7 +204,16 @@ def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, la
                                         count*val_ratio): count],
                              label6[int(count*train_ratio +
                                         count*val_ratio): count],
-                             label7[int(count*train_ratio + count*val_ratio): count]))
+                             label7[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             label8[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             label9[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             label10[int(count*train_ratio +
+                                         count*val_ratio): count],
+                             label11[int(count*train_ratio +
+                                         count*val_ratio): count]))
 
     train_gen = ImageDataGenerator(
         width_shift_range=wsr
@@ -208,12 +251,16 @@ col_len = math.ceil((end_col - start_col))
 
 image1, label1 = preprocessing(1, 0)
 image2, label2 = preprocessing(1, 2)
-image3, label3 = preprocessing(2, 0)
-image4, label4 = preprocessing(2, 2)
-image5, label5 = preprocessing(3, 0)
-image6, label6 = preprocessing(3, 2)
-image7, label7 = preprocessing(4, 0)
-image8, label8 = preprocessing(4, 2)
+image3, label3 = preprocessing(1, 3)
+image4, label4 = preprocessing(2, 0)
+image5, label5 = preprocessing(2, 2)
+image6, label6 = preprocessing(2, 3)
+image7, label7 = preprocessing(3, 0)
+image8, label8 = preprocessing(3, 2)
+image9, label9 = preprocessing(3, 3)
+image10, label10 = preprocessing(4, 0)
+image11, label11 = preprocessing(4, 2)
+image12, label12 = preprocessing(4, 3)
 
 result_acc = 0
 for i in range(try_num):
@@ -252,6 +299,22 @@ for i in range(try_num):
     np.random.shuffle(s)
     image8_shuff = image8[s]
 
+    s = np.arange(image9.shape[0])
+    np.random.shuffle(s)
+    image9_shuff = image9[s]
+
+    s = np.arange(image10.shape[0])
+    np.random.shuffle(s)
+    image10_shuff = image10[s]
+
+    s = np.arange(image11.shape[0])
+    np.random.shuffle(s)
+    image11_shuff = image11[s]
+
+    s = np.arange(image12.shape[0])
+    np.random.shuffle(s)
+    image12_shuff = image12[s]
+
     # 크기에 맞게 자름
     image1_crop = preprocessing_resize_crop(
         image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
@@ -269,10 +332,18 @@ for i in range(try_num):
         image7_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
     image8_crop = preprocessing_resize_crop(
         image8_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image9_crop = preprocessing_resize_crop(
+        image9_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image10_crop = preprocessing_resize_crop(
+        image10_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image11_crop = preprocessing_resize_crop(
+        image11_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image12_crop = preprocessing_resize_crop(
+        image12_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
 
     # 자른 image를 각 data set으로 나눠서 합침
     x_train, y_train, x_val, y_val, x_test, y_test = concatenate_n_div(
-        image1_crop, label1, image2_crop, label2, image3_crop, label3, image4_crop, label4, image5_crop, label5, image6_crop, label6, image7_crop, label7, image8_crop, label8)
+        image1_crop, label1, image2_crop, label2, image3_crop, label3, image4_crop, label4, image5_crop, label5, image6_crop, label6, image7_crop, label7, image8_crop, label8, image9_crop, label9, image10_crop, label10, image11_crop, label11, image12_crop, label12)
 
     maxval = x_train.max()
     if maxval < x_val.max():

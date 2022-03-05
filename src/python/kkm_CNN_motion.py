@@ -1,6 +1,5 @@
-# 추출좌표를 이동하며 여러 조건을 테스트하는 것이 아닌 한 곳에서만 추출하여 결과를 계산
-# un-pre classfied
-# 4명(남2여2) + 2모션(걷기,성큼성큼)을 구분
+# classify motion
+
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -19,11 +18,11 @@ import seaborn as sns
 
 import deep_learning_model
 
-menu = 2
+menu = 1
 
 augment_ratio = 9
 
-classnum = 2     # class 개수
+classnum = 3     # class 개수
 
 try_num = 10   # 같은 조건에서 몇번 반복할지
 
@@ -93,23 +92,31 @@ def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row
 
 
 # ratio비율로 각 data set을 합치고 순서도 섞음
-def concatenate_n_div(image0, label0, image1, label1):
+def concatenate_n_div(image0, label0, image1, label1, image2, label2):
     train_ratio = 0.7
     val_ratio = 0.15
     test_ratio = 0.15  # 적용안됨
 
     x_train = np.concatenate(
-        (image0[0:int(count*train_ratio)], image1[0:int(count*train_ratio)]))
+        (image0[0:int(count*train_ratio)], image1[0:int(count*train_ratio)], image2[0:int(count*train_ratio)]))
     y_train = np.concatenate(
-        (label0[0:int(count*train_ratio)], label1[0:int(count*train_ratio)]))
+        (label0[0:int(count*train_ratio)], label1[0:int(count*train_ratio)], label2[0:int(count*train_ratio)]))
     x_val = np.concatenate((image0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
-                            image1[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
+                            image1[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            image2[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
     y_val = np.concatenate((label0[int(count*train_ratio):int(count*train_ratio + count*val_ratio)],
-                            label1[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
+                            label1[int(count*train_ratio):int(count *
+                                                              train_ratio + count*val_ratio)],
+                            label2[int(count*train_ratio):int(count*train_ratio + count*val_ratio)]))
     x_test = np.concatenate((image0[int(count*train_ratio + count*val_ratio): count],
-                             image1[int(count*train_ratio + count*val_ratio): count]))
+                             image1[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             image2[int(count*train_ratio + count*val_ratio): count]))
     y_test = np.concatenate((label0[int(count*train_ratio + count*val_ratio): count],
-                             label1[int(count*train_ratio + count*val_ratio): count]))
+                             label1[int(count*train_ratio +
+                                        count*val_ratio): count],
+                             label2[int(count*train_ratio + count*val_ratio): count]))
 
     train_gen = ImageDataGenerator(
         width_shift_range=wsr
@@ -147,6 +154,7 @@ col_len = math.ceil((end_col - start_col))
 
 image1, label1 = preprocessing(0)  # motion 0 불러옴
 image2, label2 = preprocessing(2)  # motion 2 불러옴
+image3, label3 = preprocessing(3)  # motion 3 불러옴
 
 result_acc = 0
 for i in range(try_num):
@@ -161,15 +169,21 @@ for i in range(try_num):
     np.random.shuffle(s)
     image2_shuff = image2[s]
 
+    s = np.arange(image3.shape[0])
+    np.random.shuffle(s)
+    image3_shuff = image3[s]
+
     # 크기에 맞게 자름
     image1_crop = preprocessing_resize_crop(
         image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
     image2_crop = preprocessing_resize_crop(
         image2_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image3_crop = preprocessing_resize_crop(
+        image3_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
 
     # 자른 image를 각 data set으로 나눠서 합침
     x_train, y_train, x_val, y_val, x_test, y_test = concatenate_n_div(
-        image1_crop, label1, image2_crop, label2)
+        image1_crop, label1, image2_crop, label2, image3_crop, label3)
 
     maxval = x_train.max()
     if maxval < x_val.max():
