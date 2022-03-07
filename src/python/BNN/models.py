@@ -16,21 +16,21 @@ use_bias = False
 
 def create_CNNmodel(lr, img_row, img_col, classnum):
     model = Sequential()
-    model.add(BinaryConv2D(32, kernel_size=(3, 3), input_shape=(1, img_row, img_col),
+    model.add(BinaryConv2D(16, kernel_size=(3, 3), input_shape=(img_row, img_col, 1),
                         data_format=None,
                         H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
                         padding='valid', use_bias=use_bias, name='conv1'))
     model.add(MaxPooling2D(pool_size=(2, 2), name='pool1', data_format=None))
     model.add(Activation(binary_tanh, name='act1'))
 
-    model.add(BinaryConv2D(64, kernel_size=(3, 3), input_shape=(1, img_row, img_col),
+    model.add(BinaryConv2D(16, kernel_size=(3, 3), input_shape=(1, img_row, img_col),
                         data_format=None,
                         H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
                         padding='valid', use_bias=use_bias, name='conv2'))
     model.add(MaxPooling2D(pool_size=(2, 2), name='pool2', data_format=None))
     model.add(Activation(binary_tanh, name='act2'))
 
-    model.add(BinaryConv2D(64, kernel_size=(3, 3), input_shape=(1, img_row, img_col),
+    model.add(BinaryConv2D(16, kernel_size=(3, 3), input_shape=(1, img_row, img_col),
                         data_format=None,
                         H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
                         padding='valid', use_bias=use_bias, name='conv3'))
@@ -50,7 +50,7 @@ def create_CNNmodel(lr, img_row, img_col, classnum):
 
 def create_CNNmodel_MTL(classnum_human, classnum_motion, lr, img_row, img_col):
 
-    model_input = Input(shape=(1, img_row, img_col), name='main_input')
+    model_input = Input(shape=(img_row, img_col, 1), name='main_input')
 
     # merge 2 branches
     left_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
