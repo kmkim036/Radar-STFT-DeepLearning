@@ -38,7 +38,7 @@ def create_CNNmodel(lr, img_row, img_col, classnum):
     model.add(Activation(binary_tanh, name='act3'))
 
     model.add(Flatten())
-    model.add(BinaryDense(64, H=H, kernel_lr_multiplier=kernel_lr_multiplier, use_bias=use_bias, name='dense4'))
+    model.add(BinaryDense(128, H=H, kernel_lr_multiplier=kernel_lr_multiplier, use_bias=use_bias, name='dense4'))
     model.add(Activation(binary_tanh, name='act4'))
 
     model.add(BinaryDense(classnum, H=H, kernel_lr_multiplier=kernel_lr_multiplier, use_bias=use_bias, name='dense5'))
