@@ -197,14 +197,21 @@ for i in range(try_num):
 print('image size :', str(row_len)+'X'+str(col_len), '   row =', str(start_row)+' : '+str(end_row), '   col =', str(start_col)+' : '+str(end_col),
       '   round :', try_num, '//  average_acc :', result_acc / try_num)
 
-test_label = np.delete(test_label, 0, axis=0)
-predict_label = np.delete(predict_label, 0, axis=0)
+test_label = np.delete(test_label,0,axis=0)
+predict_label = np.delete(predict_label,0,axis=0)
 sns.set(style='white')
-plt.figure(figsize=(classnum, classnum))
+plt.figure(figsize=(classnum,classnum))
 cm = confusion_matrix(np.argmax(test_label[:int(test_label.shape[0])], axis=1),
-                      np.argmax(predict_label[:int(predict_label.shape[0])], axis=-1))
+np.argmax(predict_label[:int(predict_label.shape[0])], axis=-1))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-plt.title('Classify Motion')
+if motion == 0:
+    plt.title('Classify Human in Walk')
+elif motion == 1:
+    plt.title('Classify Human in Run')
+elif motion == 2:
+    plt.title('Classify Human in Stride')
+elif motion == 3:
+    plt.title('Classify Human in Creep')
 plt.xlabel('Predicted Label')
 plt.ylabel('True Label')
 plt.show()

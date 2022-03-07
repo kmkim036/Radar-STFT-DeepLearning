@@ -330,7 +330,7 @@ plt.figure(figsize=(classnum, classnum))
 cm = confusion_matrix(np.argmax(test_label[:int(test_label.shape[0])], axis=1),
                       np.argmax(predict_label[:int(predict_label.shape[0])], axis=-1))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-plt.title('Classify Motion')
+plt.title('Classify Human with Motion')
 plt.xlabel('Predicted Label')
 plt.ylabel('True Label')
 plt.show()
