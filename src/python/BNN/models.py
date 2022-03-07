@@ -48,53 +48,28 @@ def create_CNNmodel(lr, img_row, img_col, classnum):
 
     return model
 
-def create_CNNmodel_MTL(modeltype, classnum_human, classnum_motion, lr, img_row, img_col):
+def create_CNNmodel_MTL(classnum_human, classnum_motion, lr, img_row, img_col):
 
     model_input = Input(shape=(1, img_row, img_col), name='main_input')
 
-    if modeltype == 1:
-        # model 1
-        # merge 2 branches
-        left_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
-                       data_format=None,
-                       H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
-                       padding='same', use_bias=use_bias, name='conv1')
-        left_branch = MaxPooling2D(pool_size=(2, 2), name='pool1', data_format=None)(left_branch)
-        left_branch = Activation(binary_tanh, name='act1')(left_branch)
+    # merge 2 branches
+    left_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
+                    data_format=None,
+                    H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
+                    padding='same', use_bias=use_bias, name='conv1')
+    left_branch = MaxPooling2D(pool_size=(2, 2), name='pool1', data_format=None)(left_branch)
+    left_branch = Activation(binary_tanh, name='act1')(left_branch)
 
-        right_branch = BinaryConv2D(16, kernel_size=(5, 5), input_shape=model_input,
-                       data_format=None,
-                       H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
-                       padding='same', use_bias=use_bias, name='conv2')
-        right_branch = MaxPooling2D(pool_size=(2, 2), name='pool2', data_format=None)(right_branch)
-        right_branch = Activation(binary_tanh, name='act2')(right_branch)
+    right_branch = BinaryConv2D(16, kernel_size=(5, 5), input_shape=model_input,
+                    data_format=None,
+                    H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
+                    padding='same', use_bias=use_bias, name='conv2')
+    right_branch = MaxPooling2D(pool_size=(2, 2), name='pool2', data_format=None)(right_branch)
+    right_branch = Activation(binary_tanh, name='act2')(right_branch)
 
-        main_branch = Add()([left_branch, right_branch])
-        main_branch = MaxPooling2D(pool_size=(2, 2), name='pool3', data_format=None)(main_branch)
-        main_branch = Activation(binary_tanh, name='act3')(main_branch)
-    elif modeltype == 2:
-        # model 2
-        # one stream with multiple kernels
-        main_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
-                            data_format=None,
-                            H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
-                            padding='valid', use_bias=use_bias, name='conv1')
-        main_branch = MaxPooling2D(pool_size=(2, 2), name='pool1', data_format=None)(main_branch)
-        main_branch = Activation(binary_tanh, name='act1')(main_branch)
-
-        main_branch = BinaryConv2D(16, kernel_size=(5, 5), input_shape=model_input,
-                            data_format=None,
-                            H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
-                            padding='valid', use_bias=use_bias, name='conv2')(main_branch)
-        main_branch = MaxPooling2D(pool_size=(2, 2), name='pool2', data_format=None)(main_branch)
-        main_branch = Activation(binary_tanh, name='act2')(main_branch)
-        
-        main_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
-                            data_format=None,
-                            H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
-                            padding='valid', use_bias=use_bias, name='conv3')(main_branch)
-        main_branch = MaxPooling2D(pool_size=(2, 2), name='pool3', data_format=None)(main_branch)
-        main_branch = Activation(binary_tanh, name='act3')(main_branch)
+    main_branch = Add()([left_branch, right_branch])
+    main_branch = MaxPooling2D(pool_size=(2, 2), name='pool3', data_format=None)(main_branch)
+    main_branch = Activation(binary_tanh, name='act3')(main_branch)
 
     main_branch = Flatten()(main_branch)
     main_branch = BinaryDense(128, H=H, kernel_lr_multiplier=kernel_lr_multiplier, use_bias=use_bias, name='dense4')(main_branch)
