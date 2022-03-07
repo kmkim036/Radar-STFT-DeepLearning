@@ -52,14 +52,14 @@ def create_CNNmodel_MTL(classnum_human, classnum_motion, lr, img_row, img_col):
     model_input = Input(shape=(img_row, img_col, 1), name='main_input')
 
     # merge 2 branches
-    left_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=model_input,
+    left_branch = BinaryConv2D(16, kernel_size=(3, 3), input_shape=(img_row, img_col, 1),
                     data_format=None,
                     H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
                     padding='same', use_bias=use_bias, name='conv1')
     left_branch = MaxPooling2D(pool_size=(2, 2), name='pool1', data_format=None)(left_branch)
     left_branch = Activation(binary_tanh, name='act1')(left_branch)
 
-    right_branch = BinaryConv2D(16, kernel_size=(5, 5), input_shape=model_input,
+    right_branch = BinaryConv2D(16, kernel_size=(5, 5), input_shape=(img_row, img_col, 1),
                     data_format=None,
                     H=H, kernel_lr_multiplier=kernel_lr_multiplier, 
                     padding='same', use_bias=use_bias, name='conv2')
