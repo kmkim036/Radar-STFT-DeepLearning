@@ -9,10 +9,9 @@ from tensorflow.keras.optimizers import Adam
 from binary_layers import BinaryDense, BinaryConv2D
 from activations import binary_tanh 
 
-H = 1.
+H = 'Glorot'
 kernel_lr_multiplier = 'Glorot'
 use_bias = False
-
 
 def create_CNNmodel(lr, img_row, img_col, classnum):
     model = Sequential()
@@ -43,7 +42,7 @@ def create_CNNmodel(lr, img_row, img_col, classnum):
 
     model.add(BinaryDense(classnum, H=H, kernel_lr_multiplier=kernel_lr_multiplier, use_bias=use_bias, name='dense5'))
     
-    model.compile(loss='categorical_crossentropy',
+    model.compile(loss='squared_hinge',
                   optimizer=Adam(lr), metrics=['accuracy'])
 
     return model
@@ -82,7 +81,7 @@ def create_CNNmodel_MTL(classnum_human, classnum_motion, lr, img_row, img_col):
     model = Model(inputs = model_input, outputs = [human, motion])
     
     model.compile(optimizer=Adam(lr), 
-                  loss=['categorical_crossentropy', 'categorical_crossentropy'],
+                  loss=['squared_hinge', 'squared_hinge'],
                   metrics=['accuracy'])
     
     return model
