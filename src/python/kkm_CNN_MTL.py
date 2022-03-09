@@ -435,8 +435,7 @@ for i in range(try_num):
         print(x_val.shape[0])
         print(x_test.shape[0])
         print(model.summary())
-        plot_model(model, to_file='MTL_model_' +
-                   str(modeltype) + '.png', show_shapes=True)
+        plot_model(model, to_file='MTL_model.png', show_shapes=True)
 
     early_stopping = EarlyStopping(
         monitor='val_human_output_accuracy', patience=10)
