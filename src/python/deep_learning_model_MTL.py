@@ -6,34 +6,29 @@ from keras.layers import Dense, Flatten
 from keras.layers import Input, Add
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 
-def create_CNNmodel(modeltype, classnum_human, classnum_motion, lr, img_row, img_col):
+def create_CNNmodel(classnum_human, classnum_motion, lr, img_row, img_col):
 
     model_input = Input(shape=(img_row, img_col, 1), name='main_input')
 
-    if modeltype == 1:
-        # model 1
-        # merge 2 branches
-        left_branch = Conv2D(16, kernel_size=(3, 3), strides=(1, 1), padding = 'same', activation='relu')(model_input)
-        left_branch = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(left_branch)
+    left_branch1 = Conv2D(16, kernel_size=(3, 3), strides=(1, 1), padding = 'same', activation='relu')(model_input)
+    left_branch1 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(left_branch1)
 
-        right_branch = Conv2D(16, kernel_size=(5, 5), strides=(1, 1), padding = 'same', activation='relu')(model_input)
-        right_branch = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(right_branch)
+    right_branch1 = Conv2D(16, kernel_size=(5, 5), strides=(1, 1), padding = 'same', activation='relu')(model_input)
+    right_branch1 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(right_branch1)
 
-        main_branch = Add()([left_branch, right_branch])
-        main_branch = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(main_branch)
-    elif modeltype == 2:
-        # model 2
-        # one stream with multiple kernels
-        main_branch = Conv2D(16, kernel_size=(3, 3), strides=(1,1), activation='relu')(model_input)
-        main_branch = MaxPooling2D(pool_size=(2, 2), strides=(1,1))(main_branch)
-        
-        main_branch = Conv2D(16, kernel_size=(5, 5), strides=(1,1), activation='relu')(main_branch)
-        main_branch = MaxPooling2D(pool_size=(2, 2), strides=(1,1))(main_branch)
-        
-        main_branch = Conv2D(16, kernel_size=(3, 3), strides=(1,1), activation='relu')(main_branch)
-        main_branch = MaxPooling2D(pool_size=(2, 2), strides=(1,1))(main_branch)
+    main_branch1 = Add()([left_branch1, right_branch1])
+    main_branch1 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(main_branch1)
 
-    main_branch = Flatten()(main_branch)
+    left_branch2 = Conv2D(16, kernel_size=(3, 3), strides=(1, 1), padding = 'same', activation='relu')(main_branch1)
+    left_branch2 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(left_branch2)
+
+    right_branch2 = Conv2D(16, kernel_size=(5, 5), strides=(1, 1), padding = 'same', activation='relu')(main_branch1)
+    right_branch2 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(right_branch2)
+
+    main_branch2 = Add()([left_branch2, right_branch2])
+    main_branch2 = MaxPooling2D(pool_size=(2, 2), strides=(1, 1))(main_branch2)
+
+    main_branch = Flatten()(main_branch2)
     main_branch = Dense(128, activation='relu')(main_branch)
 
     human = Dense(classnum_human, activation='softmax', name = 'human_output')(main_branch)

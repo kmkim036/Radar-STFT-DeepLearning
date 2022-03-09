@@ -21,8 +21,6 @@ import deep_learning_model_MTL
 
 menu = 1
 
-modeltype = 1
-
 augment_ratio = 9
 
 try_num = 10   # 같은 조건에서 몇번 반복할지
@@ -430,7 +428,7 @@ for i in range(try_num):
 
     # CNN model
     model = deep_learning_model_MTL.create_CNNmodel(
-        modeltype, classnum_human, classnum_motion, lr, row_len, col_len)
+        classnum_human, classnum_motion, lr, row_len, col_len)
 
     if i == 0:
         print(x_train.shape[0])
