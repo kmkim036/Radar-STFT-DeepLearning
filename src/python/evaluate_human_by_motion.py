@@ -12,10 +12,13 @@ date = '220132'
 motion = 3
 
 if motion == 0:
+    print('walk')
     saved_model = 'human_walk_model.h5'
 elif motion == 2:
+    print('stride')
     saved_model = 'human_strides_model.h5'
 else:
+    print('creep')
     saved_model = 'human_creep_model.h5'
 
 
