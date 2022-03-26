@@ -307,8 +307,8 @@ for i in range(repeat_num):
 
     print(str(i+1) + ': Test Start')
     start = time.time()
-    model.evaluate(x_test, y_test)
-    # predict_level = model.predict(x_test)
+    # model.evaluate(x_test, y_test)
+    predict_level = model.predict(x_test)
     total_time = total_time + time.time() - start
 
     # predict_level = np.argmax(predict_level, axis=1)

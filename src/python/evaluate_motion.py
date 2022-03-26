@@ -155,7 +155,8 @@ for i in range(repeat_num):
 
     print(str(i+1) + ': Test Start')
     start = time.time()
-    model.evaluate(x_test, y_test)
+    model.predict(x_test)
+    # model.evaluate(x_test, y_test)
     total_time = total_time + time.time() - start
 
     if i == repeat_num - 1:
