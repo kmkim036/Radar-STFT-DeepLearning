@@ -9,6 +9,9 @@ from tensorflow.keras.models import load_model
 file_name = '_stft.txt'
 date = '220132'
 
+repeat_num = 10
+total_time = 0
+
 motion = 3
 
 if motion == 0:
@@ -20,6 +23,13 @@ elif motion == 2:
 else:
     print('creep')
     saved_model = 'human_creep_model.h5'
+
+# DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
+DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
+saved_model = DirectoryPath + saved_model
+
+# DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/txt/'
+DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/txt/'
 
 
 start_row = 46
@@ -37,8 +47,6 @@ count = 100
 classnum = 4
 
 def preprocessing(person, motion): 
-    DirectoryPath = '/home/pi/Projects/CapstoneDesign/DATA/'
-
     image = np.zeros(shape=(count, rows, cols, 1))
     label = []
     cwt_data = pd.read_csv(
@@ -117,55 +125,55 @@ image2, label2 = preprocessing(2, motion)
 image3, label3 = preprocessing(3, motion)  
 image4, label4 = preprocessing(4, motion) 
 
-s = np.arange(image1.shape[0])
-np.random.shuffle(s)
-image1_shuff = image1[s]
+for i in range(repeat_num):
+    s = np.arange(image1.shape[0])
+    np.random.shuffle(s)
+    image1_shuff = image1[s]
 
-s = np.arange(image2.shape[0])
-np.random.shuffle(s)
-image2_shuff = image2[s]
+    s = np.arange(image2.shape[0])
+    np.random.shuffle(s)
+    image2_shuff = image2[s]
 
-s = np.arange(image3.shape[0])
-np.random.shuffle(s)
-image3_shuff = image3[s]
+    s = np.arange(image3.shape[0])
+    np.random.shuffle(s)
+    image3_shuff = image3[s]
 
-s = np.arange(image4.shape[0])
-np.random.shuffle(s)
-image4_shuff = image4[s]
+    s = np.arange(image4.shape[0])
+    np.random.shuffle(s)
+    image4_shuff = image4[s]
 
-image1_crop = preprocessing_resize_crop(
-    image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image2_crop = preprocessing_resize_crop(
-    image2_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image3_crop = preprocessing_resize_crop(
-    image3_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image4_crop = preprocessing_resize_crop(
-    image4_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image1_crop = preprocessing_resize_crop(
+        image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image2_crop = preprocessing_resize_crop(
+        image2_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image3_crop = preprocessing_resize_crop(
+        image3_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image4_crop = preprocessing_resize_crop(
+        image4_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
 
-x_train, y_train, x_val, y_val, x_test, y_test = concatenate_n_div(
-    image1_crop, label1, image2_crop, label2, image3_crop, label3, image4_crop, label4)
+    x_train, y_train, x_val, y_val, x_test, y_test = concatenate_n_div(
+        image1_crop, label1, image2_crop, label2, image3_crop, label3, image4_crop, label4)
 
-maxval = x_train.max()
-if maxval < x_val.max():
-    maxval = x_val.max()
-if maxval < x_test.max():
-    maxval = x_test.max()
+    maxval = x_train.max()
+    if maxval < x_val.max():
+        maxval = x_val.max()
+    if maxval < x_test.max():
+        maxval = x_test.max()
 
-x_test = x_test.astype('float32')/maxval
+    x_test = x_test.astype('float32')/maxval
 
-print(x_train.shape[0])
-print(x_val.shape[0])
-print(x_test.shape[0])
+    model = load_model(saved_model)
+    y_test = to_categorical(y_test, classnum)
 
-model = load_model(saved_model)
-y_test = to_categorical(y_test, classnum)
+    print(str(i+1) + ': Test Start')
+    start = time.time()
+    model.evaluate(x_test, y_test)
+    total_time = total_time + time.time() - start
 
-print('Test Start')
-start = time.time()
-model.evaluate(x_test, y_test)
-print("--- %s seconds ---" % (time.time() - start))
+    if i == repeat_num - 1:
+        print(x_train.shape[0])
+        print(x_val.shape[0])
+        print(x_test.shape[0])
+        print('motion: ', str(motion))    
 
-#print('Evaluate')
-#score = model.evaluate(x_test, y_test)
-#print('Test loss:', score[0])
-#print('Test accuracy:', score[1])
+print("--- %s seconds ---" % (total_time))

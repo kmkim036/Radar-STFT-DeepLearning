@@ -9,7 +9,16 @@ from tensorflow.keras.models import load_model
 file_name = '_stft.txt'
 date = '220132'
 
+repeat_num = 10
+total_time = 0
+
 saved_model = 'MTL.h5'
+# DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
+DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
+saved_model = DirectoryPath + saved_model
+
+# DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/txt/'
+DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/txt/'
 
 start_row = 46
 end_row = 82
@@ -27,7 +36,6 @@ classnum_human = 4
 classnum_motion = 3
 
 def preprocessing(person, motion):  # person, motion에 해당하는 image 불러옴
-    DirectoryPath = '/home/pi/Projects/CapstoneDesign/DATA/'
     image = np.zeros(shape=(count, rows, cols, 1))
     label1 = []
     label2 = []
@@ -270,100 +278,103 @@ image10, label10_1, label10_2 = preprocessing(4, 0)
 image11, label11_1, label11_2 = preprocessing(4, 2)
 image12, label12_1, label12_2 = preprocessing(4, 3)
 
-s = np.arange(image1.shape[0])
-np.random.shuffle(s)
-image1_shuff = image1[s]
+for i in range(repeat_num):
+    s = np.arange(image1.shape[0])
+    np.random.shuffle(s)
+    image1_shuff = image1[s]
 
-s = np.arange(image2.shape[0])
-np.random.shuffle(s)
-image2_shuff = image2[s]
+    s = np.arange(image2.shape[0])
+    np.random.shuffle(s)
+    image2_shuff = image2[s]
 
-s = np.arange(image3.shape[0])
-np.random.shuffle(s)
-image3_shuff = image3[s]
+    s = np.arange(image3.shape[0])
+    np.random.shuffle(s)
+    image3_shuff = image3[s]
 
-s = np.arange(image4.shape[0])
-np.random.shuffle(s)
-image4_shuff = image4[s]
+    s = np.arange(image4.shape[0])
+    np.random.shuffle(s)
+    image4_shuff = image4[s]
 
-s = np.arange(image5.shape[0])
-np.random.shuffle(s)
-image5_shuff = image5[s]
+    s = np.arange(image5.shape[0])
+    np.random.shuffle(s)
+    image5_shuff = image5[s]
 
-s = np.arange(image6.shape[0])
-np.random.shuffle(s)
-image6_shuff = image6[s]
+    s = np.arange(image6.shape[0])
+    np.random.shuffle(s)
+    image6_shuff = image6[s]
 
-s = np.arange(image7.shape[0])
-np.random.shuffle(s)
-image7_shuff = image7[s]
+    s = np.arange(image7.shape[0])
+    np.random.shuffle(s)
+    image7_shuff = image7[s]
 
-s = np.arange(image8.shape[0])
-np.random.shuffle(s)
-image8_shuff = image8[s]
+    s = np.arange(image8.shape[0])
+    np.random.shuffle(s)
+    image8_shuff = image8[s]
 
-s = np.arange(image9.shape[0])
-np.random.shuffle(s)
-image9_shuff = image9[s]
+    s = np.arange(image9.shape[0])
+    np.random.shuffle(s)
+    image9_shuff = image9[s]
 
-s = np.arange(image10.shape[0])
-np.random.shuffle(s)
-image10_shuff = image10[s]
+    s = np.arange(image10.shape[0])
+    np.random.shuffle(s)
+    image10_shuff = image10[s]
 
-s = np.arange(image11.shape[0])
-np.random.shuffle(s)
-image11_shuff = image11[s]
+    s = np.arange(image11.shape[0])
+    np.random.shuffle(s)
+    image11_shuff = image11[s]
 
-s = np.arange(image12.shape[0])
-np.random.shuffle(s)
-image12_shuff = image12[s]
+    s = np.arange(image12.shape[0])
+    np.random.shuffle(s)
+    image12_shuff = image12[s]
 
-image1_crop = preprocessing_resize_crop(
-    image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image2_crop = preprocessing_resize_crop(
-    image2_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image3_crop = preprocessing_resize_crop(
-    image3_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image4_crop = preprocessing_resize_crop(
-    image4_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image5_crop = preprocessing_resize_crop(
-    image5_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image6_crop = preprocessing_resize_crop(
-    image6_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image7_crop = preprocessing_resize_crop(
-    image7_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image8_crop = preprocessing_resize_crop(
-    image8_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image9_crop = preprocessing_resize_crop(
-    image9_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image10_crop = preprocessing_resize_crop(
-    image10_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image11_crop = preprocessing_resize_crop(
-    image11_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
-image12_crop = preprocessing_resize_crop(
-    image12_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image1_crop = preprocessing_resize_crop(
+        image1_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image2_crop = preprocessing_resize_crop(
+        image2_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image3_crop = preprocessing_resize_crop(
+        image3_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image4_crop = preprocessing_resize_crop(
+        image4_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image5_crop = preprocessing_resize_crop(
+        image5_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image6_crop = preprocessing_resize_crop(
+        image6_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image7_crop = preprocessing_resize_crop(
+        image7_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image8_crop = preprocessing_resize_crop(
+        image8_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image9_crop = preprocessing_resize_crop(
+        image9_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image10_crop = preprocessing_resize_crop(
+        image10_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image11_crop = preprocessing_resize_crop(
+        image11_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
+    image12_crop = preprocessing_resize_crop(
+        image12_shuff, start_row, end_row, start_col, end_col, scale_row, scale_col)
 
-x_train, y_train_human, y_train_motion, x_val, y_val_human, y_val_motion, x_test, y_test_human, y_test_motion = concatenate_n_div(
-    image1_crop, label1_1, label1_2, image2_crop, label2_1, label2_2, image3_crop, label3_1, label3_2, image4_crop, label4_1, label4_2, image5_crop, label5_1, label5_2, image6_crop, label6_1, label6_2, image7_crop, label7_1, label7_2, image8_crop, label8_1, label8_2, image9_crop, label9_1, label9_2, image10_crop, label10_1, label10_2, image11_crop, label11_1, label11_2, image12_crop, label12_1, label12_2)
+    x_train, y_train_human, y_train_motion, x_val, y_val_human, y_val_motion, x_test, y_test_human, y_test_motion = concatenate_n_div(
+        image1_crop, label1_1, label1_2, image2_crop, label2_1, label2_2, image3_crop, label3_1, label3_2, image4_crop, label4_1, label4_2, image5_crop, label5_1, label5_2, image6_crop, label6_1, label6_2, image7_crop, label7_1, label7_2, image8_crop, label8_1, label8_2, image9_crop, label9_1, label9_2, image10_crop, label10_1, label10_2, image11_crop, label11_1, label11_2, image12_crop, label12_1, label12_2)
 
-maxval = x_train.max()
-if maxval < x_val.max():
-    maxval = x_val.max()
-if maxval < x_test.max():
-    maxval = x_test.max()
+    maxval = x_train.max()
+    if maxval < x_val.max():
+        maxval = x_val.max()
+    if maxval < x_test.max():
+        maxval = x_test.max()
 
-x_test = x_test.astype('float32')/maxval
+    x_test = x_test.astype('float32')/maxval
 
-print(x_train.shape[0])
-print(x_val.shape[0])
-print(x_test.shape[0])
+    model = load_model(saved_model)
+    y_test_human = to_categorical(y_test_human, classnum_human)
+    y_test_motion = to_categorical(y_test_motion, classnum_motion)
 
-model = load_model(saved_model)
-y_test_human = to_categorical(y_test_human, classnum_human)
-y_test_motion = to_categorical(y_test_motion, classnum_motion)
+    print(str(i+1) + ': Test Start')
+    start = time.time()
+    model.evaluate(x_test, [y_test_human, y_test_motion])
+    total_time = total_time + time.time() - start
 
-print('Test Start')
-start = time.time()
-model.evaluate(x_test, [y_test_human, y_test_motion])
-print("--- %s seconds ---" % (time.time() - start))
+    if i == repeat_num - 1:
+        print(x_train.shape[0])
+        print(x_val.shape[0])
+        print(x_test.shape[0])
 
+print("--- %s seconds ---" % (total_time))
