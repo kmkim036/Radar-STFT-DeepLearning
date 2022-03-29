@@ -7,12 +7,12 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import load_model
 
 file_name = '_stft.txt'
-date = '220132'
+date = '220133'
 
-repeat_num = 10
+repeat_num = 30
 total_time = 0
 
-saved_model = 'motion_model.h5'
+saved_model = '3_motion_model.h5'
 # DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
 DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
 saved_model = DirectoryPath + saved_model
@@ -42,7 +42,7 @@ def preprocessing(motion):
         cwt_data = pd.read_csv(
             DirectoryPath + date + "_" + str(person) + "_" + str(motion) + file_name)
         for i in range(0, 100):
-            df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
+            df = np.fromstring(cwt_data['pixels'][i], dtype=float, sep=' ')
             df = np.reshape(df, (rows, cols, 1))
             image[i + 100*(person-1)] = df
             if motion == 0:
@@ -115,8 +115,26 @@ row_len = 36
 col_len = 28
 
 image1, label1 = preprocessing(0)  # motion 0 
+
+import matplotlib.pyplot as plt
+
+# plt.figure(figsize = (128,29), dpi=80)
+plt.imshow(image1[0], vmin=0, aspect='auto')
+plt.show()
+plt.imshow(image1[5], vmin=0, aspect='auto')
+plt.show()
+plt.imshow(image1[7], vmin=0, aspect='auto')
+plt.show()
+plt.imshow(image1[10], vmin=0, aspect='auto')
+plt.show()
+
 image2, label2 = preprocessing(2)  # motion 2 
+plt.imshow(image2[0], vmin=0, aspect='auto')
+plt.show()
+
 image3, label3 = preprocessing(3)  # motion 3 
+plt.imshow(image3[0], vmin=0, aspect='auto')
+plt.show()
 
 for i in range(repeat_num):
     s = np.arange(image1.shape[0])

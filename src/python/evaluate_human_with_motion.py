@@ -9,10 +9,10 @@ from tensorflow.keras.models import load_model
 file_name = '_stft.txt'
 date = '220132'
 
-repeat_num = 10
+repeat_num = 30
 total_time = 0
 
-saved_model = 'all_in_one.h5'
+saved_model = '4_all_in_one.h5'
 # DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
 DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
 saved_model = DirectoryPath + saved_model

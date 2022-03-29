@@ -7,22 +7,22 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import load_model
 
 file_name = '_stft.txt'
-date = '220132'
+date = '220133'
 
-repeat_num = 10
+repeat_num = 30
 total_time = 0
 
-motion = 3
+motion = 0
 
 if motion == 0:
     print('walk')
-    saved_model = 'human_walk_model.h5'
+    saved_model = '3_human_walk_model.h5'
 elif motion == 2:
     print('stride')
-    saved_model = 'human_strides_model.h5'
+    saved_model = '3_human_strides_model.h5'
 else:
     print('creep')
-    saved_model = 'human_creep_model.h5'
+    saved_model = '3_human_creep_model.h5'
 
 # DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
 DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
@@ -52,7 +52,7 @@ def preprocessing(person, motion):
     cwt_data = pd.read_csv(
         DirectoryPath + date + "_" + str(person) + "_" + str(motion) + file_name)
     for i in range(0, count):
-        df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
+        df = np.fromstring(cwt_data['pixels'][i], dtype=float, sep=' ')
         df = np.reshape(df, (rows, cols, 1))
         image[i] = df
         label.append(person - 1)   
