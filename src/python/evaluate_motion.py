@@ -115,26 +115,8 @@ row_len = 36
 col_len = 28
 
 image1, label1 = preprocessing(0)  # motion 0 
-
-import matplotlib.pyplot as plt
-
-# plt.figure(figsize = (128,29), dpi=80)
-plt.imshow(image1[0], vmin=0, aspect='auto')
-plt.show()
-plt.imshow(image1[5], vmin=0, aspect='auto')
-plt.show()
-plt.imshow(image1[7], vmin=0, aspect='auto')
-plt.show()
-plt.imshow(image1[10], vmin=0, aspect='auto')
-plt.show()
-
 image2, label2 = preprocessing(2)  # motion 2 
-plt.imshow(image2[0], vmin=0, aspect='auto')
-plt.show()
-
 image3, label3 = preprocessing(3)  # motion 3 
-plt.imshow(image3[0], vmin=0, aspect='auto')
-plt.show()
 
 for i in range(repeat_num):
     s = np.arange(image1.shape[0])
