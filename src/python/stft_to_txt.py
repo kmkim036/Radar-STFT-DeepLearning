@@ -21,9 +21,6 @@ for human in range(1, 3):
         f = open(DirectoryPath + txt_file_name, 'w')
         f.close()
 
-        IM_raw_data = []
-        RE_raw_data = []
-
         for repeat in range(1, repeat + 1):
             IM_raw_data = []
             RE_raw_data = []
