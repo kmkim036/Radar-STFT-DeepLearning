@@ -9,7 +9,7 @@ from tensorflow.keras.models import load_model
 file_name = '_stft.txt'
 date = '220133'
 
-repeat_num = 30
+repeat_num = 11
 total_time = 0
 
 saved_model = '3_motion_model.h5'
@@ -157,7 +157,10 @@ for i in range(repeat_num):
     start = time.time()
     model.predict(x_test)
     # model.evaluate(x_test, y_test)
-    total_time = total_time + time.time() - start
+    exc_time = time.time() - start
+    print(exc_time)
+    if i > 0:
+        total_time = total_time + exc_time
 
     if i == repeat_num - 1:
         print(x_train.shape[0])

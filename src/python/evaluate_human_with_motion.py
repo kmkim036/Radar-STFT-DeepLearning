@@ -7,12 +7,12 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import load_model
 
 file_name = '_stft.txt'
-date = '220132'
+date = '220133'
 
-repeat_num = 30
+repeat_num = 11
 total_time = 0
 
-saved_model = '4_all_in_one.h5'
+saved_model = '6_all_in_one.h5'
 # DirectoryPath = '/home/pi/Projects/git/Radar-STFT-DeepLearning/h5/'
 DirectoryPath = '/home/kmkim/Projects/git/kmkim036/Radar-STFT-DeepLearning/h5/'
 saved_model = DirectoryPath + saved_model
@@ -41,7 +41,7 @@ def preprocessing(person, motion):  # person, motion에 해당하는 image 불�
     cwt_data = pd.read_csv(
         DirectoryPath + date + "_" + str(person) + "_" + str(motion) + file_name)
     for i in range(0, 100):
-        df = np.fromstring(cwt_data['pixels'][i], dtype=int, sep=' ')
+        df = np.fromstring(cwt_data['pixels'][i], dtype=float, sep=' ')
         df = np.reshape(df, (rows, cols, 1))
         image[i] = df
         if motion == 0:
@@ -309,7 +309,10 @@ for i in range(repeat_num):
     start = time.time()
     # model.evaluate(x_test, y_test)
     predict_level = model.predict(x_test)
-    total_time = total_time + time.time() - start
+    exc_time = time.time() - start
+    print(exc_time)
+    if i > 0:
+        total_time = total_time + exc_time
 
     # predict_level = np.argmax(predict_level, axis=1)
 

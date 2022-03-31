@@ -9,7 +9,7 @@ from tensorflow.keras.models import load_model
 file_name = '_stft.txt'
 date = '220133'
 
-repeat_num = 30
+repeat_num = 11
 total_time = 0
 
 motion = 0
@@ -67,9 +67,9 @@ def preprocessing_resize_crop(image, start_row, end_row, start_col, end_col, row
 
 
 def concatenate_n_div(image0, label0, image1, label1, image2, label2, image3, label3):
-    train_ratio = 0.7
-    val_ratio = 0.15
-    test_ratio = 0.15  # 적용안됨
+    train_ratio = 0.05
+    val_ratio = 0.5
+    test_ratio = 0.45  # 적용안됨
 
     x_train = np.concatenate((image0[0:int(count*train_ratio)], image1[0:int(
         count*train_ratio)], image2[0:int(count*train_ratio)], image3[0:int(count*train_ratio)]))
@@ -169,7 +169,10 @@ for i in range(repeat_num):
     start = time.time()
     model.predict(x_test)
     # model.evaluate(x_test, y_test)
-    total_time = total_time + time.time() - start
+    exc_time = time.time() - start
+    print(exc_time)
+    if i > 0:
+        total_time = total_time + exc_time
 
     if i == repeat_num - 1:
         print(x_train.shape[0])
