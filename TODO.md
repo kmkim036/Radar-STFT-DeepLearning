@@ -2,7 +2,7 @@
 - [X] STFT in Python  
 - [X] Raspberry Pi Setting  
 - [ ] Human Detection Algorithm in Python  
-- [ ] CW Radar Interface in Raspberry Pi  
+- [X] CW Radar Interface in Raspberry Pi  
 - [ ] SPI Interface in Raspberry PI  
 - [ ] Confirm BNN model  
 - [ ] Write BNN spec document for HW  
