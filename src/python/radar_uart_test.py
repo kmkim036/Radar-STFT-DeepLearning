@@ -1,9 +1,12 @@
 import serial
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal
-from scipy.fft import fftshift
 import math
+from scipy import signal
+# RPI4
+from scipy.fftpack import fftshift
+# PC
+# from scipy.fft import fftshift
 
 
 class CircularQueue:
@@ -82,6 +85,10 @@ radar = serial.Serial(portname, baudrate, timeout=0.3)
 def GetRadar():
     # Get radar raw data and save into circular queue
     raw_data = str(radar.readline(), 'utf-8')
+    '''
+    need to solve under bug
+    UnicodeDecodeError: 'utf-8' codec can't decode byte 0x92 in position 3: invalid start byte
+    '''
     if raw_data.find('I') > 0:
         for i in range(0, 18):
             raw_data = str(radar.readline(), 'utf-8')
