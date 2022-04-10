@@ -45,3 +45,17 @@ if __name__ == "__main__":
 plt.imshow(stft_result, vmin=0, aspect='auto')
 plt.colorbar()
 plt.show()
+
+
+'''
+# pseudo code
+while True:
+    get radar data 
+    stft
+    if human detected:
+        send it to FPGA by SPI
+        (wait for BNN inference in FPGA)
+        receive prediction from FPGA by SPI 
+        display result
+        clear
+'''
