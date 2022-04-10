@@ -7,6 +7,21 @@ import stft
 import spi
 import display
 
+
+'''
+# pseudo code
+while True:
+    get radar data 
+    stft
+    if human detected:
+        send it to FPGA by SPI
+        (wait for BNN inference in FPGA)
+        receive prediction from FPGA by SPI 
+        display result
+        clear
+'''
+
+
 def detect_human(image):
     '''
     need to fix human detect algorithm
@@ -42,21 +57,24 @@ if __name__ == "__main__":
             ret = detect_human(stft_result)
             if ret == True:
                 break
+    plt.imshow(stft_result, vmin=0, aspect='auto')
+    plt.colorbar()
+    plt.show()
 
-plt.imshow(stft_result, vmin=0, aspect='auto')
-plt.colorbar()
-plt.show()
+    '''
+    while True:
+        radar.GetRadar(I_raw_data_queue, Q_raw_data_queue)
+        if I_raw_data_queue.isFull() and Q_raw_data_queue.isFull():
+            I_raw_data = I_raw_data_queue.returndata()
+            Q_raw_data = Q_raw_data_queue.returndata()
 
+            stft_result = stft.stft_crop(I_raw_data, Q_raw_data)
 
-'''
-# pseudo code
-while True:
-    get radar data 
-    stft
-    if human detected:
-        send it to FPGA by SPI
-        (wait for BNN inference in FPGA)
-        receive prediction from FPGA by SPI 
-        display result
-        clear
-'''
+            ret = detect_human(stft_result)
+            if ret == True:
+                spi.send_spi(stft_result)
+                motion, human = spi.receive_spi()
+                display.display_monitor(stft_result, motion, human)
+                I_raw_data_queue.clear()
+                Q_raw_data_queue.clear()
+    '''
