@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import radar
 import cirqueue
 import stft
-
+import spi
+import display
 
 def detect_human(image):
     '''
