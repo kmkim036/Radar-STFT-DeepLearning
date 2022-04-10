@@ -12,6 +12,25 @@ i = 1;
 load 211130_0_0_1_RE.mat;
 load 211130_0_0_1_IM.mat;
 
+%% plot raw signal data by real and imagenary
+% figure(i);
+% i = i + 1;
+% plot(t, dataRE);
+% grid on;
+% xlabel('Time (secs)');
+% ylabel('Raw Data');
+% title('Radar Signal RE')
+% axis tight
+%
+% figure(i);
+% i = i + 1;
+% plot(t, dataIM);
+% grid on;
+% xlabel('Time (secs)');
+% ylabel('Raw Data');
+% title('Radar Signal IM')
+% axis tight
+
 %% signal processing and plot stft (by SoC Lab code)
 % make into complex raw data
 RawData = complex(dataRE, dataIM);
@@ -34,25 +53,6 @@ imagesc(pow2db(abs(stft_data)));
 colorbar;
 title('STFT result');
 % saveas(gcf, sprintf('%s_stft.png', file_name));
-
-%% plot raw signal data by real and imagenary
-% figure(i);
-% i = i + 1;
-% plot(t, dataRE);
-% grid on;
-% xlabel('Time (secs)');
-% ylabel('Raw Data');
-% title('Radar Signal RE')
-% axis tight
-%
-% figure(i);
-% i = i + 1;
-% plot(t, dataIM);
-% grid on;
-% xlabel('Time (secs)');
-% ylabel('Raw Data');
-% title('Radar Signal IM')
-% axis tight
 
 %% cwt
 % To perform the Continuous Wavelet Transform, you can use the fucntion cwt. We provide the
@@ -112,10 +112,10 @@ end
 % colorbar;
 % title('CWT with morlet wavelet with log scale');
 
-figure(i);
-i = i + 1;
-cwt(input, 'amor', 650);
-title('CWT with morlet wavelet');
+% figure(i);
+% i = i + 1;
+% cwt(input, 'amor', 650);
+% title('CWT with morlet wavelet');
 % saveas(gcf, sprintf('%s_cwt.png', file_name));
 
 %% complex positive, negative
