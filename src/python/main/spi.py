@@ -11,24 +11,24 @@ spi.max_speed_hz = 5000000
 
 def send_spi(image):
     # send 36x28 image to FPGA using SPI communication
-
+    
     # binarize input image
+    binary_image = [[0 for j in range(28)] for i in range(36)]
     for i in range(36):
         for j in range(28):
-            if image[i, j] < binary_threshold:
-                image[i, j] = 0
+            if image[i][j] < binary_threshold:
+                binary_image[i][j] = 0
             else:
-                image[i, j] = 1
+                binary_image[i][j] = 1
 
     spi_data = np.zeros(140)
-    for i in range(28):
-        for j in range(8):
-            spi_data[5*i] += image[i, j] * (2**(7-j))
-            spi_data[5*i + 1] += image[i, 8 + j] * (2**(7-j))
-            spi_data[5*i + 2] += image[i, 16 + j] * (2**(7-j))
-            spi_data[5*i + 3] += image[i, 24 + j] * (2**(7-j))
-        for j in range(4):
-            spi_data[5*i + 4] += image[i, 32 + j] * (2**(7-j))
+    for i in range(0, 32):
+        for j in range(0, 8):
+            spi_data[4*i + 0] += binary_image[i][j] * (2**(7-j))
+            spi_data[4*i + 1] += binary_image[i][8 + j] * (2**(7-j))
+            spi_data[4*i + 2] += binary_image[i][16 + j] * (2**(7-j))
+        for j in range(0, 4):
+            spi_data[4*i + 3] += binary_image[i][24 + j] * (2**(7-j))
 
     spi.xfer2(
         [0x08,
@@ -88,9 +88,6 @@ def send_spi(image):
              spi_data[132]), int(spi_data[133]), int(spi_data[134]),
          int(spi_data[135]),  int(spi_data[136]), int(spi_data[137]), int(spi_data[138]), int(spi_data[139])]
     )
-
-    print('send success')
-
 
 def receive_spi():
     # receive prediction from FPGA using SPI communication
