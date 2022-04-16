@@ -28,6 +28,11 @@ def GetRadar(I_raw_data_queue, Q_raw_data_queue):
             elif i < 10:
                 continue
             else:
+                if raw_data.find('-') > 0:
+                    # clear queue if async data come in the beginning
+                    I_raw_data_queue.clear()
+                    Q_raw_data_queue.clear()
+                    break
                 raw_data = raw_data.split()
                 list_of_integers = list(map(int, raw_data))
                 for j in list_of_integers:
