@@ -3,9 +3,9 @@ import numpy as np
 from scipy import signal
 
 # RPI4
-# from scipy.fftpack import fftshift
+from scipy.fftpack import fftshift
 # PC
-from scipy.fft import fftshift
+# from scipy.fft import fftshift
 
 # fft parameter
 N_FFT_point = 128
