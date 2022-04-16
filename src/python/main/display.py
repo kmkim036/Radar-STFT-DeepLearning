@@ -44,8 +44,8 @@ def display_result(image, motion, human):
 
     mngr = plt.get_current_fig_manager()
     window_position = "+" + \
-        str(int(0.54 * SCREEN_WIDTH)) + "+" + \
-        str(int(0.25 * SCREEN_HEIGHT))    # +x+y
+        str(int(0.33 * SCREEN_WIDTH)) + "+" + \
+        str(int(0.20 * SCREEN_HEIGHT))    # +x+y
     mngr.window.wm_geometry(window_position)
 
     plt.show()
