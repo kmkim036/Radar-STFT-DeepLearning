@@ -1,5 +1,4 @@
 import pygame
-import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -14,7 +13,7 @@ grey = (128, 128, 128)
 yellow = (255, 204, 0)
 
 pygame.init()
-pygame.display.set_caption("Example")
+pygame.display.set_caption("Display Prediction")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 font = pygame.font.Font('freesansbold.ttf', 50)
@@ -27,18 +26,6 @@ text_M2 = font.render("human: Man 2", True, black)
 text_W1 = font.render("human: Woman 1", True, black)
 text_W2 = font.render("human: Woman 2", True, black)
 
-def move_figure(f, x, y):
-    """Move figure's upper left corner to pixel (x, y)"""
-    backend = matplotlib.get_backend()
-    print(backend)
-    if backend == 'TkAgg':
-        f.canvas.manager.window.wm_geometry("+%d+%d" % (x, y))
-    elif backend == 'WXAgg':
-        f.canvas.manager.window.SetPosition((x, y))
-    else:
-        # This works for QT and GTK
-        # You can also use window.setGeometry
-        f.canvas.manager.window.move(x, y)
 
 def display_init():
     screen.fill(white)
@@ -50,8 +37,12 @@ def display_result(image, motion, human):
     # display stft result with image
     plt.close()
     plt.ion()
-    f = plt.imshow(image, vmin=0, aspect='auto')
-    #move_figure(f, 100, 100)
+    plt.figure("STFT spectrogram")
+    plt.imshow(image, vmin=0, aspect='auto')
+
+    mngr = plt.get_current_fig_manager()
+    mngr.window.wm_geometry("+650+200")     # x+y
+    
     plt.show()
     plt.colorbar()
     plt.pause(1)
