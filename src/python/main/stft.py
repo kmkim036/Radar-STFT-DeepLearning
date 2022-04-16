@@ -31,9 +31,12 @@ def stft_crop(I_raw_data, Q_raw_data):
     # crop image into 36x28 from 128x29
     Zxx = Zxx[46:82, 1:29]
 
+    power_sum = 0
+
     # make fft result into integer from float
     for i in range(36):
         for j in range(28):
             Zxx[i][j] = math.ceil(abs(Zxx[i][j]))
+            power_sum += Zxx[i][j] * Zxx[i][j]
 
-    return Zxx
+    return Zxx, power_sum
