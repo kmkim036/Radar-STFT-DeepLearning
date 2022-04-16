@@ -1,4 +1,5 @@
 import pygame
+import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -26,6 +27,18 @@ text_M2 = font.render("human: Man 2", True, black)
 text_W1 = font.render("human: Woman 1", True, black)
 text_W2 = font.render("human: Woman 2", True, black)
 
+def move_figure(f, x, y):
+    """Move figure's upper left corner to pixel (x, y)"""
+    backend = matplotlib.get_backend()
+    print(backend)
+    if backend == 'TkAgg':
+        f.canvas.manager.window.wm_geometry("+%d+%d" % (x, y))
+    elif backend == 'WXAgg':
+        f.canvas.manager.window.SetPosition((x, y))
+    else:
+        # This works for QT and GTK
+        # You can also use window.setGeometry
+        f.canvas.manager.window.move(x, y)
 
 def display_init():
     screen.fill(white)
@@ -37,8 +50,9 @@ def display_result(image, motion, human):
     # display stft result with image
     plt.close()
     plt.ion()
+    f = plt.imshow(image, vmin=0, aspect='auto')
+    #move_figure(f, 100, 100)
     plt.show()
-    plt.imshow(image, vmin=0, aspect='auto')
     plt.colorbar()
     plt.pause(1)
 
