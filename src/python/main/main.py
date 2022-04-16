@@ -6,6 +6,8 @@ import display
 import detect
 
 
+import random
+
 '''
 # pseudo code
 while True:
@@ -36,14 +38,16 @@ if __name__ == "__main__":
             I_raw_data = I_raw_data_queue.returndata()
             Q_raw_data = Q_raw_data_queue.returndata()
 
-            stft_result = stft.stft_crop(I_raw_data, Q_raw_data)
+            stft_result, power = stft.stft_crop(I_raw_data, Q_raw_data)
 
-            ret = detect.detect_human(stft_result)
+            ret = detect.detect_human(stft_result, power)
 
             if ret == True:
                 spi.send_spi(stft_result)
                 motion, human = spi.receive_spi()
                 # example: 1 = stride, 3 =  Woman 2
-                display.display_result(stft_result, 1, 3)
+                motion = random.randrange(0, 3)
+                human = random.randrange(0, 4)
+                display.display_result(stft_result, motion, human)
                 I_raw_data_queue.clear()
                 Q_raw_data_queue.clear()
