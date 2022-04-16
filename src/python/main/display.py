@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
+
 SIZE = 100
 
 white = (255, 255, 255)
@@ -29,7 +30,7 @@ text_W2 = font.render("human: Woman 2", True, black)
 
 def display_init():
     screen.fill(white)
-    screen.blit(text_waiting, (500, 400))
+    screen.blit(text_waiting, (int(0.42 * SCREEN_WIDTH), int(0.5 * SCREEN_HEIGHT)))
     pygame.display.update()
 
 
@@ -41,7 +42,8 @@ def display_result(image, motion, human):
     plt.imshow(image, vmin=0, aspect='auto')
 
     mngr = plt.get_current_fig_manager()
-    mngr.window.wm_geometry("+650+200")     # x+y
+    window_position = "+" + str(int(0.54 * SCREEN_WIDTH)) + "+" + str(int(0.25 * SCREEN_HEIGHT))
+    mngr.window.wm_geometry(window_position)     # x+y
     
     plt.show()
     plt.colorbar()
@@ -63,6 +65,6 @@ def display_result(image, motion, human):
         text_human = text_W1
     else:
         text_human = text_W2
-    screen.blit(text_motion, (400, 600))
-    screen.blit(text_human, (400, 700))
+    screen.blit(text_motion, (int(0.375 * SCREEN_WIDTH), int(0.75 * SCREEN_HEIGHT)))
+    screen.blit(text_human, (int(0.375 * SCREEN_WIDTH), int(0.875 * SCREEN_HEIGHT)))
     pygame.display.update()
