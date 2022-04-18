@@ -100,10 +100,10 @@ def send_spi():
     spi_data[6] = 0x06
     spi_data[7] = 0x07
     spi.xfer2(
-                [0x08, int(spi_data[0]), int(spi_data[1]),
-                int(spi_data[2]), int(spi_data[3]), int(spi_data[4]),
-                int(spi_data[5]), int(spi_data[6]), int(spi_data[7])]
-            )
+        [0x08, int(spi_data[0]), int(spi_data[1]),
+         int(spi_data[2]), int(spi_data[3]), int(spi_data[4]),
+         int(spi_data[5]), int(spi_data[6]), int(spi_data[7])]
+    )
     print('send success')
 
 
@@ -124,7 +124,7 @@ def receive_spi():
 
     maxval = output.index(max(output))
     quotient, remainder = divmod(maxval - 1, 3)
-    
+
     if quotient == 0:
         human = 0
     elif quotient == 1:
@@ -152,7 +152,6 @@ def receive_spi():
     return motion, human
 
 
-
 send_spi()
 
 m, h = receive_spi()
@@ -160,5 +159,3 @@ print('motion')
 print(m)
 print('human')
 print(h)
-
-
