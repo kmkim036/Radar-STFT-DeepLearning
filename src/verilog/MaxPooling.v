@@ -63,7 +63,7 @@ module SHIFT_REG(iRSTn,
     
     assign ResetCounter = ~Count2bit;
     
-    assign oDATA = (Count2bit || CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
+    assign oDATA = (Count2bit && CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
         
 endmodule
         
