@@ -1,6 +1,7 @@
 # Program Language  
 Matlab  
 Python  
+Verilog  
   
 # When  
 In Capstone Design Class  
