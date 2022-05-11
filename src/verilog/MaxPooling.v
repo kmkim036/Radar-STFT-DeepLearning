@@ -38,7 +38,7 @@ module SHIFT_REG(iRSTn,
             DATA_tmp <= #1 {DATA_tmp[(TL-1)-1:0], iDATA};	// Input data input to Shift register & shift operation
         end
     end        
-       
+/*      
     COUNTER_NECV#(
     .WL(1),
     .IV(0)
@@ -49,21 +49,22 @@ module SHIFT_REG(iRSTn,
     .iEN(iEN),
     .oCNT(Count2bit)
     );
-    
+*/    
     COUNTER_NECV#(
     .WL(TLB),
     .IV(0)
     )CounterLines(
     .iCLK(iCLK),
-    .iRSTn(iRSTn|ResetCounter),
+    .iRSTn(iRSTn),
     .iCLR(iCLR),
     .iEN(iEN),
     .oCNT(CNT)
     );
     
-    assign ResetCounter = ~Count2bit;
+//    assign ResetCounter = ~Count2bit;
     
-    assign oDATA = (Count2bit && CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
-        
+//    assign oDATA = (Count2bit && CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
+      assign oDATA = (CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0; 
+
 endmodule
         
