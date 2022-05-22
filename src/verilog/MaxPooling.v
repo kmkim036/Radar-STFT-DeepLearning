@@ -7,8 +7,8 @@ module SHIFT_REG(iRSTn,
                  iDATA,
                  oDATA);
     
-    parameter TL  = 30;
-    parameter TLB = 5;
+    parameter TL  = 4;
+    parameter TLB = 2;
     
     input 				iRSTn;
     input 				iCLK;
