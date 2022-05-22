@@ -1,5 +1,5 @@
 `timescale 1 ns / 100 ps
-
+/*
 module Maxpooling(iRSTn,
                  iCLK,
                  iEN,
@@ -38,18 +38,7 @@ module Maxpooling(iRSTn,
             DATA_tmp <= #1 {DATA_tmp[(TL-1)-1:0], iDATA};	// Input data input to Shift register & shift operation
         end
     end        
-/*      
-    COUNTER_NECV#(
-    .WL(1),
-    .IV(0)
-    )Counter2bits(
-    .iCLK(iCLK),
-    .iRSTn(iRSTn|ResetCounter),
-    .iCLR(iCLR),
-    .iEN(iEN),
-    .oCNT(Count2bit)
-    );
-*/    
+    
     COUNTER_NECV#(
     .WL(TLB),
     .IV(0)
@@ -61,10 +50,40 @@ module Maxpooling(iRSTn,
     .oCNT(CNT)
     );
     
-//    assign ResetCounter = ~Count2bit;
-    
-//    assign oDATA = (Count2bit && CNT == 5'd29) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
-      assign oDATA = (CNT > TL) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0; 
+    assign oDATA = (CNT > TL) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0; 
+*/
+
+module MaxPooling(iRSTn,
+		  iCLK,
+		  iEN,
+		  iCLR,
+		  iDATA,
+		  oDATA);
+	
+	input 	iRSTn;
+	input 	iCLK;
+	input 	iEN;
+	input 	iCLR;
+	input 	iDATA;
+
+	output 	oDATA;
+	reg 	oDATA;
+
+	always@(posedge iCLK or negedge iRSTn)
+	begin
+		if(~iRSTn)
+		begin
+			oDATA <= #1 0;
+		end
+		else if(iCLR)
+		begin
+			oDATA <= #1 0;
+		end
+		else if(iEN)
+		begin
+			oDATA = oDATA | iDATA;
+		end
+	end
 
 endmodule
         
