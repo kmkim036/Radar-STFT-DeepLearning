@@ -1,6 +1,6 @@
 `timescale 1 ns / 100 ps
 
-module SHIFT_REG(iRSTn,
+module Maxpooling(iRSTn,
                  iCLK,
                  iEN,
                  iCLR,
