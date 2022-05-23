@@ -28,14 +28,14 @@ module Accumulator(iCLK,
     //	Internal Signals
     wire oEN;
     wire [3:0] CNT;
-    wire [OL-1:0]oDATA;
+    reg [OL-1:0]oDATA;
     assign oEN = (CNT == END) ? 1'b1 : 1'b0;
     
     always@(posedge iCLK or negedge iRSTn)
     begin
         if (~iRSTn)
         begin
-            oDATA <= 0;
+            oDATA <= 1'b0;
         end
         else if (iCLR)
         begin

@@ -34,11 +34,11 @@ module Comparator(iCLK,
     
     TH_ROM
     U_TH_ROM(
-    .TH_addr(CNT)
+    .TH_addr(CNT),
     .oTH(oTH)
-    )
+    );
     
-    assign BoDATA = (iDATA > = oTH) ? 1'b1 : 1'b0;
+    assign BoDATA = (iDATA >= oTH) ? 1'b1 : 1'b0;
     
     D_FF_enable#(
     .WL(IL)

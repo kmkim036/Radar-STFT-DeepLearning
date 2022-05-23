@@ -9,7 +9,7 @@ module TH_ROM(TH_addr,
     input [WN-1:0] TH_addr;
     output [WL-1:0] oTH;
     
-    reg [WL-1:0] oTH
+    reg [WL-1:0] oTH;
     
     always@(TH_addr)
     begin
