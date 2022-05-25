@@ -2,12 +2,9 @@
 
 module Comparator(iCLK,
                   iRSTn,
-                  iCLR,
                   iEN,
                   iDATA,
-                  STAGE,
-                  CNT,
-                  oEN,
+						iTH,
                   oDATA);
     
     
@@ -17,14 +14,11 @@ module Comparator(iCLK,
     //	Input Signals
     input iRSTn;
     input iCLK;
-    input iCLR;
-    input iEN;
+	 input iEN;
     input [IL-1 : 0] iDATA;
     input [2:0] STAGE;
-    input [16:0] CNT;
     
     //	Output Signals
-    output oEN;
     output oDATA;
     
     //	Internal Signals

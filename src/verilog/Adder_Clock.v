@@ -7,7 +7,7 @@ module Adder_Clock(iCLK,
                    idata2,
                    odata);
     
-    parameter WL = 4;
+    parameter WL = 1;
     
     input		iCLK;
     input		iRSTn;

@@ -15,7 +15,7 @@ module xnor_popcount(iCLK,
     input	[WL-1:0]	idata;
     input	[WL-1:0]	iweight;
     
-    output  [10:0]		odata;
+    output  [6:0]		odata;
     
     wire    [WL-1:0]	xnor_result;
     
