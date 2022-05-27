@@ -1,92 +1,46 @@
 `timescale 1 ns / 100 ps
 
-/*
-module MaxPooling(iRSTn,
+module Maxpooling(iRSTn,
                   iCLK,
-                  iEN,
                   iCLR,
+                  iReadEN,
+                  iWriteEN,
                   iDATA,
+                  iADDR,
                   oDATA);
     
-    input 	iRSTn;
-    input 	iCLK;
-    input 	iEN;
-    input 	iCLR;
-    input 	iDATA;
+    parameter WL = 112;
     
-    output 	oDATA;
-    reg 	oDATA;
+    input                   iRSTn;
+    input                   iCLK;
+    input                   iCLR;
+    input                   iReadEN;
+    input                   iWriteEN;
+    input	                iDATA;
+    input                   iADDR;
+    output      [TL-1:0]    oDATA;
     
-    always@(posedge iCLK or negedge iRSTn)
+    reg         [TL-1:0]    DATA_ARRAY_tmp;
+    wire                    DATA_tmp;
+    
+    assign DATA_tmp = DATA_ARRAY_tmp[iADDR] | iDATA;
+    
+    always@(negedge iRSTn or posedge iCLK)
     begin
         if (~iRSTn)
         begin
-            oDATA <= #1 0;
+            DATA_ARRAY_tmp <= #1 0 ;
         end
         else if (iCLR)
         begin
-            oDATA <= #1 0;
+            DATA_ARRAY_tmp <= #1 0 ;
         end
-        else if (iEN)
+        else if (iWriteEN)
         begin
-            oDATA = oDATA | iDATA;
+            DATA_ARRAY_tmp[iADDR] <= #1 DATA_tmp;
         end
     end
             
-endmodule
-
-*/
-module Maxpooling(iRSTn,
-iCLK,
-iEN,
-iCLR,
-iDATA,
-oDATA);
-
-parameter TL  = 4;
-parameter TLB = 2;
-
-input 				iRSTn;
-input 				iCLK;
-input 				iEN;
-input 				iCLR ;
-input	            iDATA;
-output              oDATA;
-
-reg  	[TL-1:0]    DATA_tmp ;
-wire                ResetCounter;
-wire                Count2bit;
-wire    [TLB-1:0]   CNT;
-
-
-always@(negedge iRSTn or posedge iCLK)
-begin
-if (~iRSTn)
-begin
-DATA_tmp <= #1 0 ;
-end
-else if (iCLR)
-begin
-DATA_tmp <= #1 0 ;
-end
-else if (iEN)
-begin
-DATA_tmp <= #1 {DATA_tmp[(TL-1)-1:0], iDATA};	// Input data input to Shift register & shift operation
-end
-end
-
-COUNTER_NECV#(
-.WL(TLB),
-.IV(0)
-)CounterLines(
-.iCLK(iCLK),
-.iRSTn(iRSTn),
-.iCLR(iCLR),
-.iEN(iEN),
-.oCNT(CNT)
-);
-
-assign oDATA = (CNT > TL) ? (DATA_tmp[0] || DATA_tmp[1] || DATA_tmp[TL-1] || DATA_tmp[TL-2]) : 0;
+    assign oDATA = (iReadEN) ? DATA_ARRAY_tmp : 0;
 
 endmodule
-	
