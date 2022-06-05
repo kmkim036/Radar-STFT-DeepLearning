@@ -10,7 +10,7 @@ module Accumulator(iCLK,
     
     //	Parameter
     parameter IL  = 10;
-//    parameter END = 9;
+    parameter END = 9;
     parameter OL  = 10;
 
     //	Input Signals
@@ -19,7 +19,7 @@ module Accumulator(iCLK,
     input iCLR;
     input iEN;
     input [IL-1 : 0] iDATA;
-//    input [3:0] CNT;
+    input [3:0] CNT;
 
     //	Output Signals
     output oEN;
@@ -29,7 +29,7 @@ module Accumulator(iCLK,
     wire oEN;
     wire [3:0] CNT;
     reg [OL-1:0]oDATA;
-//    assign oEN = (CNT == END) ? 1'b1 : 1'b0;
+    assign oEN = (CNT == END) ? 1'b1 : 1'b0;
     
     always@(posedge iCLK or negedge iRSTn)
     begin

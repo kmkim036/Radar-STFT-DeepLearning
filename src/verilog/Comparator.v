@@ -5,7 +5,8 @@ module Comparator(iCLK,
                   iEN,
                   iDATA,
 						iTH,
-                  oDATA);
+                  oDATA,
+						oEN);
     
     
     //	Parameter
@@ -15,33 +16,36 @@ module Comparator(iCLK,
     input iRSTn;
     input iCLK;
 	 input iEN;
+	 input [IL-1 : 0] iTH;
     input [IL-1 : 0] iDATA;
-    input [2:0] STAGE;
     
     //	Output Signals
     output oDATA;
+	 output oEN;
     
     //	Internal Signals
-    wire [IL-1:0] oTH;
-    wire [16:0] CNT;
     wire BoDATA;
     
-    TH_ROM
-    U_TH_ROM(
-    .TH_addr(CNT),
-    .oTH(oTH)
-    );
-    
-    assign BoDATA = (iDATA >= oTH) ? 1'b1 : 1'b0;
+    assign BoDATA = (iDATA >= iTH) ? 1'b1 : 1'b0;
     
     D_FF_enable#(
-    .WL(IL)
+    .WL(1)
     )U_D_FF(
-    .iCLK(iCKK),
+    .iCLK(iCLK),
     .iRSTn(iRSTn),
     .iEN(iEN),
     .iDATA(BoDATA),
     .oDATA(oDATA)
+    );
+	 
+	 D_FF_enable#(
+    .WL(1)
+    )U_D_FF_1(
+    .iCLK(iCLK),
+    .iRSTn(iRSTn),
+    .iEN(1'b1),
+    .iDATA(iEN),
+    .oDATA(oEN)
     );
     
 endmodule
