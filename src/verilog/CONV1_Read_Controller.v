@@ -1,12 +1,12 @@
-module CONV23_Read_Controller(iCLK,
+module CONV1_Read_Controller(iCLK,
                        iRSTn,
-                       iCLR,
                        iEN,
-                       iDATA,
-                       oRd_ADDR,
+							  oRd_ADDR,
                        oRd_DONE
 );
 
+
+// zero padding
 parameter WL = 3'd4;
 parameter HL = 3'd5;
 parameter WIDTH = 4'd14;
@@ -18,13 +18,13 @@ input iEN;
 output oRd_DONE;
 output [8:0] oRd_ADDR;
 
+wire [8:0] oRd_ADDR_TEMP;
+
 wire [WL-1:0] i;
 wire [HL-1:0] j;
 
-assign oRd_DONE = (j == HEIGHT-3) ? 1'b1 : 1'b0;
-
 wire COUNTER_i_oEN;
-
+wire DUMP;
 // counter j
 COUNTER_LAB#(
 .WL(HL),
@@ -33,7 +33,7 @@ COUNTER_LAB#(
 .iCLK(iCLK),
 .iRSTn(iRSTn),
 .iEN(COUNTER_i_oEN),
-.oEN(),
+.oEN(DUMP), //
 .oCNT(j)
 );
 
@@ -95,8 +95,9 @@ COUNTER_LAB#(
 .oCNT(CNTS_9)
 );
 
+assign oRd_DONE = (j == HEIGHT-3) ? 1'b1 : 1'b0;
 
-assign oRd_ADDR = (CNTS_4 == 2'd0) ? (
+assign oRd_ADDR_TEMP = (CNTS_4 == 2'd0) ? (
 							(CNTS_9 == 4'd0) ? ((i << 1) + 0 + ((j << 1) + 0) * WIDTH)  : 
 							(CNTS_9 == 4'd1) ? ((i << 1) + 1 + ((j << 1) + 0) * WIDTH)  :
 							(CNTS_9 == 4'd2) ? ((i << 1) + 2 + ((j << 1) + 0) * WIDTH)  :
@@ -137,4 +138,6 @@ assign oRd_ADDR = (CNTS_4 == 2'd0) ? (
 							(CNTS_9 == 4'd7) ? ((i << 1) + 2 + ((j << 1) + 3) * WIDTH)  :
 							(CNTS_9 == 4'd8) ? ((i << 1) + 3 + ((j << 1) + 3) * WIDTH) ): 9'd0;
 
+assign oRd_ADDR = (iSTATE == 3'b011) ? (oRd_ADDR_TEMP + 8'd252) : oRd_ADDR_TEMP;
+							
 endmodule			

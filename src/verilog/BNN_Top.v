@@ -52,7 +52,6 @@ module BNN_Top(iCLK,
 	 wire		[8:0]		MEM1_RD_ADDR;
 	 
     reg				current_state;
-    
     // FSM			mem0Read	mem0Write	mem1Read	mem1Write
 	 // READ			1			0				0			1
     // conv 1		1			0				0			1
@@ -77,8 +76,10 @@ module BNN_Top(iCLK,
         end
     end
 	 
-	 wire READ_DONE, CONV1_DONE, CONV2_DONE, CONV3_DONE, FCL1_DONE, FCL2_DONE;
+//	 wire READ_DONE, CONV1_DONE, CONV2_DONE, CONV3_DONE, FCL1_DONE, FCL2_DONE;
     
+	 wire STATE_DONE;
+	 
     //next state logic
     assign next_state = (current_state == IDLE_ST) ? ((iSTART == 1'b1) ? CONV1_ST : IDLE_ST):
     (current_state == CONV1_ST) ? ((STATE_DONE == 1'b1) ? CONV2_ST : CONV1_ST) :
@@ -98,17 +99,51 @@ module BNN_Top(iCLK,
     1'b0;
 		
 	 wire WHOLE_RST = iRSTn | ~state_start;
+
+	 wire [8:0] CONV23_Rd_ADDR, FCL_Rd_ADDR;
+	 wire conv23_Rd_DONE, FCL_Rd_DONE;
+
+	 wire READ_EN;
+	 assign READ_EN = (current_state == IDLE_ST) ? 1'b0:
+	 (current_state == CONV1_ST) ? ((==) ? 1'b1: 1'b0) :
+	 (current_state == CONV2_ST) ? ((conv23_Rd_DONE == 1'b0) ? 1'b1: 1'b0) :
+	 (current_state == CONV3_ST) ? ((conv23_Rd_DONE == 1'b0) ? 1'b1: 1'b0) :
+	 (current_state == FCL1_ST) ? ((FCL_Rd_DONE == 1'b0) ? 1'b1: 1'b0) :
+	 (current_state == FCL2_ST) ? ((FCL_Rd_DONE == 1'b0) ? 1'b1: 1'b0) : 1'b0;
+	 
+		// conv1 read controller
+		
+	 CONV23_Read_Controller READCONTROLLER1(
+	 .iCLK(iCLK),
+	 .iRSTn(WHOLE_RST),
+	 .iEN(1'b1),
+	 .iSTATE(current_state),
+	 .oRd_ADDR(CONV23_Rd_ADDR),
+	 .oRd_DONE(conv23_Rd_DONE),
+	 );
+
+	 FCL_Read_Controller READCONTROLLER2(
+	 .iCLK(iCLK),
+	 .iRSTn(WHOLE_RST),
+	 .iEN(1'b1),
+	 .iSTATE(current_state)
+	 .oRd_ADDR(FCL_Rd_ADDR),
+	 .oRd_DONE(FCL_Rd_DONE)
+	 );
+	 
+	 assign MEM1_RD_ADDR = (current_state == CONV2_ST || current_state == CONV3_ST) ? CONV23_Rd_ADDR:
+	 (current_state == FCL1_ST || current_state == FCL2_ST) ? FCL_Rd_ADDR: 9'd0;
 	 
 	 MEM112x315 MEM1(
 	 .clock(iCLK),
 	 .data(MEM1_WR_DATA),
 	 .rdaddress(MEM1_RD_ADDR),
-	 .rden(),
+	 .rden(READ_EN),
 	 .wraddress(MEM1_WR_ADDR),
-	 .wren(),
+	 .wren(MAXPOOLING_READ_EN),
 	 .q(MEM1_RD_DATA)
 	 );
-//	 
+	 
 //	 READ_COPY readNcopy(
 //	 .mem0readDATA(),
 //	 .mem0readADDR(),
@@ -126,7 +161,7 @@ module BNN_Top(iCLK,
 	 
 	 //====================================================//
 	 //XNOR + POPCOUNT//
-    wire [111:0] iImage;
+//    wire [111:0] iImage;
     wire [6:0] oPopcount;
     wire [111:0] WEIGHT;
 	 wire ACCUMULATOR_EN;
@@ -142,7 +177,7 @@ module BNN_Top(iCLK,
     .iCLK(iCLK),
     .iRSTn(WHOLE_RST),
     .iEN(1'b1),
-    .idata(iImage),
+    .idata(MEM1_RD_DATA),
     .iweight(WEIGHT),
     .odata(oPopcount),
 	 .oEN(ACCUMULATOR_EN)
