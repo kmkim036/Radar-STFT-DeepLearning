@@ -2,7 +2,6 @@
 
 module Maxpooling(iRSTn,
                   iCLK,
-                  iCLR,
                   iReadEN,
                   iWriteEN,
                   iDATA,
@@ -13,7 +12,6 @@ module Maxpooling(iRSTn,
     
     input                   iRSTn;
     input                   iCLK;
-    input                   iCLR;
     input                   iReadEN;
     input                   iWriteEN;
     input	                iDATA;
@@ -23,7 +21,7 @@ module Maxpooling(iRSTn,
     reg         [TL-1:0]    DATA_ARRAY_tmp;
     wire                    DATA_tmp;
     
-    assign DATA_tmp = DATA_ARRAY_tmp[iADDR] | iDATA;
+    assign DATA_tmp = (iReadEN != 0) ? DATA_ARRAY_tmp[iADDR] | iDATA;
     
     always@(negedge iRSTn or posedge iCLK)
     begin
@@ -31,9 +29,9 @@ module Maxpooling(iRSTn,
         begin
             DATA_ARRAY_tmp <= #1 0 ;
         end
-        else if (iCLR)
+        else if (iReadEN)
         begin
-            DATA_ARRAY_tmp <= #1 0 ;
+            DATA_ARRAY_tmp <= #1 {111b'0, DATA_tmp} ;
         end
         else if (iWriteEN)
         begin

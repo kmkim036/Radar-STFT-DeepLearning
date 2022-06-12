@@ -4,7 +4,7 @@ module Accumulator(iCLK,
                    iCLR,
                    iEN,
                    iDATA,
-                   CNT,
+                   iCNT,
                    oEN,
                    oDATA);
     
@@ -19,7 +19,7 @@ module Accumulator(iCLK,
     input iCLR;
     input iEN;
     input [IL-1 : 0] iDATA;
-    input [3:0] CNT;
+    input [3:0] iCNT;
 
     //	Output Signals
     output oEN;
@@ -29,7 +29,7 @@ module Accumulator(iCLK,
     wire oEN;
     wire [3:0] CNT;
     reg [OL-1:0]oDATA;
-    assign oEN = (CNT == END) ? 1'b1 : 1'b0;
+    assign oEN = (iCNT == END) ? 1'b1 : 1'b0;
     
     always@(posedge iCLK or negedge iRSTn)
     begin

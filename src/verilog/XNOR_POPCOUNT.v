@@ -1,21 +1,24 @@
 `timescale 1 ns / 100 ps
 
-module xnor_popcount(iCLK, iRSTn, iEN, idata, iweight, odata, oEN);
+module xnor_popcount(iCLK, iRSTn, iEN, idata, iweight, iSTATE, odata, oEN);
 
 parameter WL = 112;
 
 input iCLK;
 input iRSTn;
 input iEN;
+input iSTATE;
 input	[WL-1:0]	idata;
 input	[WL-1:0]	iweight;
 
 output oEN;
 output [10:0]		odata;
 
+wire 	[WL-1:0] temp_xnor;
 wire  [WL-1:0]	xnor_result;
 
-assign xnor_result	=	idata  ~^  iweight;
+assign temp_xnor = idata ~^ iweight;
+assign xnor_result	=	(iSTATE > 3'b010) ? temp_xnor : {temp_xnor[iaddr], 111'd0};
 
 adder_tree
 popcount(
