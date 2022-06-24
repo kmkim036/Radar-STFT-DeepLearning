@@ -11,6 +11,12 @@ module BNN_TEST(iCLK,
                 done,
                 oPopcount);
     
+    // input    iCLK, iSTART, iRSTn, iCLR
+    // input	[27:0]	iMEM0RdDATA;
+    // output	[5:0]	oMEM0WrADDR, oMEM0RdADDR;
+    // output	[27:0]	oMEM0WrDATA; // Final_Index
+    // output	oMEM0Rd_EN, oMEM0Wr_EN;
+
     parameter	IDLE_ST		  = 	3'b000;
     parameter 	READ_ST		 = 3'b001;
     parameter	CONV1_ST	  = 	3'b010;
