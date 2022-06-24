@@ -3,14 +3,12 @@ import numpy as np
 
 binary_threshold = 36
 
-spi = spidev.SpiDev()
-spi.open(0, 0)
-spi.mode = 1
-spi.max_speed_hz = 5000000
-
-
 def send_spi(image):
     # send 36x28 image to FPGA using SPI communication
+    spi = spidev.SpiDev()
+    spi.open(0, 0)
+    spi.mode = 1
+    spi.max_speed_hz = 5000000
 
     # binarize input image
     binary_image = [[0 for j in range(28)] for i in range(36)]
@@ -21,12 +19,6 @@ def send_spi(image):
             else:
                 binary_image[i][j] = 1
 
-    for i in binary_image:
-        for j in i:
-            print(j, end=" ")
-        print()
-
-    # spi_data = np.zeros(140)
     spi_data = np.zeros(144)
     for i in range(0, 36):
         for j in range(0, 8):
@@ -96,44 +88,30 @@ def send_spi(image):
              spi_data[137]), int(spi_data[138]), int(spi_data[139]),
          int(spi_data[140]), int(spi_data[141]), int(spi_data[142]), int(spi_data[143])]
     )
+    
+    for i in binary_image:
+            for j in i:
+                print(j, end=" ")
+            print()
+    
+    print(spi_data)
+    
+    spi.close()
 
 
 def receive_spi():
     # receive prediction from FPGA using SPI communication
-    # motion = 0
-    # 0: walk
-    # 1: stride
-    # 2: creep
-    # human = 0
-    # 0: man 1
-    # 1: man 2
-    # 2: woman 1
-    # 3: woman 2
+    spi = spidev.SpiDev()
+    spi.open(0, 0)
+    spi.mode = 1
+    spi.max_speed_hz = 5000000
 
-    # output = spi.xfer2([0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    #                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-
-    # maxval = output.index(max(output))
-    # quotient, remainder = divmod(maxval - 1, 3)
-
-    # if quotient == 0:
-    #     human = 0
-    # elif quotient == 1:
-    #     human = 1
-    # elif quotient == 2:
-    #     human = 2
-    # else:
-    #     human = 3
-
-    # if remainder == 0:
-    #     motion = 0
-    # elif remainder == 1:
-    #     motion = 1
-    # else:
-    #     motion = 2
 
     output = spi.xfer2([0x00, 0x00])
-
+    
+    print(output)
+    spi.close()
+    
     '''
     0 1 2 
     3 4 5 

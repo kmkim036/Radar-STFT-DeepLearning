@@ -45,9 +45,6 @@ if __name__ == "__main__":
             if ret == True:
                 spi.send_spi(stft_result)
                 motion, human = spi.receive_spi()
-                # example: 1 = stride, 3 =  Woman 2
-                motion = random.randrange(0, 3)
-                human = random.randrange(0, 4)
                 display.display_result(stft_result, motion, human)
                 I_raw_data_queue.clear()
                 Q_raw_data_queue.clear()
