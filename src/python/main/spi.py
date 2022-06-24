@@ -11,7 +11,7 @@ spi.max_speed_hz = 5000000
 
 def send_spi(image):
     # send 36x28 image to FPGA using SPI communication
-    
+
     # binarize input image
     binary_image = [[0 for j in range(28)] for i in range(36)]
     for i in range(36):
@@ -21,8 +21,14 @@ def send_spi(image):
             else:
                 binary_image[i][j] = 1
 
-    spi_data = np.zeros(140)
-    for i in range(0, 32):
+    for i in binary_image:
+        for j in i:
+            print(j, end=" ")
+        print()
+
+    # spi_data = np.zeros(140)
+    spi_data = np.zeros(144)
+    for i in range(0, 36):
         for j in range(0, 8):
             spi_data[4*i + 0] += binary_image[i][j] * (2**(7-j))
             spi_data[4*i + 1] += binary_image[i][8 + j] * (2**(7-j))
@@ -86,8 +92,11 @@ def send_spi(image):
              spi_data[127]), int(spi_data[128]), int(spi_data[129]),
          int(spi_data[130]),  int(spi_data[131]), int(
              spi_data[132]), int(spi_data[133]), int(spi_data[134]),
-         int(spi_data[135]),  int(spi_data[136]), int(spi_data[137]), int(spi_data[138]), int(spi_data[139])]
+         int(spi_data[135]),  int(spi_data[136]), int(
+             spi_data[137]), int(spi_data[138]), int(spi_data[139]),
+         int(spi_data[140]), int(spi_data[141]), int(spi_data[142]), int(spi_data[143])]
     )
+
 
 def receive_spi():
     # receive prediction from FPGA using SPI communication
@@ -101,26 +110,47 @@ def receive_spi():
     # 2: woman 1
     # 3: woman 2
 
-    output = spi.xfer2([0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    # output = spi.xfer2([0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    #                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
-    maxval = output.index(max(output))
-    quotient, remainder = divmod(maxval - 1, 3)
+    # maxval = output.index(max(output))
+    # quotient, remainder = divmod(maxval - 1, 3)
 
-    if quotient == 0:
+    # if quotient == 0:
+    #     human = 0
+    # elif quotient == 1:
+    #     human = 1
+    # elif quotient == 2:
+    #     human = 2
+    # else:
+    #     human = 3
+
+    # if remainder == 0:
+    #     motion = 0
+    # elif remainder == 1:
+    #     motion = 1
+    # else:
+    #     motion = 2
+
+    output = spi.xfer2([0x00, 0x00])
+
+    '''
+    0 1 2 
+    3 4 5 
+    6 7 8
+    9 10 11
+    '''
+    ret = output[1]
+
+    if ret < 3:
         human = 0
-    elif quotient == 1:
+    elif ret < 6:
         human = 1
-    elif quotient == 2:
+    elif ret < 9:
         human = 2
     else:
         human = 3
 
-    if remainder == 0:
-        motion = 0
-    elif remainder == 1:
-        motion = 1
-    else:
-        motion = 2
+    motion = ret % 3
 
     return motion, human
