@@ -8,23 +8,13 @@ module BNN_WRAPPER(CLOCK_50,
                    MISO,
                    CS,
                    LEDR,
-                   SW,
-                   ILA_MEM_oADDR,
-                   ILA_MEM_Rd_EN,
-                   ILA_MEM_Wr_EN,
-                   ILA_MEM_oDATA);
+                   SW);
     
     // Debugging
-    input SW;
-    output LEDR;
-    assign LEDR = SW;
-    
-    //ILA_MEMORY
-    output		[5:0]			ILA_MEM_oADDR;
-    output						ILA_MEM_Rd_EN;
-    output						ILA_MEM_Wr_EN;
-    output		[27:0]			ILA_MEM_oDATA;
-    
+    input   SW;
+    output  LEDR;
+    assign  LEDR = SW;
+        
     input						CLOCK_50;
     input						iRSTn;
     input						iCLR;
@@ -43,11 +33,16 @@ module BNN_WRAPPER(CLOCK_50,
     wire			[27:0]		SPI_SPI2MEM_DATA;
     wire						SPI_Wr_EN;
     
-    wire			[27:0]		tmp;
     wire						START_TICK;
-    wire						IP_DONE;
     wire						DONE_FLAG;
     
+    //ILA_MEMORY
+    wire		[5:0]			ILA_MEM_oADDR;
+    wire						ILA_MEM_Rd_EN;
+    wire						ILA_MEM_Wr_EN;
+    wire		[27:0]			ILA_MEM_oDATA;
+    wire		[27:0]			ILA_MEM_iDATA;
+
     //clear all(shift_reg)
     COMMUNICATION_DONE clear_all(
     .iCLK(CLOCK_50),
@@ -75,6 +70,16 @@ module BNN_WRAPPER(CLOCK_50,
     .oWr_EN(SPI_Wr_EN),
     );
     
+    //iSTART tick signal generator
+    Tick_signal_gen Start_Signal_Gen(
+    .iCLK(CLOCK_50),
+    .iRSTn(iRSTn),
+    .iEN(Wr_DONE),
+    .Pulse(START_TICK)
+    );
+
+    ////////////////////////////////////////
+    // temporary Code
     MEM48x28 RAM0(
     .clock_a(SCLK),
     .address_a(SPI_ADDR),
@@ -89,31 +94,7 @@ module BNN_WRAPPER(CLOCK_50,
     .wren_b(1'b0),//fill the blank
     .q_b(ILA_MEM_oDATA)//fill the blank
     );
-    
-    //iSTART tick signal generator
-    Tick_signal_gen Start_Signal_Gen(
-    .iCLK(CLOCK_50),
-    .iRSTn(iRSTn),
-    .iEN(Wr_DONE),
-    .Pulse(START_TICK)
-    );
-    
-    /*
-     //BNN IP Code
-     BNN_IP BNN_IP(
-     .iCLK(CLOCK_50),
-     .iRSTn(iRSTn),
-     .iCLR(~iCLR),
-     .iSTART(START_TICK),
-     .iMEM0RdDATA(), // 28bits
-     .oMEM0WrADDR(), // 6bits
-     .oMEM0RdADDR(), // 6bits
-     .oMEM0WrDATA(), // 28bits
-     .oMEM0Rd_EN(ILA_MEM_Rd_EN),
-     .oMEM0Wr_EN(ILA_MEM_Wr_EN),
-     );
-     */
-    //BNN IP temp Code
+
     BNN_IP_temp BNN_IP(
     .iCLK(CLOCK_50),
     .iRSTn(iRSTn),
@@ -122,6 +103,39 @@ module BNN_WRAPPER(CLOCK_50,
     .oADDR(ILA_MEM_oADDR),
     .oRd_EN(ILA_MEM_Rd_EN),
     .oWr_EN(ILA_MEM_Wr_EN)
+    );    
+    ////////////////////////////////////////
+    
+    ////////////////////////////////////////
+    // real codes
+    /*
+    MEM48x28 RAM0(
+    .clock_a(SCLK),
+    .address_a(SPI_ADDR),
+    .data_a(SPI_SPI2MEM_DATA),
+    .rden_a(SPI_Rd_EN),
+    .wren_a(SPI_Wr_EN),
+    .q_a(SPI_MEM2SPI_DATA),
+    .clock_b(CLOCK_50),
+    .address_b(ILA_MEM_oADDR),
+    .data_b(ILA_MEM_oDATA),
+    .rden_b(ILA_MEM_Rd_EN),
+    .wren_b(ILA_MEM_Wr_EN),
+    .q_b(ILA_MEM_iDATA)
     );
+    
+    //BNN IP Code
+    BNN_IP BNN_IP(
+    .iCLK(CLOCK_50),
+    .iRSTn(iRSTn),
+    .iCLR(~iCLR),
+    .iSTART(START_TICK),
+    .iMEM0RdDATA(ILA_MEM_iDATA), // 28bits
+    .oMEM0ADDR(ILA_MEM_oADDR), // 6bits
+    .oMEM0WrDATA(ILA_MEM_oDATA), // 28bits
+    .oMEM0Rd_EN(ILA_MEM_Rd_EN),
+    .oMEM0Wr_EN(ILA_MEM_Wr_EN),
+    );
+    */
     
 endmodule
