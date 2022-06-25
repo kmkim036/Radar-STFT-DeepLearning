@@ -2,6 +2,7 @@ import spidev
 import numpy as np
 
 
+
 def send_spi(image):
     # send 36x28 image to FPGA using SPI communication
     spi = spidev.SpiDev()
@@ -91,12 +92,12 @@ def send_spi(image):
     )
 
     for i in binary_image:
-            for j in i:
-                print(j, end=" ")
-            print()
-    
+        for j in i:
+            print(j, end=" ")
+        print()
+
     print(spi_data)
-    
+
     spi.close()
 
 
@@ -107,12 +108,11 @@ def receive_spi():
     spi.mode = 1
     spi.max_speed_hz = 5000000
 
-
     output = spi.xfer2([0x00, 0x00])
-    
+
     print(output)
     spi.close()
-    
+
     '''
     0 1 2 
     3 4 5 
