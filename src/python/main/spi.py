@@ -110,9 +110,8 @@ def receive_spi():
 
     output = spi.xfer2([0x00, 0x00])
     
-    print(output)
-
     # print(output)
+
     spi.close()
 
     '''
