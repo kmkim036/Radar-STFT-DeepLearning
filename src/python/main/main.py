@@ -30,7 +30,6 @@ if __name__ == "__main__":
     # declare list for I-data and Q-data
     I_raw_data = []
     Q_raw_data = []
-    
 
     display.display_init()
     while True:
@@ -44,12 +43,15 @@ if __name__ == "__main__":
             ret = detect.detect_human(stft_result, power)
 
             if ret == True:
-#                start = time.time() # time measure
+                # start = time.time()  # time measure
+
                 spi.send_spi(stft_result)
                 motion, human = spi.receive_spi()
-#                exc_time = time.time() - start # time measure
-#                print("time: ") # time measure
-#                print(exc_time) # time measure
+
+                # exc_time = time.time() - start  # time measure
+                # print("time: ", end='')  # time measure
+                # print(exc_time)  # time measure
+
                 display.display_result(stft_result, motion, human)
                 I_raw_data_queue.clear()
                 Q_raw_data_queue.clear()
