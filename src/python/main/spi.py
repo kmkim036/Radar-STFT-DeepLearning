@@ -123,8 +123,6 @@ def receive_spi():
     '''
     ret = output[1]
     
-    ret = 0
-    
     if ret < 3:
         human = 0
     elif ret < 6:
