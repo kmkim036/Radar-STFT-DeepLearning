@@ -95,7 +95,7 @@ module MEM48X28 (
 		altsyncram_component.clock_enable_input_a = "BYPASS",
 		altsyncram_component.clock_enable_input_b = "BYPASS",
 		altsyncram_component.clock_enable_output_b = "BYPASS",
-		altsyncram_component.init_file = "MEM0.mif",
+		// altsyncram_component.init_file = "MEM0.mif",
 		altsyncram_component.intended_device_family = "MAX 10",
 		altsyncram_component.lpm_type = "altsyncram",
 		altsyncram_component.numwords_a = 48,

@@ -2,12 +2,14 @@ module WEIGHT_ROM_CONTROLLER(iCLK,
                              iRSTn,
                              iEN,
                              iSTATE,
-                             oADDR);
+                             oADDR,
+                             ibit_addr,
+                             weight_addr);
     
     // iEN == ReadEnable which is same with MEM0 or MEM1 ReadEnable
     
     parameter	IDLE_ST		  = 	3'b000;
-    parameter 	READ_ST		  =     3'b001;
+    parameter 	READ_ST		 = 3'b001;
     parameter	CONV1_ST	  = 	3'b010;
     parameter	CONV2_ST	  = 	3'b011;
     parameter	CONV3_ST	  = 	3'b100;
@@ -20,16 +22,19 @@ module WEIGHT_ROM_CONTROLLER(iCLK,
     parameter	FCL2_OFFSET		 = 	12'd2697;
     
     input	iCLK, iRSTn, iEN;
-    input	[2:0] iSTATE;
+    input	[2:0]   iSTATE;
+    input   [4:0]   ibit_addr;
     
-    output	[11:0] oADDR;
+    output  [11:0]  oADDR;
+    output  [6:0]   weight_addr;
     
     wire	[6:0]	CNT_112;
-    wire	[3:0] CNT_9;
-    wire  oEN_4, oEN_9;
-    wire	[9:0] CNTS_CONV23, CNTS_FCL1;
+    wire	[3:0]   CNT_9;
+    wire    oEN_4, oEN_9;
+    wire	[9:0]   CNTS_CONV23, CNTS_FCL1;
     wire	[3:0]	CNTS_FCL2;
     wire	DUMP1, DUMP2, DUMP3;
+    wire 	[6:0]   weight_addr1;
     
     COUNTER_LAB#(
     .WL(4),
@@ -86,7 +91,29 @@ module WEIGHT_ROM_CONTROLLER(iCLK,
     .oCNT(CNTS_FCL2)
     );
     
-    assign oADDR = 	(iSTATE == CONV1_ST) ? {8'b0, CNT_9} :
+    D_REG#(
+    .WL(7)
+    )U_D_weight_d1(
+    .iRSTn(WHOLE_RST),
+    .iCLK(iCLK),
+    .iEN(iEN),
+    .iCLR(0),
+    .iDATA(CNT_112),
+    .oDATA(weight_addr1)
+    );
+    
+    D_REG#(
+    .WL(7)
+    )U_D_weight_d2(
+    .iRSTn(WHOLE_RST),
+    .iCLK(iCLK),
+    .iEN(iEN),
+    .iCLR(0),
+    .iDATA(weight_addr1),
+    .oDATA(weight_addr)
+    );
+    
+    assign oADDR = 	(iSTATE == CONV1_ST) ? (ibit_addr == 28) ? 12'd2709   :{8'b0, CNT_9} :
     (iSTATE == CONV2_ST) ? CNTS_CONV23 + CONV2_OFFSET :
     (iSTATE == CONV3_ST) ? CNTS_CONV23 + CONV3_OFFSET :
     (iSTATE == FCL1_ST) ? CNTS_FCL1 + FCL1_OFFSET :

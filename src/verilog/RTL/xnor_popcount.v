@@ -6,27 +6,30 @@ module xnor_popcount(iCLK,
                      iweight,
                      iaddr,
                      odata,
-                     oEN);
+                     oEN,
+                     weight_addr);
     
     parameter WL = 112;
     
-    input iCLK;
-    input iRSTn;
-    input iEN;
-    input [2:0] iSTATE;
-    input [4:0] iaddr;
+    input   iCLK;
+    input   iRSTn;
+    input   iEN;
+    input   [2:0]   iSTATE;
+    input   [4:0]   iaddr;
     input	[WL-1:0]	idata;
     input	[WL-1:0]	iweight;
+    input   [6:0]   weight_addr;
     
-    output oEN;
-    output [6:0]		odata;
+    output  oEN;
+    output  [6:0]   odata;
     
-    wire  [WL-1:0]	xnor_result, temp_xnor;
-    
-    wire [6:0] pop_result;
+    wire    [WL-1:0]    xnor_result, temp_xnor;
+    wire    [6:0]   pop_result;
+    wire    bit_result;
     
     assign temp_xnor    = idata ~^ iweight;
-    assign xnor_result	 = 	(iSTATE > 3'b010) ? temp_xnor : {111'd0,temp_xnor[iaddr]};
+    assign bit_result   = idata[iaddr] ~^ iweight[weight_addr];
+    assign xnor_result	 = 	(iSTATE > 3'b010) ? temp_xnor : bit_result;
     
     adder_tree popcount(
     .iRSTn(iRSTn),
