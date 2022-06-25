@@ -17,7 +17,7 @@ pygame.init()
 pygame.display.set_caption("Display Prediction")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-font = pygame.font.Font('freesansbold.ttf', 50)
+font = pygame.font.Font('freesansbold.ttf', 80)
 text_waiting = font.render("waiting...", True, black)
 text_walk = font.render("motion: walk", True, black)
 text_stride = font.render("motion: stride", True, black)
@@ -45,7 +45,7 @@ def display_result(image, motion, human):
     mngr = plt.get_current_fig_manager()
     window_position = "+" + \
         str(int(0.33 * SCREEN_WIDTH)) + "+" + \
-        str(int(0.20 * SCREEN_HEIGHT))    # +x+y
+        str(int(0.15 * SCREEN_HEIGHT))    # +x+y
     mngr.window.wm_geometry(window_position)
 
     plt.show()
@@ -68,8 +68,8 @@ def display_result(image, motion, human):
         text_human = text_W1
     else:
         text_human = text_W2
-    screen.blit(text_motion, (int(0.4 * SCREEN_WIDTH),
-                int(0.75 * SCREEN_HEIGHT)))
-    screen.blit(text_human, (int(0.39 * SCREEN_WIDTH),
-                int(0.875 * SCREEN_HEIGHT)))
+    screen.blit(text_motion, (int(0.35 * SCREEN_WIDTH),
+                int(0.65 * SCREEN_HEIGHT)))
+    screen.blit(text_human, (int(0.34 * SCREEN_WIDTH),
+                int(0.775 * SCREEN_HEIGHT)))
     pygame.display.update()
