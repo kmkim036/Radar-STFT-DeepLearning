@@ -90,14 +90,14 @@ def send_spi(image):
              spi_data[137]), int(spi_data[138]), int(spi_data[139]),
          int(spi_data[140]), int(spi_data[141]), int(spi_data[142]), int(spi_data[143])]
     )
-
+    '''
     for i in binary_image:
         for j in i:
             print(j, end=" ")
         print()
 
     print(spi_data)
-
+    '''
     spi.close()
 
 
@@ -109,8 +109,10 @@ def receive_spi():
     spi.max_speed_hz = 5000000
 
     output = spi.xfer2([0x00, 0x00])
-
+    
     print(output)
+
+    # print(output)
     spi.close()
 
     '''
@@ -120,6 +122,8 @@ def receive_spi():
     9 10 11
     '''
     ret = output[1]
+    
+    ret = 0
     
     if ret < 3:
         human = 0
