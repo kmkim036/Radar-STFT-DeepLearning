@@ -1,7 +1,6 @@
 import spidev
 import numpy as np
 
-binary_threshold = 36
 
 def send_spi(image):
     # send 36x28 image to FPGA using SPI communication
@@ -9,12 +8,14 @@ def send_spi(image):
     spi.open(0, 0)
     spi.mode = 1
     spi.max_speed_hz = 5000000
-
+    
     # binarize input image
+    image_std = (image - np.mean(image)) / np.std(image)
+    
     binary_image = [[0 for j in range(28)] for i in range(36)]
     for i in range(36):
         for j in range(28):
-            if image[i][j] < binary_threshold:
+            if image_std[i][j] <= 0:
                 binary_image[i][j] = 0
             else:
                 binary_image[i][j] = 1
@@ -88,7 +89,7 @@ def send_spi(image):
              spi_data[137]), int(spi_data[138]), int(spi_data[139]),
          int(spi_data[140]), int(spi_data[141]), int(spi_data[142]), int(spi_data[143])]
     )
-    
+
     for i in binary_image:
             for j in i:
                 print(j, end=" ")
@@ -119,7 +120,7 @@ def receive_spi():
     9 10 11
     '''
     ret = output[1]
-
+    
     if ret < 3:
         human = 0
     elif ret < 6:
