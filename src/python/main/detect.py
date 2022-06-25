@@ -1,6 +1,6 @@
 import numpy as np
 
-time_reference = 21
+time_reference = 23
 
 def detect_human(image, power):
     '''
