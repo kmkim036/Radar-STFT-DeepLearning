@@ -56,7 +56,7 @@ module BNN_WRAPPER(CLOCK_50,
     
     // Debugging
     output  [27:0] Debug_SPI_SPI2MEM_DATA, Debug_ILA_MEM_iDATA, Debug_ILA_MEM_oDATA, Debug_SPI_MEM2SPI_DATA;
-    output  [5:0]  Debug_ILA_MEM_oADDR, Debug_SPI_ADDR
+    output  [5:0]  Debug_ILA_MEM_oADDR, Debug_SPI_ADDR;
     assign Debug_SPI_SPI2MEM_DATA = SPI_SPI2MEM_DATA;
     assign Debug_ILA_MEM_iDATA    = ILA_MEM_iDATA;
     assign Debug_ILA_MEM_oDATA    = ILA_MEM_oDATA;
