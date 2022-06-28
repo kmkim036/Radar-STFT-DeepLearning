@@ -154,7 +154,7 @@ module BNN_TEST(iCLK,
     (current_state == CONV3_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_CONV3_OFFSET :
     (current_state == FCL1_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_FCL1_OFFSET : 9'd0;
     
-    MEM112X300 MEM1(
+    MEM112x300 MEM1(
     .clock(iCLK),
     .data(BNN_WR_DATA),
     .rdaddress(MEM1_Rd_ADDR),
