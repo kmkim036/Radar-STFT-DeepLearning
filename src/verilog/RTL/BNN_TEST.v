@@ -83,13 +83,13 @@ module BNN_TEST(iCLK,
     wire            READ_DONE;
     
     wire [6:0] 			weight_addr;
-
+    
     wire Rd_Enable0;
     assign READ_DONE = (current_state > CONV1_ST) ? MEM1_Rd_DONE : MEM0_Rd_DONE;
     wire Rd_Enable;
     assign Rd_Enable0 = (current_state == IDLE_ST) ? (iSTART == 1'b1) ? 1'b1 : 1'b0 :
     (STATE_DONE == 1'b0 && READ_DONE == 1'b0) ? 1'b1 : 1'b0; //CONV1, CONV2, CONV3, FCL1, FCL2
-
+    
     wire	[111:0]	BNN_WR_DATA;
     D_REG#(
     .WL(1)
@@ -101,7 +101,7 @@ module BNN_TEST(iCLK,
     .iDATA(Rd_Enable0),
     .oDATA(Rd_Enable)
     );
-
+    
     wire [111:0] IMAGE_TEMP_MEM0, IMAGE_TEMP_MEM1;
     assign IMAGE_TEMP_MEM0 = {84'd0 ,iMEM0RdDATA};
     
@@ -119,7 +119,7 @@ module BNN_TEST(iCLK,
     
     wire [3:0] ACC_Max_Val;
     assign ACC_Max_Val = (current_state > CONV3_ST) ? 4'd6 : 4'd9;
-
+    
     wire            oCompartor;
     wire            MAXPOOLING_EN;
     wire    [9:0]   THRESHOLD_VALUE;
@@ -148,12 +148,12 @@ module BNN_TEST(iCLK,
             current_state <= next_state;
         end
     end
-
+    
     assign THRESHOLD_ADDR = 	(current_state == CONV1_ST) ? THRESHOLD_ADDR_CNTS :
     (current_state == CONV2_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_CONV2_OFFSET :
     (current_state == CONV3_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_CONV3_OFFSET :
     (current_state == FCL1_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_FCL1_OFFSET : 9'd0;
-
+    
     MEM112X300 MEM1(
     .clock(iCLK),
     .data(BNN_WR_DATA),
@@ -234,7 +234,7 @@ module BNN_TEST(iCLK,
     .iDATA(CONV1_Bit_ADDR_D1),
     .oDATA(CONV1_Bit_ADDR_D2)
     );
-        
+    
     D_REG#(
     .WL(1)
     )U_D_POP_EN(
@@ -341,7 +341,7 @@ module BNN_TEST(iCLK,
     );
     
     wire [10:0] cmr_data_d1, cmr_data;
-
+    
     D_REG#(
     .WL(11)
     )U_D_cmr_data_d1(
@@ -420,7 +420,7 @@ module BNN_TEST(iCLK,
     .oEN(FCL_READ_EN),
     .oCNT(DUMP2)
     );
-
+    
     wire CONV_READ_EN1;
     assign CONV_READ_EN = (max_EN_4 == 1) && (iADDR_clear == 1) ? 1'b1 : 1'b0;
     
@@ -434,7 +434,7 @@ module BNN_TEST(iCLK,
     .iDATA(CONV_READ_EN),
     .oDATA(CONV_READ_EN1)
     );
-
+    
     wire FCL_READ_EN1;
     
     D_REG#(
@@ -511,7 +511,7 @@ module BNN_TEST(iCLK,
     wire	        FinalOutEnable;
     wire	        Final_Compare;
     assign Final_Compare_En = (current_state == FCL2_ST) ? 1'b1 : 1'b0;
-
+    
     COUNTER_LAB#(
     .WL(4),
     .MV(13)
