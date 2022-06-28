@@ -24,12 +24,18 @@ module CONV23_Read_Controller(iCLK,
     wire	[WL-1:0]	i;
     wire	[HL-1:0]	j;
     
+    // counter for 4
+    wire [1:0] CNTS_4;
+    wire COUNTER_9_oEN;
+    
     // counter for j
     wire COUNTER_i_oEN;
+    wire [6:0] CNTS_112;
+    wire COUNTER_4_oEN;
     
     COUNTER_LAB#(
     .WL(HL),
-    .MV((HEIGHT >> 1) - 1)
+    .MV((HEIGHT >> 1) - 1)  //8
     )COUNTER_J(
     .iCLK(iCLK),
     .iRSTn(iRSTn),
@@ -43,33 +49,26 @@ module CONV23_Read_Controller(iCLK,
     
     COUNTER_LAB#(
     .WL(WL),
-    .MV((WIDTH >> 1) - 1)
+    .MV((WIDTH >> 1) - 1)   //6
     )COUNTER_I(
     .iCLK(iCLK),
     .iRSTn(iRSTn),
-    .iEN(COUNTER_112_oEN),
+    .iEN(COUNTER_4_oEN),
     .oEN(COUNTER_i_oEN),
     .oCNT(i)
     );
     
     // counter for 112
-    wire [6:0] CNTS_112;
-    wire COUNTER_4_oEN;
-    
     COUNTER_LAB#(
     .WL(7),
     .MV(112)
     )COUNTER_112(
     .iCLK(iCLK),
     .iRSTn(iRSTn),
-    .iEN(COUNTER_4_oEN),
+    .iEN(COUNTER_9_oEN),
     .oEN(COUNTER_112_oEN),
     .oCNT(CNTS_112)
     );
-    
-    // counter for 4
-    wire [1:0] CNTS_4;
-    wire COUNTER_9_oEN;
     
     COUNTER_LAB#(
     .WL(2),
@@ -77,7 +76,7 @@ module CONV23_Read_Controller(iCLK,
     )COUNTER_4(
     .iCLK(iCLK),
     .iRSTn(iRSTn),
-    .iEN(COUNTER_9_oEN),
+    .iEN(COUNTER_112_oEN),
     .oEN(COUNTER_4_oEN),
     .oCNT(CNTS_4)
     );
@@ -95,6 +94,7 @@ module CONV23_Read_Controller(iCLK,
     .oEN(COUNTER_9_oEN),
     .oCNT(CNTS_9)
     );
+    
     
     assign oRd_ADDR = 
     (CNTS_4 == 2'd0) ? (

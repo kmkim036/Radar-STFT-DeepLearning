@@ -1,4 +1,3 @@
-
 module BNN_TEST(iCLK,
                 iSTART,
                 iRSTn,
@@ -26,7 +25,7 @@ module BNN_TEST(iCLK,
     input			iCLK;
     input			iCLR;
     input			iRSTn;
-    input 		    iSTART;
+    input 		   iSTART;
     input	[27:0]	iMEM0RdDATA;
     
     output	[5:0]	oMEM0ADDR;
@@ -49,7 +48,7 @@ module BNN_TEST(iCLK,
     (current_state == CONV3_ST) ? CONV3_Wr_DONE :
     (current_state == FCL1_ST) ? FCL1_Wr_DONE : 1'b0;
     
-    wire            WHOLE_RST, STATE_DONE_DELAY;
+    wire        WHOLE_RST, STATE_DONE_DELAY;
     D_FF_enable#(
     .WL(1)
     )U_D_FF_0(
@@ -77,21 +76,21 @@ module BNN_TEST(iCLK,
     wire    [6:0]   oPopcount;
     wire            ACCUMULATOR_EN;
     
-    wire    [8:0]   MEM1_wr_ADDR;
+    wire    [8:0]   MEM1_Wr_ADDR;
     wire    [8:0]   MEM1_Rd_ADDR;
     wire            MEM1_Rd_DONE;
-    wire		    MEM0_Rd_DONE;
+    wire			MEM0_Rd_DONE;
     wire            READ_DONE;
-    wire            Rd_Enable0;
-    wire            Rd_Enable;
     
+    wire [6:0] 			weight_addr;
+
+    wire Rd_Enable0;
     assign READ_DONE = (current_state > CONV1_ST) ? MEM1_Rd_DONE : MEM0_Rd_DONE;
+    wire Rd_Enable;
     assign Rd_Enable0 = (current_state == IDLE_ST) ? (iSTART == 1'b1) ? 1'b1 : 1'b0 :
     (STATE_DONE == 1'b0 && READ_DONE == 1'b0) ? 1'b1 : 1'b0; //CONV1, CONV2, CONV3, FCL1, FCL2
-    
-    wire    [6:0] 	weight_addr;
+
     wire	[111:0]	BNN_WR_DATA;
-    
     D_REG#(
     .WL(1)
     )U_D_rd_en_delay(
@@ -102,7 +101,7 @@ module BNN_TEST(iCLK,
     .iDATA(Rd_Enable0),
     .oDATA(Rd_Enable)
     );
-    
+
     wire [111:0] IMAGE_TEMP_MEM0, IMAGE_TEMP_MEM1;
     assign IMAGE_TEMP_MEM0 = {84'd0 ,iMEM0RdDATA};
     
@@ -115,11 +114,12 @@ module BNN_TEST(iCLK,
     wire            COMPARATOR_EN;
     wire    [10:0]  oAccumulator;
     wire    [3:0]   COMPARATOR_iCNT;
+    
     wire    [6:0]   total_CNT;
     
-    wire    [3:0]   ACC_Max_Val;
+    wire [3:0] ACC_Max_Val;
     assign ACC_Max_Val = (current_state > CONV3_ST) ? 4'd6 : 4'd9;
-    
+
     wire            oCompartor;
     wire            MAXPOOLING_EN;
     wire    [9:0]   THRESHOLD_VALUE;
@@ -129,9 +129,9 @@ module BNN_TEST(iCLK,
     wire    [2:0]   DUMP1;
     wire            DUMP2, DUMP3;
     
-    wire [1:0] pad;
-    wire POPCOUNT_EN;
-    wire RD_EN_delay1, RD_EN_delay2;
+    wire    [1:0]   pad;
+    wire            POPCOUNT_EN;
+    wire            RD_EN_delay1, RD_EN_delay2;
     
     always@(posedge iCLK or negedge iRSTn)
     begin
@@ -148,19 +148,18 @@ module BNN_TEST(iCLK,
             current_state <= next_state;
         end
     end
-    
+
     assign THRESHOLD_ADDR = 	(current_state == CONV1_ST) ? THRESHOLD_ADDR_CNTS :
     (current_state == CONV2_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_CONV2_OFFSET :
     (current_state == CONV3_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_CONV3_OFFSET :
     (current_state == FCL1_ST) ? THRESHOLD_ADDR_CNTS + THRESHOLD_FCL1_OFFSET : 9'd0;
-    // (current_state == FCL1_ST) ? THRESHOLD_FCL1_OFFSET : 9'd0;	// if use same threshold
-    
+
     MEM112X300 MEM1(
     .clock(iCLK),
     .data(BNN_WR_DATA),
     .rdaddress(MEM1_Rd_ADDR),
     .rden(Rd_Enable),
-    .wraddress(MEM1_wr_ADDR),
+    .wraddress(MEM1_Wr_ADDR),
     .wren(MAXPOOLING_READ_EN),
     .q(IMAGE_TEMP_MEM1)
     );
@@ -174,6 +173,7 @@ module BNN_TEST(iCLK,
     .oDONE(MEM1_Rd_DONE)
     );
     
+    
     CONV1_Read_Controller MEM0_READ_ADDR_CONTROLLER(
     .iCLK(iCLK),
     .iRSTn(WHOLE_RST),
@@ -183,6 +183,7 @@ module BNN_TEST(iCLK,
     .oRd_DONE(MEM0_Rd_DONE),
     .opad(pad)
     );
+    
     
     WEIGHT_ROM_CONTROLLER WEIGHT_ROM_CONTROLLER(
     .iCLK(iCLK),
@@ -233,7 +234,7 @@ module BNN_TEST(iCLK,
     .iDATA(CONV1_Bit_ADDR_D1),
     .oDATA(CONV1_Bit_ADDR_D2)
     );
-    
+        
     D_REG#(
     .WL(1)
     )U_D_POP_EN(
@@ -250,7 +251,7 @@ module BNN_TEST(iCLK,
     )XNOR_POPCOUNT(
     .iCLK(iCLK),
     .iRSTn(WHOLE_RST),
-    .iEN(POPCOUNT_EN), // after first memory read by stages: read enable + 2 clk
+    .iEN(POPCOUNT_EN),
     .idata(IMAGE),
     .iSTATE(current_state),
     .iweight(WEIGHT),
@@ -340,6 +341,7 @@ module BNN_TEST(iCLK,
     );
     
     wire [10:0] cmr_data_d1, cmr_data;
+
     D_REG#(
     .WL(11)
     )U_D_cmr_data_d1(
@@ -369,7 +371,7 @@ module BNN_TEST(iCLK,
     .iRSTn(WHOLE_RST),
     .iEN(cmr_EN),
     .iDATA(cmr_data),
-    .iTH({1'b0,THRESHOLD_VALUE}),
+    .iTH({THRESHOLD_VALUE}),
     .oDATA(oCompartor),
     .oEN(MAXPOOLING_EN),
     .current_state(current_state),
@@ -389,7 +391,7 @@ module BNN_TEST(iCLK,
     .iRSTn(WHOLE_RST),
     .iEN(MAXPOOLING_EN),
     .oEN(iADDR_clear),
-    .oCNT(REG_ADDR)
+    .oCNT(REG_ADDR)		// use REG_ADDR as threshold ROM input
     );
     
     // counter for 4 or 1
@@ -418,7 +420,7 @@ module BNN_TEST(iCLK,
     .oEN(FCL_READ_EN),
     .oCNT(DUMP2)
     );
-    
+
     wire CONV_READ_EN1;
     assign CONV_READ_EN = (max_EN_4 == 1) && (iADDR_clear == 1) ? 1'b1 : 1'b0;
     
@@ -432,7 +434,7 @@ module BNN_TEST(iCLK,
     .iDATA(CONV_READ_EN),
     .oDATA(CONV_READ_EN1)
     );
-    
+
     wire FCL_READ_EN1;
     
     D_REG#(
@@ -506,10 +508,10 @@ module BNN_TEST(iCLK,
     
     /////////////////////final result save///////////////////////////
     wire    [3:0]   class_index;
-    wire	FinalOutEnable;
-    wire	Final_Compare;
+    wire	        FinalOutEnable;
+    wire	        Final_Compare;
     assign Final_Compare_En = (current_state == FCL2_ST) ? 1'b1 : 1'b0;
-    
+
     COUNTER_LAB#(
     .WL(4),
     .MV(13)
@@ -521,8 +523,8 @@ module BNN_TEST(iCLK,
     .oCNT(class_index)
     );
     
-    reg [3:0] Final_Index;
-    reg [6:0] Maximum_Value;
+    reg     [3:0]   Final_Index;
+    reg     [6:0]   Maximum_Value;
     
     always@(posedge iCLK or negedge WHOLE_RST)
     begin
@@ -547,7 +549,7 @@ module BNN_TEST(iCLK,
     assign oMEM0Wr_EN  = FinalOutEnable & Final_Compare_En;
     assign oMEM0WrDATA = {24'd0, Final_Index};
     
-    assign MEM1_wr_ADDR = (current_state == CONV1_ST) ? CONV1_Wr_ADDR :
+    assign MEM1_Wr_ADDR = (current_state == CONV1_ST) ? CONV1_Wr_ADDR :
     (current_state == CONV2_ST) ? (CONV2_Wr_ADDR + MEM1_OFFSET) :
     (current_state == CONV3_ST) ? CONV3_Wr_ADDR :
     (current_state == FCL1_ST) ? (FCL1_Wr_ADDR + MEM1_OFFSET) : 9'd0;

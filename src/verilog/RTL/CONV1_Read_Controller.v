@@ -6,30 +6,27 @@ module CONV1_Read_Controller(iCLK,
                              oRd_DONE,
                              opad);
     
-    input   iCLK;
-    input   iRSTn;
-    input   iEN;
-    output  [5:0]   oRd_ADDR;
-    output  [4:0]   oBit_ADDR;
-    output  oRd_DONE;
-    output  [1:0]   opad;
-    
-    wire    oEN_col;
-    wire    oEN_4;
-    wire    oEN_9;
-    wire    oEN_112;
-    wire    oEN_row;
-    wire    oEN_11;
-    wire    [3:0]   CNT_col;
-    wire    [4:0]   CNT_row;
-    wire    [1:0]   CNT_4;
-    wire    [3:0]   CNT_9;
-    wire    [6:0]   CNT_112;
-    wire    [3:0]   CNT_11;
-    
+    input iCLK;
+    input iRSTn;
+    input iEN;
+    output [5:0] oRd_ADDR;
+    output [4:0] oBit_ADDR;
+    output oRd_DONE;
+    output [1:0] opad;
+    wire oEN_col;
+    wire oEN_4;
+    wire oEN_9;
+    wire oEN_112;
+    wire oEN_row;
+    wire oEN_11;
+    wire [3:0] CNT_col;
+    wire [4:0] CNT_row;
+    wire [1:0] CNT_4;
+    wire [3:0] CNT_9;
+    wire [6:0] CNT_112;
+    wire [3:0] CNT_11;
     assign oRd_DONE = (oEN_row == 1 && oEN_col == 1) ? 1 : 0;
-    
-    wire    [1:0]   pad_d1, pad_d2, pad_d3, pad_d4, pad_d5, pad_d6, pad_d7, pad_d8, pad_d9, pad_d10, pad_d11;
+    wire		[1:0]	 pad_d1, pad_d2, pad_d3, pad_d4, pad_d5, pad_d6, pad_d7, pad_d8, pad_d9, pad_d10, pad_d11;
     
     COUNTER_LAB#(
     .WL(4),
@@ -52,7 +49,6 @@ module CONV1_Read_Controller(iCLK,
     .oCNT(CNT_row),
     .oEN(oEN_row)
     );
-    
     
     COUNTER_LAB#(
     .WL(2),
@@ -740,23 +736,47 @@ module CONV1_Read_Controller(iCLK,
     
     
     assign pad_d1 = 
-    (CNT_col > = 1 && CNT_col < = 12 && CNT_row > = 1 && CNT_row < = 16) ? 2'd0 :
+    (CNT_col > = 1 && CNT_col < = 12 && CNT_row > = 1 && CNT_row < = 16) ? 2'd0:
     //////////////////////////////////
-    (CNT_col == 0 && CNT_row == 0) ? 2'd1 :
+    (CNT_col == 0 && CNT_row == 0) ?
+    ((CNT_4 == 2'd0) ? 2'd1:
+    (CNT_4 == 2'd1) ?  2'd2:
+    (CNT_4 == 2'd2) ?  2'd2:
+    (CNT_4 == 2'd3) ?  2'd0: 2'd0):
     ///////////////////////////////
-    (CNT_col > = 1 && CNT_col < = 12 && CNT_row == 0) ? 2'd2 :
+    (CNT_col > = 1 && CNT_col < = 12 && CNT_row == 0) ?
+    ((CNT_4 == 2'd0 || CNT_4 == 2'd1) ? 2'd2:
+    (CNT_4 == 2'd2 || CNT_4 == 2'd3) ? 2'd0 : 2'd0):
     ////////////////////////////////
-    (CNT_col == 13 && CNT_row == 0) ?  2'd1 :
+    (CNT_col == 13 && CNT_row == 0) ?
+    ((CNT_4 == 2'd0) ? 2'd2:
+    (CNT_4 == 2'd1) ?  2'd1:
+    (CNT_4 == 2'd2) ?  2'd0:
+    (CNT_4 == 2'd3) ?  2'd2: 2'd0):
     //////////////////////////////
-    (CNT_col == 0 && CNT_row > = 1 && CNT_row < = 16) ? 2'd2 :
+    (CNT_col == 0 && CNT_row > = 1 && CNT_row < = 16) ?
+    ((CNT_4 == 2'd0 || CNT_4 == 2'd2) ? 2'd2:
+    (CNT_4 == 2'd1 || CNT_4 == 2'd3) ?  2'd0: 2'd0):
     //////////////////////////////////////
-    (CNT_col == 13 && CNT_row > = 1 && CNT_row < = 16) ? 2'd2 :
+    (CNT_col == 13 && CNT_row > = 1 && CNT_row < = 16) ?
+    ((CNT_4 == 2'd0 || CNT_4 == 2'd2) ? 2'd0:
+    (CNT_4 == 2'd1 || CNT_4 == 2'd3) ?  2'd2: 2'd0):
     ////////////////////////////////////////////
-    (CNT_col == 0 && CNT_row == 17) ? 2'd1 :
+    (CNT_col == 0 && CNT_row == 17) ?
+    ((CNT_4 == 2'd0) ? 2'd2:
+    (CNT_4 == 2'd1) ?  2'd0:
+    (CNT_4 == 2'd2) ?  2'd1:
+    (CNT_4 == 2'd3) ?  2'd2: 2'd0):
     //////////////////////////////////////////////
-    (CNT_col > = 1 && CNT_col < = 12 && CNT_row == 17) ? 2'd2 :
+    (CNT_col > = 1 && CNT_col < = 12 && CNT_row == 17) ?
+    ((CNT_4 == 2'd0 || CNT_4 == 2'd1) ? 2'd0:
+    (CNT_4 == 2'd2 || CNT_4 == 2'd3) ? 2'd2: 2'd0):
     /////////////////////////////////////////////
-    (CNT_col == 13 && CNT_row == 17) ? 2'd1 : 2'd0;
+    (CNT_col == 13 && CNT_row == 17) ?
+    ((CNT_4 == 2'd0) ? 2'd0:
+    (CNT_4 == 2'd1) ?  2'd2:
+    (CNT_4 == 2'd2) ?  2'd2:
+    (CNT_4 == 2'd3) ?  2'd1: 2'd0): 2'd0;
     
     
     ////////////////////padding reg 12//////////////////////
@@ -882,4 +902,3 @@ module CONV1_Read_Controller(iCLK,
     );
     
 endmodule
-    

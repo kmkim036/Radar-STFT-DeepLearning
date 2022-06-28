@@ -30,7 +30,14 @@ module Maxpooling(iRSTn,
         end
         else if (iReadEN)
         begin
-            DATA_ARRAY_tmp <= {111'b0, DATA_tmp} ;
+            if (iWriteEN)
+            begin
+                DATA_ARRAY_tmp <= {111'b0, DATA_tmp} ;
+            end
+            else
+            begin
+                DATA_ARRAY_tmp <= 112'b0;
+            end
         end
         else if (iWriteEN)
         begin
