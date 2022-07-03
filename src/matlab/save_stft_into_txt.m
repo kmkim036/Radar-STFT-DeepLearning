@@ -14,10 +14,10 @@ for person = 0:2
         dpm = sprintf('%d_%d_%d', date, person, motion);
 
         % cwt
-        txt_file_name = sprintf('%s_cwt.txt', dpm);
+        % txt_file_name = sprintf('%s_cwt.txt', dpm);
 
         % stft
-        % txt_file_name = sprintf('%s_stft.txt', dpm);
+        txt_file_name = sprintf('%s_stft.txt', dpm);
 
         writematrix(['pixels'], txt_file_name);
         sum_result = [];
