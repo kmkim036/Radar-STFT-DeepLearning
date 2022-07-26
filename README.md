@@ -5,7 +5,10 @@ Verilog
   
 # When  
 In Capstone Design Class  
-  
+
+# Contributors
+Kim-Kyeongmin, Kim-Seongjin, NamKoong-Hojung  
+ 
 # Description  
 Radar signal processing with Short Time Fourier Transform  
  
